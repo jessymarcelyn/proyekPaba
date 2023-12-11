@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 
 class utama : AppCompatActivity() {
     companion object{
@@ -21,6 +22,7 @@ class utama : AppCompatActivity() {
         val _ivJoin = findViewById<ImageView>(R.id.ivJoin)
         val _ivClass = findViewById<ImageView>(R.id.ivClass)
         val _ivProfile = findViewById<ImageView>(R.id.ivProfile)
+        val _ivTrainer = findViewById<ImageView>(R.id.ivTrainer)
 
         val dataLogin = intent.getBooleanExtra(login, false)
         val idLogin = intent.getStringExtra(dataId)
@@ -48,57 +50,34 @@ class utama : AppCompatActivity() {
         }
 
         _ivHome.setOnClickListener{
-            val mFragmentManager = supportFragmentManager
-            val mfSatu = fHome()
-
-//            val mBundle = Bundle()
-//            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
-//            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
-
-
-            mFragmentManager.findFragmentByTag(fHome::class.java.simpleName)
-            mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fHome::class.java.simpleName).commit()
+            goToPage(fHome())
         }
 
         _ivGym.setOnClickListener{
-            val mFragmentManager = supportFragmentManager
-            val mfSatu = fGym()
-
-//            val mBundle = Bundle()
-//            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
-//            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
-
-
-            mFragmentManager.findFragmentByTag(fGym::class.java.simpleName)
-            mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fGym::class.java.simpleName).commit()
+            goToPage(fGym())
         }
 
         _ivJoin.setOnClickListener{
-            val mFragmentManager = supportFragmentManager
-            val mfSatu = fJoin()
-
-//            val mBundle = Bundle()
-//            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
-//            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
-
-
-            mFragmentManager.findFragmentByTag(fJoin::class.java.simpleName)
-            mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fJoin::class.java.simpleName).commit()
+            goToPage(fJoin())
         }
 
         _ivClass.setOnClickListener{
-            val mFragmentManager = supportFragmentManager
-            val mfSatu = fClass()
-
-//            val mBundle = Bundle()
-//            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
-//            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
-
-
-            mFragmentManager.findFragmentByTag(fClass::class.java.simpleName)
-            mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fClass::class.java.simpleName).commit()
+            goToPage(fClass())
         }
 
+        _ivTrainer.setOnClickListener{
+            goToPage(fTrainer())
+        }
+    }
+    private fun goToPage(fragment: Fragment) {
+        //            val mBundle = Bundle()
+        //            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
+        //            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
 
+        val mFragmentManager = supportFragmentManager
+        val mfSatu = fragment
+
+        mFragmentManager.findFragmentByTag(fragment::class.java.simpleName)
+        mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fragment::class.java.simpleName).commit()
     }
 }
