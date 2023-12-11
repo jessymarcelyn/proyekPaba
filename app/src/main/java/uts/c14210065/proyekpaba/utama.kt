@@ -3,11 +3,13 @@ package uts.c14210065.proyekpaba
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 
 class utama : AppCompatActivity() {
     companion object{
         const val login = "GETDATA"
+        const val dataId = "GETDATA"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,12 +22,16 @@ class utama : AppCompatActivity() {
         val _ivClass = findViewById<ImageView>(R.id.ivClass)
         val _ivProfile = findViewById<ImageView>(R.id.ivProfile)
 
-        val data = intent.getBooleanExtra(login, false)
+        val dataLogin = intent.getBooleanExtra(login, false)
+        val idLogin = intent.getStringExtra(dataId)
 
+        Log.d("idLogin", idLogin.toString())
+        Log.d("dataLogin", dataLogin.toString())
         _ivProfile.setOnClickListener {
-            if (!data) {
+            if (!dataLogin) {
                 val intentWithData = Intent(this@utama, MainActivity::class.java).apply {
-                    putExtra(MainActivity.login, false)
+                    putExtra(utama.login, false)
+                    putExtra(utama.dataId, "0")
                 }
                 startActivity(intentWithData)
             }else{
