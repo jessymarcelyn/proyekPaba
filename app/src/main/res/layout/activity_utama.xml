@@ -4,17 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#0C9F24"
     tools:context=".utama">
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="710dp"
+        android:layout_height="match_parent"
+        android:background="#212122"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/flTop"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#C9F24D">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="GymHub"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                tools:layout_editor_absoluteX="355dp"
+                tools:layout_editor_absoluteY="16dp"
+                tools:srcCompat="@drawable/profile" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#C9F24D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/ivHome"
@@ -72,7 +112,7 @@
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ivJoin"
-        app:srcCompat="@drawable/profile" />
+        app:srcCompat="@drawable/baseline_emoji_people_24" />
 
     <TextView
         android:id="@+id/tvJoin"
@@ -99,7 +139,7 @@
         android:id="@+id/tvProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Profile"
+        android:text="Trainer"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/ivProfile"
         app:layout_constraintStart_toStartOf="@+id/ivProfile"
@@ -114,4 +154,5 @@
         app:layout_constraintEnd_toEndOf="@+id/ivClass"
         app:layout_constraintStart_toStartOf="@+id/ivClass"
         app:layout_constraintTop_toTopOf="@+id/tvJoin" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
