@@ -22,7 +22,6 @@ class utama : AppCompatActivity() {
         val _ivJoin = findViewById<ImageView>(R.id.ivJoin)
         val _ivClass = findViewById<ImageView>(R.id.ivClass)
         val _ivProfile = findViewById<ImageView>(R.id.ivProfile)
-        val _ivTrainer = findViewById<ImageView>(R.id.ivTrainer)
 
         val dataLogin = intent.getBooleanExtra(login, false)
         val idLogin = intent.getStringExtra(userId)
@@ -65,9 +64,9 @@ class utama : AppCompatActivity() {
             goToPage(fClass())
         }
 
-        _ivTrainer.setOnClickListener{
-            goToPage(fTrainer())
-        }
+//        _ivTrainer.setOnClickListener{
+//            goToPage(fTrainer())
+//        }
     }
     private fun goToPage(fragment: Fragment) {
         //            val mBundle = Bundle()
