@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     val db = Firebase.firestore
     companion object{
         const val login = "GETDATA"
-        const val dataId = "GETDATA"
+        const val userId = "GETID"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         _btnLewati.setOnClickListener{
             val intentWithData = Intent(this@MainActivity, utama::class.java).apply {
                 putExtra(utama.login, false)
-                putExtra(utama.dataId, "0")
+                putExtra(utama.userId, "0")
 //                putExtra(login, true)
             }
             startActivity(intentWithData)
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         _btnLogin.setOnClickListener{
             val intentWithData = Intent(this@MainActivity, Login::class.java).apply {
                 putExtra(utama.login, false)
-                putExtra(utama.dataId, "0")
+                putExtra(utama.userId, "0")
 //                putExtra(login, true)
             }
             startActivity(intentWithData)

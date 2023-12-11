@@ -21,7 +21,7 @@ class Login : AppCompatActivity() {
 
     companion object {
         const val login = "GETDATA"
-        const val dataId = "GETDATA"
+        const val userId = "GETID"
     }
 
     val db = Firebase.firestore
@@ -72,7 +72,7 @@ class Login : AppCompatActivity() {
                 if (enteredNoTelp == noTelp && enteredPassword == password) {
                     val intentWithData = Intent(this@Login, utama::class.java).apply {
                         putExtra(utama.login, true)
-                        putExtra(utama.dataId, id.toString())
+                        putExtra(utama.userId, id.toString())
                         Log.d("Dataid", id.toString())
                     }
                     startActivity(intentWithData)

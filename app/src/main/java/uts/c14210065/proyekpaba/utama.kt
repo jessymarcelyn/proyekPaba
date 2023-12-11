@@ -9,7 +9,7 @@ import android.widget.ImageView
 class utama : AppCompatActivity() {
     companion object{
         const val login = "GETDATA"
-        const val dataId = "GETDATA"
+        const val userId = "GETID"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,7 @@ class utama : AppCompatActivity() {
         val _ivProfile = findViewById<ImageView>(R.id.ivProfile)
 
         val dataLogin = intent.getBooleanExtra(login, false)
-        val idLogin = intent.getStringExtra(dataId)
+        val idLogin = intent.getStringExtra(userId)
 
         Log.d("idLogin", idLogin.toString())
         Log.d("dataLogin", dataLogin.toString())
@@ -31,7 +31,7 @@ class utama : AppCompatActivity() {
             if (!dataLogin) {
                 val intentWithData = Intent(this@utama, MainActivity::class.java).apply {
                     putExtra(utama.login, false)
-                    putExtra(utama.dataId, "0")
+                    putExtra(utama.userId, "0")
                 }
                 startActivity(intentWithData)
             }else{
