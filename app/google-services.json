@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "439610904116",
+    "project_id": "proyekpaba-6c982",
+    "storage_bucket": "proyekpaba-6c982.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439610904116:android:6bc56a2b39ef6db216c461",
+        "android_client_info": {
+          "package_name": "uts.c14210065.proyekpaba"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc9KQOkpJ1vRC8uxQsXu3tR88y2YZmOV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
