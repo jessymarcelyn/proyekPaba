@@ -1,10 +1,13 @@
 package uts.c14210065.proyekpaba
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,6 +32,29 @@ class fProfile : Fragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var idLogin = arguments?.getString("userId")
+        Log.d("trainer", "profile" + idLogin)
+        val _btnLogout = view.findViewById<Button>(R.id.btnLogout)
+        val _btnTrainer = view.findViewById<Button>(R.id.btnTrainer)
+
+        _btnLogout.setOnClickListener{
+            val intent = Intent(activity, utama::class.java)
+            intent.putExtra(utama.login, false)
+            intent.putExtra(utama.userId, "0")
+            startActivity(intent)
+        }
+
+        _btnTrainer.setOnClickListener{
+
+            val intent = Intent(activity, sesiTrainer::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, idLogin)
+            startActivity(intent)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +73,9 @@ class fProfile : Fragment() {
          * @return A new instance of fragment fProfile.
          */
         // TODO: Rename and change types and number of parameters
+
+        const val login = "GETDATA"
+        const val userId = "GETID"
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             fProfile().apply {

@@ -25,7 +25,6 @@ class utama : AppCompatActivity() {
         val _ivProfile = findViewById<ImageView>(R.id.ivProfile)
         val _ivTrainer = findViewById<ImageView>(R.id.ivTrainer)
 
-
         _ivProfile.setImageResource(R.drawable.profile)
 
         val dataLogin = intent.getBooleanExtra(login, false)
@@ -41,15 +40,7 @@ class utama : AppCompatActivity() {
                 }
                 startActivity(intentWithData)
             }else{
-                val mFragmentManager = supportFragmentManager
-                val mfSatu = fProfile()
-
-//            val mBundle = Bundle()
-//            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
-//            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
-
-                mFragmentManager.findFragmentByTag(fProfile::class.java.simpleName)
-                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fProfile::class.java.simpleName).commit()
+                goToPage(fProfile())
             }
         }
 

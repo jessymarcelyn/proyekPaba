@@ -84,46 +84,59 @@ class adapterGym(
                         //JANGAN LUPA BALIKIN
                         if (!userIds.contains(idLogin)) {
 //                        if (userIds.contains(idLogin)) {
-                            db.collection("GymBooking")
-                                .add(gymSesi)
-                                .addOnSuccessListener { documentReference ->
-                                    Log.d(
-                                        "BookingGym",
-                                        "berhasil tambahkan user ke database GymBooking"
-                                    )
 
-                                    // Update GymSesi untuk kuota dan userId
-                                    val documentId = gym.idGym
-                                    val newKuotaSisa = gym.kuotaSisa - 1
-                                    val fieldName1 = "kuotaSisa"
-                                    val fieldName2 = "userId"
+                            val documentRef = db.collection("users").document(gym.idGym)
+                            documentRef.get()
+                                .addOnSuccessListener { documentSnapshot ->
+                                    val member = documentSnapshot.getBoolean("member")
 
-                                    val updateData = mapOf(
-                                        fieldName1 to newKuotaSisa,
-                                        fieldName2 to FieldValue.arrayUnion(idLogin)
-                                    )
+                                    if(member == true){
+                                        db.collection("GymBooking")
+                                            .add(gymSesi)
+                                            .addOnSuccessListener { documentReference ->
+                                                Log.d(
+                                                    "BookingGym",
+                                                    "berhasil tambahkan user ke database GymBooking"
+                                                )
 
-                                    showAlert(context, "Booking Berhasil", "Booking Gym anda pada tanggal ${gym.tanggal} " +
-                                            " jam ${gym.sesi} telah berhasil, Salam sehat! ")
+                                                // Update GymSesi untuk kuota dan userId
+                                                val documentId = gym.idGym
+                                                val newKuotaSisa = gym.kuotaSisa - 1
+                                                val fieldName1 = "kuotaSisa"
+                                                val fieldName2 = "userId"
 
-                                    db.collection("GymSesi").document(documentId)
-                                        .update(updateData)
-                                        .addOnSuccessListener {
-                                            Log.d(
-                                                "BookingGym",
-                                                "berhasil update"
-                                            )
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.d(
-                                                "BookingGym",
-                                                "gagal update"
-                                            )
-                                        }
+                                                val updateData = mapOf(
+                                                    fieldName1 to newKuotaSisa,
+                                                    fieldName2 to FieldValue.arrayUnion(idLogin)
+                                                )
+
+                                                showAlert(context, "Booking Berhasil", "Booking Gym anda pada tanggal ${gym.tanggal} " +
+                                                        " jam ${gym.sesi} telah berhasil, Salam sehat! ")
+
+                                                db.collection("GymSesi").document(documentId)
+                                                    .update(updateData)
+                                                    .addOnSuccessListener {
+                                                        Log.d(
+                                                            "BookingGym",
+                                                            "berhasil update"
+                                                        )
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.d(
+                                                            "BookingGym",
+                                                            "gagal update"
+                                                        )
+                                                    }
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.e("TAG", "Error adding document", e)
+                                            }
+                                    }
+                                    else{
+                                        showAlert(context, "Booking Gagal", "Anda belum berlangganan")
+                                    }
                                 }
-                                .addOnFailureListener { e ->
-                                    Log.e("TAG", "Error adding document", e)
-                                }
+
                         } else {
                             Log.d("BookingGym", "userId sudah terdaftar di sesi tersebut")
                             showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +

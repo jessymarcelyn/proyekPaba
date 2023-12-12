@@ -64,6 +64,7 @@ class fGym : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var idLogin = arguments?.getString("userId")
+        Log.d("trainer", "Gym" + idLogin)
         _rvGym = view.findViewById(R.id.rvGym)
 // Usage
         val _btnd1 = view.findViewById<Button>(R.id.btnd1)
@@ -154,12 +155,13 @@ class fGym : Fragment() {
                     val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
                     val sesi = document.getString("sesi") ?: ""
                     val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                    val member = document.getBoolean("member") ?: false
 
                     val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
                     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                     val formattedDate = dateFormat.format(Date(tanggal))
 
-                    arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId)))
+                    arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId), member))
                     Log.d("haes", "Document data: ${document.data}")
                     Log.d("haes", formattedDate)
                 }
