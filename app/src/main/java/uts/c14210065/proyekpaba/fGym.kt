@@ -1,10 +1,7 @@
 package uts.c14210065.proyekpaba
 
-import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
@@ -15,17 +12,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SimpleAdapter
-import android.widget.Toast
-import android.widget.ToggleButton
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -184,8 +180,6 @@ class fGym : Fragment() {
             lastClickedButton = _btnSun
         }
 
-
-
         TampilkanData()
         _rvGym.layoutManager = LinearLayoutManager(context)
         val adapterP = adapterGym(arGym)
@@ -193,20 +187,14 @@ class fGym : Fragment() {
     }
 
     fun dayTextSet(button: Button, text: String, size1: Int, size2: Int) {
-        // Create a SpannableString
         val spannableString = SpannableString(text)
 
-        // Apply different font sizes
         spannableString.setSpan(AbsoluteSizeSpan(size1, true), 0, text.indexOf('\n'), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         spannableString.setSpan(AbsoluteSizeSpan(size2, true), text.indexOf('\n') + 1, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        // Set the SpannableString to the Button
         button.text = spannableString
 
         button.setOnClickListener {
-            // Perform your button click logic here
-
-            // Disable the button to "freeze" it
             button.isEnabled = false
 
         }
@@ -215,31 +203,46 @@ class fGym : Fragment() {
     val db = Firebase.firestore
 
     private fun TampilkanData() {
-        db.collection("Gym2").get().addOnSuccessListener { result ->
+        db.collection("GymSesi").get().addOnSuccessListener { result ->
             arGym.clear()
             for (document in result) {
-                // Uncomment the following lines if you want to process the data
-                 val tanggal = document.getString("tanggal") ?: ""
-                 val jamList = (document.get("jamStart") as? ArrayList<*>)?.map { it.toString() }?.toList() ?: emptyList()
-                 val kuotaFullList = (document.get("kuotaMax") as? ArrayList<*>)?.map { (it as? Long)?.toInt() ?: 0 }?.toList() ?: emptyList()
-                 val kuotaSisaList = (document.get("sisaKuota") as? ArrayList<*>)?.map { (it as? Long)?.toInt() ?: 0 }?.toList() ?: emptyList()
 
-                 val gym = Gym(tanggal, ArrayList(jamList), ArrayList(kuotaFullList), ArrayList(kuotaSisaList))
-                 arGym.add(gym)
-                Log.d("haes", "Document data: ${document.data}")
-                Log.d("haes", tanggal)
+                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
+
+
+                if(isToday(tanggal)) {
+                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
+                    val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
+                    val sesi = document.getString("sesi") ?: ""
+
+                    val userId =
+                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+
+
+                val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+                dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                val formattedDate = dateFormat.format(Date(tanggal))
+
+                    arGym.add(Gym(formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId)))
+                    Log.d("haes", "Document data: ${document.data}")
+                    Log.d("haes", formattedDate)
+                }
             }
             _rvGym.adapter?.notifyDataSetChanged()
         }.addOnFailureListener { e ->
             Log.e("haes", "Error fetching data from Firebase", e)
         }
-
     }
 
-    private fun isDateInNext7Days(date: Date, startDate: Calendar, endDate: Calendar): Boolean {
-        val documentDate = Calendar.getInstance()
-        documentDate.time = date
-        return documentDate.after(startDate) && documentDate.before(endDate)
+
+    fun isToday(timestamp: Long): Boolean {
+        val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
+        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+
+        val formattedDate = dateFormat.format(Date(timestamp))
+        val currentDate = dateFormat.format(Date())
+
+        return formattedDate == currentDate
     }
 
     companion object {

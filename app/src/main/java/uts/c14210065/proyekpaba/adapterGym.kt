@@ -41,9 +41,11 @@ class adapterGym (
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var gym = listGym[position]
 
-        holder._tvStartGym.setText(gym.jamStart[0].toString())
-        holder._tvEndGym.setText(gym.jamStart[0].toString())
-        holder._tvSlot.setText(gym.kuotaSisa[0].toString())
+
+            // Now you can use these values to set your TextViews or perform any other logic
+            holder._tvStartGym.text = gym.sesi
+            holder._tvEndGym.text = gym.tanggal.toString()  // You might want to change this if 'jamStart' is the end time
+            holder._tvSlot.text = gym.kuotaSisa.toString()
 
 
 //        holder._btnHapus.setOnClickListener{
