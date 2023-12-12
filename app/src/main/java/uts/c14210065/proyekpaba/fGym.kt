@@ -59,29 +59,24 @@ class fGym : Fragment() {
     private lateinit var _rvGym : RecyclerView
     private var arGym = arrayListOf<Gym>()
     private var lastClickedButton: Button? = null
+    lateinit var dayDate : Date
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        var idLogin = arguments?.getString("userId")
         _rvGym = view.findViewById(R.id.rvGym)
 // Usage
-        val _btnMon = view.findViewById<Button>(R.id.btnMon)
-        val _btnTue = view.findViewById<Button>(R.id.btnTue)
-        val _btnWed = view.findViewById<Button>(R.id.btnWed)
-        val _btnThu = view.findViewById<Button>(R.id.btnThu)
-        val _btnFri = view.findViewById<Button>(R.id.btnFri)
-        val _btnSat = view.findViewById<Button>(R.id.btnSat)
-        val _btnSun = view.findViewById<Button>(R.id.btnSun)
-//        dayTextSet(_btnMon, "Mon\n17 Des", size1, size2)
-//        dayTextSet(_btnTue, "Tue\n18 Des", size1, size2)
-//        dayTextSet(_btnWed, "Wed\n19 Des", size1, size2)
-//        dayTextSet(_btnThu, "Thu\n20 Des", size1, size2)
-//        dayTextSet(_btnFri, "Fri\n21 Des", size1, size2)
-//        dayTextSet(_btnSat, "Sat\n22 Des", size1, size2)
-//        dayTextSet(_btnSun, "Sun\n23 Des", size1, size2)
+        val _btnd1 = view.findViewById<Button>(R.id.btnd1)
+        val _btnd2 = view.findViewById<Button>(R.id.btnd2)
+        val _btnd3 = view.findViewById<Button>(R.id.btnd3)
+        val _btnd4 = view.findViewById<Button>(R.id.btnd4)
+        val _btnd5 = view.findViewById<Button>(R.id.btnd5)
+        val _btnd6 = view.findViewById<Button>(R.id.btnd6)
+        val _btnd7 = view.findViewById<Button>(R.id.btnd7)
 
         // Get the current date
-        val currentDate = Calendar.getInstance().time
+        var currentDate = Calendar.getInstance().time
+        dayDate = currentDate
 
         // Generate text for the next 7 days
         for (i in 0 until 7) {
@@ -91,98 +86,43 @@ class fGym : Fragment() {
 
             val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale.getDefault()).format(day.time)
 
-            // Use the generated text in your buttons
             when (i) {
-                0 -> dayTextSet(_btnMon, formattedDate, size1, size2)
-                1 -> dayTextSet(_btnTue, formattedDate, size1, size2)
-                2 -> dayTextSet(_btnWed, formattedDate, size1, size2)
-                3 -> dayTextSet(_btnThu, formattedDate, size1, size2)
-                4 -> dayTextSet(_btnFri, formattedDate, size1, size2)
-                5 -> dayTextSet(_btnSat, formattedDate, size1, size2)
-                6 -> dayTextSet(_btnSun, formattedDate, size1, size2)
+                0 -> dayTextSet(_btnd1, formattedDate, size1, size2)
+                1 -> dayTextSet(_btnd2, formattedDate, size1, size2)
+                2 -> dayTextSet(_btnd3, formattedDate, size1, size2)
+                3 -> dayTextSet(_btnd4, formattedDate, size1, size2)
+                4 -> dayTextSet(_btnd5, formattedDate, size1, size2)
+                5 -> dayTextSet(_btnd6, formattedDate, size1, size2)
+                6 -> dayTextSet(_btnd7, formattedDate, size1, size2)
             }
         }
 
-        _btnMon.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
+        val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
 
-            // Set the background color of the current clicked button to purple
-            _btnMon.setBackgroundColor(Color.parseColor("#6750A4"))
+        for (i in buttons.indices) {
+            buttons[i].setOnClickListener {
+                // Reset the background color of the last clicked button to white
+                lastClickedButton?.setBackgroundColor(Color.WHITE)
 
-            // Update the last clicked button
-            lastClickedButton = _btnMon
+                // Set the background color of the current clicked button to purple
+                buttons[i].setBackgroundColor(Color.parseColor("#6750A4"))
+
+                // Update the last clicked button
+                lastClickedButton = buttons[i]
+
+                // tanggal di button
+                val calendar = Calendar.getInstance()
+                calendar.time = currentDate
+                calendar.add(Calendar.DATE, i)
+                dayDate = calendar.time
+
+                TampilkanData(dayDate)
+            }
         }
 
-        _btnTue.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
 
-            // Set the background color of the current clicked button to purple
-            _btnTue.setBackgroundColor(Color.parseColor("#6750A4"))
-
-            // Update the last clicked button
-            lastClickedButton = _btnTue
-        }
-
-        _btnWed.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
-
-            // Set the background color of the current clicked button to purple
-            _btnWed.setBackgroundColor(Color.parseColor("#6750A4"))
-
-            // Update the last clicked button
-            lastClickedButton = _btnWed
-        }
-
-        _btnThu.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
-
-            // Set the background color of the current clicked button to purple
-            _btnThu.setBackgroundColor(Color.parseColor("#6750A4"))
-
-            // Update the last clicked button
-            lastClickedButton = _btnThu
-        }
-
-        _btnFri.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
-
-            // Set the background color of the current clicked button to purple
-            _btnFri.setBackgroundColor(Color.parseColor("#6750A4"))
-
-            // Update the last clicked button
-            lastClickedButton = _btnFri
-        }
-
-        _btnSat.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
-
-            // Set the background color of the current clicked button to purple
-            _btnSat.setBackgroundColor(Color.parseColor("#6750A4"))
-
-            // Update the last clicked button
-            lastClickedButton = _btnSat
-        }
-
-        _btnSun.setOnClickListener{
-            // Reset the background color of the last clicked button to white
-            lastClickedButton?.setBackgroundColor(Color.WHITE)
-
-            // Set the background color of the current clicked button to purple
-            _btnSun.setBackgroundColor(Color.parseColor("#6750A4"))
-
-            // Update the last clicked button
-            lastClickedButton = _btnSun
-        }
-
-        TampilkanData()
         _rvGym.layoutManager = LinearLayoutManager(context)
-        val adapterP = adapterGym(arGym)
+        val adapterP = adapterGym(arGym, idLogin, requireContext())
         _rvGym.adapter = adapterP
     }
 
@@ -202,47 +142,46 @@ class fGym : Fragment() {
     lateinit var lvAdapterSimple: SimpleAdapter
     val db = Firebase.firestore
 
-    private fun TampilkanData() {
+    private fun TampilkanData(btnDate: Date) {
         db.collection("GymSesi").get().addOnSuccessListener { result ->
             arGym.clear()
             for (document in result) {
-
+                var Gymid = document.id
                 val tanggal = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
+                val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 
-
-                if(isToday(tanggal)) {
+                if(cekDate(tanggal, btnDate) && kuotaSisa > 0) {
                     val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
-                    val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
                     val sesi = document.getString("sesi") ?: ""
+                    val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
-                    val userId =
-                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                    val formattedDate = dateFormat.format(Date(tanggal))
 
-
-                val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-                dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                val formattedDate = dateFormat.format(Date(tanggal))
-
-                    arGym.add(Gym(formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId)))
+                    arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId)))
                     Log.d("haes", "Document data: ${document.data}")
                     Log.d("haes", formattedDate)
                 }
             }
+            arGym.sortBy { it.sesi }
             _rvGym.adapter?.notifyDataSetChanged()
         }.addOnFailureListener { e ->
             Log.e("haes", "Error fetching data from Firebase", e)
         }
     }
 
-
-    fun isToday(timestamp: Long): Boolean {
+    fun cekDate(timestamp: Long, btnDate: Date): Boolean {
         val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
         val formattedDate = dateFormat.format(Date(timestamp))
-        val currentDate = dateFormat.format(Date())
+        val date = dateFormat.format(btnDate)
 
-        return formattedDate == currentDate
+        Log.d("cektanggal", "format" + formattedDate)
+        Log.d("cektanggal", "button " + date)
+
+        return formattedDate == date
     }
 
     companion object {

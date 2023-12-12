@@ -13,6 +13,7 @@ class utama : AppCompatActivity() {
         const val userId = "GETID"
     }
 
+    lateinit var idLogin : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_utama)
@@ -25,7 +26,7 @@ class utama : AppCompatActivity() {
         val _ivTrainer = findViewById<ImageView>(R.id.ivTrainer)
 
         val dataLogin = intent.getBooleanExtra(login, false)
-        val idLogin = intent.getStringExtra(userId)
+        idLogin = intent.getStringExtra(userId).toString()
 
         Log.d("idLogin", idLogin.toString())
         Log.d("dataLogin", dataLogin.toString())
@@ -70,12 +71,13 @@ class utama : AppCompatActivity() {
         }
     }
     private fun goToPage(fragment: Fragment) {
-        //            val mBundle = Bundle()
-        //            mBundle.putParcelableArrayList("dataMatkul", isiMatkul)
-        //            mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
 
         val mFragmentManager = supportFragmentManager
         val mfSatu = fragment
+
+        val mBundle = Bundle()
+        mBundle.putString("userId", idLogin)
+        mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
 
         mFragmentManager.findFragmentByTag(fragment::class.java.simpleName)
         mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fragment::class.java.simpleName).commit()

@@ -44,7 +44,7 @@
 <!--                android:text="Mon\n17 Des" />-->
 
             <Button
-                android:id="@+id/btnMon"
+                android:id="@+id/btnd1"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -57,7 +57,7 @@
             <!--                app:strokeWidth="2dp"-->
 
             <Button
-                android:id="@+id/btnTue"
+                android:id="@+id/btnd2"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -66,7 +66,7 @@
                 android:text="Feb\n18 Des" />
 
             <Button
-                android:id="@+id/btnWed"
+                android:id="@+id/btnd3"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -75,7 +75,7 @@
                 android:text="Wed\n19 Des" />
 
             <Button
-                android:id="@+id/btnThu"
+                android:id="@+id/btnd4"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -84,7 +84,7 @@
                 android:text="Thu\n20 Des" />
 
             <Button
-                android:id="@+id/btnFri"
+                android:id="@+id/btnd5"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -93,7 +93,7 @@
                 android:text="Fri\n21 Des" />
 
             <Button
-                android:id="@+id/btnSat"
+                android:id="@+id/btnd6"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -102,7 +102,7 @@
                 android:text="Sat\n21 Des" />
 
             <Button
-                android:id="@+id/btnSun"
+                android:id="@+id/btnd7"
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
