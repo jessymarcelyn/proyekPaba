@@ -25,6 +25,9 @@ class utama : AppCompatActivity() {
         val _ivProfile = findViewById<ImageView>(R.id.ivProfile)
         val _ivTrainer = findViewById<ImageView>(R.id.ivTrainer)
 
+
+        _ivProfile.setImageResource(R.drawable.profile)
+
         val dataLogin = intent.getBooleanExtra(login, false)
         idLogin = intent.getStringExtra(userId).toString()
 
