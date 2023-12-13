@@ -66,7 +66,7 @@ class fGym : Fragment() {
         var idLogin = arguments?.getString("userId")
         Log.d("trainer", "Gym" + idLogin)
         _rvGym = view.findViewById(R.id.rvGym)
-// Usage
+
         val _btnd1 = view.findViewById<Button>(R.id.btnd1)
         val _btnd2 = view.findViewById<Button>(R.id.btnd2)
         val _btnd3 = view.findViewById<Button>(R.id.btnd3)
