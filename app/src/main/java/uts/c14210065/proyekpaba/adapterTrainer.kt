@@ -38,8 +38,8 @@ class adapterTrainer (private val listTrainer: ArrayList<TrainerModel>) : Recycl
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var trainers = listTrainer[position]
         holder._namaTrainer.setText(trainers.nama)
-        holder._namaTrainer.setText(trainers.review!!)
-        holder._namaTrainer.setText(trainers.client!!)
+        holder._review.text = trainers.review?.toString() ?: "N/A"
+        holder._client.text = trainers.client?.toString() ?: "N/A"
 
 
 

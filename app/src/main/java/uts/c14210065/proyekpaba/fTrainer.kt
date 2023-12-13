@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -52,15 +53,41 @@ class fTrainer : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize RecyclerView and ArrayList
+        rvTrainer = view.findViewById(R.id.rvTrainer)
+        arTrainer = ArrayList()
+
+        fetchDataFromFirestore()
+
+        // Set up RecyclerView
+        rvTrainer.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = adapterTrainer(arTrainer)
+        rvTrainer.adapter = adapter
+
+
+
+        // Fetch data and update the ArrayList
+//        lifecycleScope.launch {
+//            arTrainer.addAll(fetchDataFromFirestore())
+//            adapter.notifyDataSetChanged()
+//        }
     }
 
-//    private fun TampilkanData() {
-//        rvTrainer.layoutManager = LinearLayoutManager(this)
-//
-//        val adapterP = adapterTrainer(arTrainer)
-//        rvTrainer.adapter = adapterP
-//
-//    }
+    private fun fetchDataFromFirestore() {
+        db.collection("Trainer").get().addOnSuccessListener { result ->
+            arTrainer.clear()
+            for (document in result) {
+                var namaTrainer = document.getString("nama")
+
+                arTrainer.add(TrainerModel(namaTrainer, 5, 6))
+                Log.d("haes", "Document data: ${document.data}")
+            }
+
+            rvTrainer.adapter?.notifyDataSetChanged()
+        }.addOnFailureListener { e ->
+            Log.e("haes", "Error fetching data from Firebase", e)
+        }
+    }
 
     companion object {
         /**
