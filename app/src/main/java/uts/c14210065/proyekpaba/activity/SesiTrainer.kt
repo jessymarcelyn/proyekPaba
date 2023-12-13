@@ -1,4 +1,4 @@
-package uts.c14210065.proyekpaba
+package uts.c14210065.proyekpaba.activity
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -9,11 +9,12 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestore
+import uts.c14210065.proyekpaba.R
+import uts.c14210065.proyekpaba.fGym
+import uts.c14210065.proyekpaba.model.SesiT
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

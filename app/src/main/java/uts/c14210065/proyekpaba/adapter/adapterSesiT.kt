@@ -1,20 +1,16 @@
-package uts.c14210065.proyekpaba
+package uts.c14210065.proyekpaba.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
+import uts.c14210065.proyekpaba.model.Gym
+import uts.c14210065.proyekpaba.R
+import uts.c14210065.proyekpaba.model.User
 import java.text.SimpleDateFormat
 import java.util.Locale
 

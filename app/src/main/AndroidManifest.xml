@@ -13,16 +13,16 @@
         android:theme="@style/Theme.ProyekPaba"
         tools:targetApi="31">
         <activity
-            android:name=".sesiTrainer"
+            android:name=".activity.sesiTrainer"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".activity.Login"
             android:exported="false" />
         <activity
-            android:name=".utama"
+            android:name=".activity.utama"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

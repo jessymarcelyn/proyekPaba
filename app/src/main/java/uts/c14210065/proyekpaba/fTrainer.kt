@@ -5,6 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import uts.c14210065.proyekpaba.adapter.adapterTrainer
+import uts.c14210065.proyekpaba.model.TrainerModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,6 +24,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class fTrainer : Fragment() {
+    private lateinit var rvTrainer: RecyclerView
+    private lateinit var arTrainer: ArrayList<TrainerModel>
+
+    val db = Firebase.firestore
+
+
+
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -36,6 +51,19 @@ class fTrainer : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_f_trainer, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
+//    private fun TampilkanData() {
+//        rvTrainer.layoutManager = LinearLayoutManager(this)
+//
+//        val adapterP = adapterTrainer(arTrainer)
+//        rvTrainer.adapter = adapterP
+//
+//    }
 
     companion object {
         /**

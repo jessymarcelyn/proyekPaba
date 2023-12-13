@@ -1,4 +1,4 @@
-package uts.c14210065.proyekpaba
+package uts.c14210065.proyekpaba.model
 
 data class User(
     var nama :String,

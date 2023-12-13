@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#212122"
-    tools:context=".sesiTrainer">
+    tools:context=".activity.sesiTrainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/flTop"
