@@ -1,4 +1,4 @@
-package uts.c14210065.proyekpaba.activity
+package uts.c14210065.proyekpaba
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,13 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import uts.c14210065.proyekpaba.R
-import uts.c14210065.proyekpaba.fClass
-import uts.c14210065.proyekpaba.fGym
-import uts.c14210065.proyekpaba.fHome
-import uts.c14210065.proyekpaba.fJoin
-import uts.c14210065.proyekpaba.fProfile
-import uts.c14210065.proyekpaba.fTrainer
 
 class utama : AppCompatActivity() {
     companion object{
@@ -42,8 +35,8 @@ class utama : AppCompatActivity() {
         _ivProfile.setOnClickListener {
             if (!dataLogin) {
                 val intentWithData = Intent(this@utama, MainActivity::class.java).apply {
-                    putExtra(login, false)
-                    putExtra(userId, "0")
+                    putExtra(utama.login, false)
+                    putExtra(utama.userId, "0")
                 }
                 startActivity(intentWithData)
             }else{

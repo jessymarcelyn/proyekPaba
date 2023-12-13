@@ -29,9 +29,6 @@ class fTrainer : Fragment() {
 
     val db = Firebase.firestore
 
-
-
-
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

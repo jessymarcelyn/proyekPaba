@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#212122"
-    tools:context=".activity.sesiTrainer">
+    tools:context=".sesiTrainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/flTop"
@@ -54,13 +54,14 @@
 
     <TextView
         android:id="@+id/tvSisa"
-        android:layout_width="61dp"
-        android:layout_height="36dp"
+        android:layout_width="43dp"
+        android:layout_height="32dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:text="Sisa Sesi : "
         android:textColor="#FFFFFF"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
@@ -114,24 +115,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tvSisa" />
 
     <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvSisa"
-        app:layout_constraintStart_toEndOf="@+id/tvSisa"
-        app:layout_constraintTop_toTopOf="@+id/tvSisa" />
-
-    <TextView
         android:id="@+id/tvTotal"
-        android:layout_width="125dp"
-        android:layout_height="38dp"
+        android:layout_width="130dp"
+        android:layout_height="32dp"
         android:text="Total Sesi"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
-        app:layout_constraintStart_toEndOf="@+id/textView15"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/tvSisa"
         app:layout_constraintTop_toTopOf="@+id/tvSisa" />
 
     <TextView
@@ -288,4 +279,5 @@
         app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView"></androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.utama">
+    android:backgroundTint="#0C9F24"
+    tools:context=".utama">
 
     <FrameLayout
         android:id="@+id/frameLayout"

@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestore
-import uts.c14210065.proyekpaba.adapter.adapterGym
-import uts.c14210065.proyekpaba.model.Gym
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -87,7 +85,7 @@ class fGym : Fragment() {
             day.time = currentDate
             day.add(Calendar.DATE, i)
 
-            val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale.getDefault()).format(day.time)
+            val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale("id", "ID")).format(day.time)
 
             when (i) {
                 0 -> dayTextSet(_btnd1, formattedDate, size1, size2)
@@ -108,7 +106,7 @@ class fGym : Fragment() {
                 lastClickedButton?.setBackgroundColor(Color.WHITE)
 
                 // Set the background color of the current clicked button to purple
-                buttons[i].setBackgroundColor(Color.parseColor("#6750A4"))
+                buttons[i].setBackgroundColor(Color.parseColor("#C9F24D"))
 
                 // Update the last clicked button
                 lastClickedButton = buttons[i]
