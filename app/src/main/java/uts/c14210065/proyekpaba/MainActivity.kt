@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
         val _btnLogin = findViewById<TextView>(R.id.btnLogin)
         val _btnRegister = findViewById<TextView>(R.id.btnRegister)
 
+        _btnRegister.setOnClickListener{
+            val intentWithData = Intent(this@MainActivity, Register::class.java)
+            startActivity(intentWithData)
+        }
+
         _btnLewati.setOnClickListener{
             val intentWithData = Intent(this@MainActivity, utama::class.java).apply {
                 putExtra(utama.login, false)
