@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +28,12 @@ private const val ARG_PARAM2 = "param2"
 class fTrainer : Fragment() {
     private lateinit var rvTrainer: RecyclerView
     private lateinit var arTrainer: ArrayList<TrainerModel>
+
+    private lateinit var btnSpecial: Button
+    private lateinit var btnStrong: Button
+    private lateinit var btnAthletic: Button
+    private lateinit var btnShape: Button
+    private lateinit var btnWellness: Button
 
     val db = Firebase.firestore
 
@@ -52,40 +59,58 @@ class fTrainer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        btnSpecial = view.findViewById(R.id.btnSpecial)
+        btnStrong = view.findViewById(R.id.btnStrong)
+        btnAthletic = view.findViewById(R.id.btnAthletic)
+        btnShape = view.findViewById(R.id.btnShape)
+        btnWellness = view.findViewById(R.id.btnWellness)
 
-        // Initialize RecyclerView and ArrayList
         rvTrainer = view.findViewById(R.id.rvTrainer)
         arTrainer = ArrayList()
 
-        fetchDataFromFirestore()
+        btnSpecial.setOnClickListener {
+            fetchDataFromFirestore("special")
+        }
+        btnStrong.setOnClickListener {
+            fetchDataFromFirestore("strong")
+        }
+        btnAthletic.setOnClickListener {
+            fetchDataFromFirestore("athletic")
+        }
+        btnShape.setOnClickListener {
+            fetchDataFromFirestore("shape")
+        }
+        btnWellness.setOnClickListener {
+            fetchDataFromFirestore("wellness")
+        }
 
-        // Set up RecyclerView
+        fetchDataFromFirestore("")
+
         rvTrainer.layoutManager = LinearLayoutManager(requireContext())
         val adapter = adapterTrainer(arTrainer)
         rvTrainer.adapter = adapter
 
-
-
-        // Fetch data and update the ArrayList
-//        lifecycleScope.launch {
-//            arTrainer.addAll(fetchDataFromFirestore())
-//            adapter.notifyDataSetChanged()
-//        }
     }
 
-    private fun fetchDataFromFirestore() {
-        db.collection("Trainer").get().addOnSuccessListener { result ->
+    private fun fetchDataFromFirestore(skill: String) {
+        db.collection("Trainer")
+            .whereArrayContains("skills", skill)
+            .get()
+            .addOnSuccessListener { result ->
             arTrainer.clear()
             for (document in result) {
                 var namaTrainer = document.getString("nama")
+                val clientId = (document["clientId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                val skills = (document["skills"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
-                arTrainer.add(TrainerModel(namaTrainer, 5, 6))
-                Log.d("haes", "Document data: ${document.data}")
+                arTrainer.add(TrainerModel(namaTrainer, ArrayList(skills), clientId.size))
+                Log.d("fetchTrainer", "Document data: ${document.data}")
+                Log.d("fetchTrainer", "Document data: ${clientId.size}")
             }
 
             rvTrainer.adapter?.notifyDataSetChanged()
         }.addOnFailureListener { e ->
-            Log.e("haes", "Error fetching data from Firebase", e)
+            Log.e("fetchTrainer", "Error fetching data from Firebase", e)
         }
     }
 
