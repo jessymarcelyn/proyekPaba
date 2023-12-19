@@ -84,7 +84,8 @@ class Register : AppCompatActivity() {
             "nomor" to nomor,
             "password" to password,
             "gender" to gender,
-            "email" to email
+            "email" to email,
+            "member" to false
         )
 
         // Menambahkan data ke Firestore
