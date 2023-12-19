@@ -1,25 +1,18 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class adapterSesiT(
-    private val listGym: ArrayList<Gym>,
+    private val listSesiT: ArrayList<SesiT>,
     private val idLogin: String?
 ) : RecyclerView.Adapter<adapterSesiT.ListViewHolder>() {
 
@@ -35,30 +28,26 @@ class adapterSesiT(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartGym: TextView = itemView.findViewById(R.id.tvStartGym)
-        var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
-        var _btnBookGym: Button = itemView.findViewById(R.id.btnBookGym)
-        var _tvSlotMax: TextView = itemView.findViewById(R.id.tvSlotMax)
+        var _tvStartSesiTrainer: TextView = itemView.findViewById(R.id.tvStartSesiTrainer)
+        var _btnBookSesi: Button = itemView.findViewById(R.id.btnBookSesi)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.itemgym, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.itemsesitrainer, parent, false)
         return ListViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return listGym.size
+        return listSesiT.size
     }
 
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        var gym = listGym[position]
+        var sesiTrainer = listSesiT[position]
 
-        holder._tvStartGym.text = gym.sesi
-//        holder._tvEndGym.text = gym.endTime
-        holder._tvSlot.text = gym.kuotaSisa.toString()
-        holder._tvSlotMax.text = gym.kuotaMax.toString() + " Slot"
+        holder._tvStartSesiTrainer.text = sesiTrainer.sesi
+
     }
 
 

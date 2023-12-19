@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,12 +8,14 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -34,9 +37,13 @@ class sesiTrainer : AppCompatActivity() {
     private lateinit var _tvTanggalMulai: TextView
     private lateinit var _tvDurasi: TextView
     private lateinit var _tvTanggalExpired: TextView
-    private lateinit var _tvSisa: TextView
-    private lateinit var _tvTotal: TextView
+    private lateinit var _tvSesi: TextView
+    private lateinit var buttons: Array<Button>
+    lateinit var idTrainer : String
+    lateinit var _rvSesiT : RecyclerView
 
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sesi_trainer)
@@ -48,11 +55,10 @@ class sesiTrainer : AppCompatActivity() {
         _tvTanggalMulai = findViewById<TextView>(R.id.tvTanggalMulai)
         _tvDurasi = findViewById<TextView>(R.id.tvDurasi)
         _tvTanggalExpired = findViewById<TextView>(R.id.tvTanggalExpired)
-        _tvSisa = findViewById<TextView>(R.id.tvSisa)
-        _tvTotal = findViewById<TextView>(R.id.tvTotal)
+        _tvSesi = findViewById<TextView>(R.id.tvSesi)
 
         TampilkanData1()
-        val _rvSesiT = findViewById<RecyclerView>(R.id.rvSesiT)
+        _rvSesiT = findViewById<RecyclerView>(R.id.rvSesiT)
 
         val _btnd1 = findViewById<Button>(R.id.btnd1)
         val _btnd2 = findViewById<Button>(R.id.btnd2)
@@ -62,32 +68,23 @@ class sesiTrainer : AppCompatActivity() {
         val _btnd6 = findViewById<Button>(R.id.btnd6)
         val _btnd7 = findViewById<Button>(R.id.btnd7)
 
+        TampilkanData1()
+
         // Get the current date
         var currentDate = Calendar.getInstance().time
         dayDate = currentDate
 
-        // Generate text for the next 7 days
-        for (i in 0 until 7) {
+        buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
+
+        for (i in buttons.indices) {
             val day = Calendar.getInstance()
             day.time = currentDate
             day.add(Calendar.DATE, i)
 
             val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale("id", "ID")).format(day.time)
 
-            when (i) {
-                0 -> dayTextSet(_btnd1, formattedDate, fGym.size1, fGym.size2)
-                1 -> dayTextSet(_btnd2, formattedDate, fGym.size1, fGym.size2)
-                2 -> dayTextSet(_btnd3, formattedDate, fGym.size1, fGym.size2)
-                3 -> dayTextSet(_btnd4, formattedDate, fGym.size1, fGym.size2)
-                4 -> dayTextSet(_btnd5, formattedDate, fGym.size1, fGym.size2)
-                5 -> dayTextSet(_btnd6, formattedDate, fGym.size1, fGym.size2)
-                6 -> dayTextSet(_btnd7, formattedDate, fGym.size1, fGym.size2)
-            }
-        }
+            dayTextSet(buttons[i], formattedDate, fGym.size1, fGym.size2)
 
-        val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
-
-        for (i in buttons.indices) {
             buttons[i].setOnClickListener {
                 // Reset the background color of the last clicked button to white
                 lastClickedButton?.setBackgroundColor(Color.WHITE)
@@ -104,14 +101,14 @@ class sesiTrainer : AppCompatActivity() {
                 calendar.add(Calendar.DATE, i)
                 dayDate = calendar.time
 
-//                TampilkanData(dayDate)
+                TampilkanData2(dayDate)
             }
         }
 
 
-//        _rvGym.layoutManager = LinearLayoutManager(this)
-//        val adapterP = adapterGym(arSesiT, idLogin, requireContext())
-//        _rvGym.adapter = adapterP
+        _rvSesiT.layoutManager = LinearLayoutManager(this)
+        val adapterP = adapterSesiT(arSesiT, idLogin)
+        _rvSesiT.adapter = adapterP
     }
 
     fun dayTextSet(button: Button, text: String, size1: Int, size2: Int) {
@@ -134,7 +131,6 @@ class sesiTrainer : AppCompatActivity() {
 
         button.setOnClickListener {
             button.isEnabled = false
-
         }
     }
 
@@ -152,10 +148,11 @@ class sesiTrainer : AppCompatActivity() {
                 val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
                 val currentDate = Calendar.getInstance().time
 
-                if (idUser == idLogin && tanggalBerakhir > currentDate) {
+                idTrainer = document.getString("idTrainer") ?: ""
+
+                if (idUser == idLogin && tanggalBerakhir >= currentDate) {
                     Log.d("sesiTrainerr", "masuk")
                     var userTrainerId = document.id
-                    var idTrainer = document.getString("idTrainer") ?: ""
                     var harga = document.getLong("harga")?.toInt() ?: 0
                     var sisaSesi = document.getLong("sisaSesi")?.toInt() ?: 0
                     var totalSesi = document.getLong("totalSesi")?.toInt() ?: 0
@@ -173,11 +170,41 @@ class sesiTrainer : AppCompatActivity() {
                         }
                     }
 
-                    _tvSisa.text = sisaSesi.toString() + " / "
-                    _tvTotal.text = totalSesi.toString() + " Sesi"
+                    _tvSesi.text = sisaSesi.toString() + " / " + totalSesi.toString() + " Sesi"
                     _tvDurasi.text = durasi.toString() + " Bulan"
                     _tvTanggalExpired.text = tanggalBerakhirConvert.toString()
                     _tvTanggalMulai.text = tanggalMulaiConvert.toString()
+
+                    for (i in buttons.indices) {
+                        buttons[i].visibility = View.VISIBLE
+                    }
+//                    TampilkanData2()
+                    break
+
+                }
+                else{
+                    // kalau sudah expired hapus id client di Trainer
+                    Log.d("HHH", "MASUK")
+                    val db = Firebase.firestore
+                    val documentReference = db.collection("Trainer").document(idTrainer)
+
+                    val elementToRemove = idUser // Replace with the actual value you want to remove
+
+                    documentReference.update("clientId", FieldValue.arrayRemove(elementToRemove))
+                        .addOnSuccessListener {
+                            Log.d("FirestoreArrayRemove", "Element successfully removed from the array!")
+                            _tvNamaT.text = "-"
+                            _tvSesi.text = "Unavailable"
+//                            _tvSesi.textSize = 14f
+                            _tvDurasi.text = "-"
+                            _tvTanggalExpired.text = "-"
+                            _tvTanggalMulai.text = "-"
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("FirestoreArrayRemove", "Error removing element from the array", e)
+                        }
+
+
                 }
             }
         }.addOnFailureListener { e ->
@@ -206,41 +233,55 @@ class sesiTrainer : AppCompatActivity() {
         calendar.add(Calendar.MONTH, monthsToAdd)
         return calendar.time
     }
-//    private fun TampilkanData(btnDate: Date) {
-//        db.collection("GymSesi").get().addOnSuccessListener { result ->
-//            arSesiT.clear()
-//            for (document in result) {
-//                var Gymid = document.id
-//                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
-//                val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
-//
-//                if(cekDate(tanggal, btnDate) && kuotaSisa > 0) {
-//                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
-//                    val sesi = document.getString("sesi") ?: ""
-//                    val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
-//                    val member = document.getBoolean("member") ?: false
-//
-//                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-//                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-//                    val formattedDate = dateFormat.format(Date(tanggal))
-//
-//                    arSesiT.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId), member))
-//                    Log.d("haes", "Document data: ${document.data}")
-//                    Log.d("haes", formattedDate)
-//                }
-//            }
-//            arSesiT.sortBy { it.sesi }
-//            _rvGym.adapter?.notifyDataSetChanged()
-//        }.addOnFailureListener { e ->
-//            Log.e("haes", "Error fetching data from Firebase", e)
-//        }
-//    }
 
-    fun cekDate(timestamp: Long, btnDate: Date): Boolean {
+    //Menampilkan data yang bawah untuk jadwal trainer.
+    private fun TampilkanData2(btnDate: Date) {
+        db.collection("JadwalTrainer").get().addOnSuccessListener { result ->
+            arSesiT.clear()
+            for (document in result) {
+                var jadwalTrainerId = document.id
+                val trainerId = document.getString("trainerId") ?: ""
+                if(trainerId == idTrainer){
+                    Log.d("tralala", "masuk")
+                    val userTrainerId = document.getString("userTrainerId") ?: ""
+                    val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
+                    if(cekDate(tanggal, btnDate) && userTrainerId == "") {
+
+                        val calendar = Calendar.getInstance()
+                        calendar.time = tanggal
+
+                        // ambil jam dan menit dari timestamp tanggal di database
+                        val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                        val menit = calendar.get(Calendar.MINUTE)
+
+                        //agar jadi 08.00 atau 17.00
+                        val formatJam = String.format("%02d", jam)
+                        val formatMenit = String.format("%02d", menit)
+
+                        val sesi = "$formatJam:$formatMenit"
+
+                        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                        val formattedDate = dateFormat.format(tanggal)
+
+                    arSesiT.add(SesiT(jadwalTrainerId,formattedDate, trainerId, sesi, userTrainerId))
+                        Log.d("haes", "Document data: ${document.data}")
+                        Log.d("haes", formattedDate)
+                    }
+                }
+            }
+            arSesiT.sortBy { it.sesi }
+            _rvSesiT.adapter?.notifyDataSetChanged()
+        }.addOnFailureListener { e ->
+            Log.e("haes", "Error fetching data from Firebase", e)
+        }
+    }
+
+    fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
         val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
-        val formattedDate = dateFormat.format(Date(timestamp))
+        val formattedDate = dateFormat.format(timestamp)
         val date = dateFormat.format(btnDate)
 
         Log.d("cektanggal", "format" + formattedDate)

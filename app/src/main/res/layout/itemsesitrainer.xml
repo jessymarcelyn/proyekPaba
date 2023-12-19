@@ -8,28 +8,31 @@
     android:background="@drawable/rounded_background">
 
     <TextView
-        android:id="@+id/tvStartGym"
-        android:layout_width="109dp"
+        android:id="@+id/tvStartSesiTrainer"
+        android:layout_width="143dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="11dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnBookGym"
+        android:id="@+id/btnBookSesi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="11dp"
+        android:backgroundTint="#C9F24D"
         android:text="BOOK SEKARANG"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStartGym" />
+        app:layout_constraintTop_toBottomOf="@+id/tvStartSesiTrainer" />
 
 
     <ImageView
@@ -38,8 +41,8 @@
         android:layout_height="27dp"
         android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/tvSlot"
-        app:layout_constraintStart_toStartOf="@+id/tvStartGym"
-        app:layout_constraintTop_toBottomOf="@+id/tvStartGym"
+        app:layout_constraintStart_toStartOf="@+id/tvStartSesiTrainer"
+        app:layout_constraintTop_toBottomOf="@+id/tvStartSesiTrainer"
         app:srcCompat="@drawable/duration" />
 
     <TextView
@@ -48,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="2 Jam"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintStart_toEndOf="@+id/imageView"

@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -36,9 +34,9 @@ class adapterGym(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartGym: TextView = itemView.findViewById(R.id.tvStartGym)
+        var _tvStartGym: TextView = itemView.findViewById(R.id.tvStartSesiTrainer)
         var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
-        var _btnBookGym: Button = itemView.findViewById(R.id.btnBookGym)
+        var _btnBookGym: Button = itemView.findViewById(R.id.btnBookSesi)
         var _tvSlotMax: TextView = itemView.findViewById(R.id.tvSlotMax)
     }
 

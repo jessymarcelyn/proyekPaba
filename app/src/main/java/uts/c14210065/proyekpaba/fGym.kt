@@ -79,28 +79,17 @@ class fGym : Fragment() {
         var currentDate = Calendar.getInstance().time
         dayDate = currentDate
 
-        // Generate text for the next 7 days
-        for (i in 0 until 7) {
+        val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
+
+        for (i in buttons.indices) {
             val day = Calendar.getInstance()
             day.time = currentDate
             day.add(Calendar.DATE, i)
 
             val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale("id", "ID")).format(day.time)
 
-            when (i) {
-                0 -> dayTextSet(_btnd1, formattedDate, size1, size2)
-                1 -> dayTextSet(_btnd2, formattedDate, size1, size2)
-                2 -> dayTextSet(_btnd3, formattedDate, size1, size2)
-                3 -> dayTextSet(_btnd4, formattedDate, size1, size2)
-                4 -> dayTextSet(_btnd5, formattedDate, size1, size2)
-                5 -> dayTextSet(_btnd6, formattedDate, size1, size2)
-                6 -> dayTextSet(_btnd7, formattedDate, size1, size2)
-            }
-        }
+            dayTextSet(buttons[i], formattedDate, size1, size2)
 
-        val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
-
-        for (i in buttons.indices) {
             buttons[i].setOnClickListener {
                 // Reset the background color of the last clicked button to white
                 lastClickedButton?.setBackgroundColor(Color.WHITE)
@@ -112,15 +101,14 @@ class fGym : Fragment() {
                 lastClickedButton = buttons[i]
 
                 // tanggal di button
-                val calendar = Calendar.getInstance()
-                calendar.time = currentDate
-                calendar.add(Calendar.DATE, i)
-                dayDate = calendar.time
+                 val calendar = Calendar.getInstance()
+                 calendar.time = currentDate
+                 calendar.add(Calendar.DATE, i)
+                 dayDate = calendar.time
 
                 TampilkanData(dayDate)
             }
         }
-
 
         _rvGym.layoutManager = LinearLayoutManager(context)
         val adapterP = adapterGym(arGym, idLogin, requireContext())
@@ -137,10 +125,9 @@ class fGym : Fragment() {
 
         button.setOnClickListener {
             button.isEnabled = false
-
         }
     }
-    lateinit var lvAdapterSimple: SimpleAdapter
+
     val db = Firebase.firestore
 
     private fun TampilkanData(btnDate: Date) {

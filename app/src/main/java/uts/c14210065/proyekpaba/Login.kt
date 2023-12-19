@@ -74,7 +74,7 @@ class Login : AppCompatActivity() {
 
             for (document in result) {
                 var id = document.id
-                val noTelp = document.data.get("noTelp").toString()
+                val noTelp = document.data.get("nomor").toString()
                 val password = document.data.get("password").toString()
 
 //              check hashed password
