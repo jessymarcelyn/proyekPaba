@@ -148,18 +148,33 @@ class fGym : Fragment() {
             arGym.clear()
             for (document in result) {
                 var Gymid = document.id
-                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
+                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
                 val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 
                 if(cekDate(tanggal, btnDate) && kuotaSisa > 0) {
                     val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
-                    val sesi = document.getString("sesi") ?: ""
+//                    val sesi = document.getString("sesi") ?: ""
+
+                    val calendar = Calendar.getInstance()
+                    calendar.time = tanggal
+
+                    // ambil jam dan menit dari timestamp tanggal di database
+                    val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                    val menit = calendar.get(Calendar.MINUTE)
+
+                    //agar jadi 08.00 atau 17.00
+                    val formatJam = String.format("%02d", jam)
+                    val formatMenit = String.format("%02d", menit)
+
+                    val sesi = "$formatJam:$formatMenit"
+
                     val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
                     val member = document.getBoolean("member") ?: false
 
-                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                    val formattedDate = dateFormat.format(Date(tanggal))
+                    val formattedDate = dateFormat.format(tanggal)
+                    Log.d("formatted tanggal : ", formattedDate)
 
                     arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId), member))
                     Log.d("haes", "Document data: ${document.data}")
@@ -173,11 +188,11 @@ class fGym : Fragment() {
         }
     }
 
-    fun cekDate(timestamp: Long, btnDate: Date): Boolean {
+    fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
         val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
-        val formattedDate = dateFormat.format(Date(timestamp))
+        val formattedDate = dateFormat.format(timestamp)
         val date = dateFormat.format(btnDate)
 
         Log.d("cektanggal", "format" + formattedDate)

@@ -64,10 +64,12 @@ class adapterGym(
             // Assuming you have a reference to the Firestore database
             val db = Firebase.firestore
 
-            val gymTanggal = convertDateToTimestamp(gym.tanggal)
+            val gymTanggal = convertDateTimeToTimestamp(gym.tanggal, gym.sesi)
 
+            Log.d("gymTanggal", "tanggal : " + gym.tanggal)
+            Log.d("gymTanggal", "sesi : " +gym.sesi)
             val gymSesi = hashMapOf(
-                "sesi" to gym.sesi, "tanggal" to gymTanggal, "userId" to idLogin
+                "tanggal" to gymTanggal, "userId" to idLogin
             )
 
             if (idLogin != null) {
@@ -85,11 +87,12 @@ class adapterGym(
                         if (!userIds.contains(idLogin)) {
 //                        if (userIds.contains(idLogin)) {
 
-                            val documentRef = db.collection("users").document(gym.idGym)
+                            val documentRef = db.collection("users").document(idLogin.toString())
                             documentRef.get()
                                 .addOnSuccessListener { documentSnapshot ->
                                     val member = documentSnapshot.getBoolean("member")
-
+                                    Log.d("MEMBERR", member.toString())
+                                    Log.d("IDLOGIN", idLogin.toString())
                                     if(member == true){
                                         db.collection("GymBooking")
                                             .add(gymSesi)
@@ -168,14 +171,23 @@ class adapterGym(
         dialog.show()
     }
 
-    fun convertDateToTimestamp(dateString: String): Long {
-        val dateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
+    fun convertDateTimeToTimestamp(dateString: String, timeString: String): Timestamp {
+        val dateTimeString = "$dateString $timeString"
+        val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
         try {
-            val date = dateFormat.parse(dateString)
-            return date?.time ?: 0
+            val date = dateFormat.parse(dateTimeString)
+            if (date != null) {
+                Log.d("Conversion", "Parsed date: $date")
+                return Timestamp(date)
+            } else {
+                Log.e("Conversion", "Failed to parse date: $dateTimeString")
+            }
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.e("Conversion", "Exception: $e")
         }
-        return 0
+        return Timestamp.now() // Return a default timestamp in case of an error
     }
+
+
 }
