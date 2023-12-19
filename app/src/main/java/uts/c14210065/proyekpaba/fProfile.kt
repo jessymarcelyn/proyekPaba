@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +27,14 @@ class fProfile : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    val db = Firebase.firestore
+    lateinit var user : User
+
+    lateinit var nama: String
+    lateinit var nomor: String
+    lateinit var tvNama : TextView
+    lateinit var tvNomor : TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,10 +45,23 @@ class fProfile : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var idLogin = arguments?.getString("userId")
+        val idLogin = arguments?.getString("userId")!!
         Log.d("trainer", "profile" + idLogin)
+        ReadData(idLogin)
         val _btnLogout = view.findViewById<Button>(R.id.btnLogout)
         val _btnTrainer = view.findViewById<Button>(R.id.btnTrainer)
+        val _btnHistory = view.findViewById<Button>(R.id.btnHistory)
+        val _btnPayment = view.findViewById<Button>(R.id.btnPayment)
+        val _btnMember = view.findViewById<Button>(R.id.btnMember)
+
+        tvNama = view.findViewById<TextView>(R.id.tvNama2)
+        val tvEmail = view.findViewById<TextView>(R.id.tvEmail3)
+        tvNomor = view.findViewById<TextView>(R.id.tvNomor)
+
+
+//        tvNama.text = nama
+//        tvNomor.text = nomor
+
 
         _btnLogout.setOnClickListener{
             val intent = Intent(activity, utama::class.java)
@@ -55,6 +79,15 @@ class fProfile : Fragment() {
         }
     }
 
+    fun ReadData(idLogin : String){
+        db.collection("users")
+            .document(idLogin)
+            .get().addOnSuccessListener { result ->
+                tvNama.text = result.get("nama").toString()
+                tvNomor.text = result.get("nomor").toString()
+
+            }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
