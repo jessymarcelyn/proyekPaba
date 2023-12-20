@@ -1,6 +1,5 @@
 package uts.c14210065.proyekpaba
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -53,9 +52,10 @@ class fProfile : Fragment() {
         ReadData(idLogin)
         val _btnLogout = view.findViewById<Button>(R.id.btnLogout)
         val _btnTrainer = view.findViewById<Button>(R.id.btnTrainer)
-        val _btnHistory = view.findViewById<Button>(R.id.btnHistory)
+        val _btnHistory = view.findViewById<Button>(R.id.btnOnGoing)
         val _btnPayment = view.findViewById<Button>(R.id.btnPayment)
         val _btnMember = view.findViewById<Button>(R.id.btnMember)
+        val _btnOnGoing = view.findViewById<Button>(R.id.btnOnGoing)
         val  _iconedit = view.findViewById<ImageView>(R.id.iconEdit)
 
         tvNama = view.findViewById<TextView>(R.id.tvNama2)
@@ -77,6 +77,13 @@ class fProfile : Fragment() {
         _btnTrainer.setOnClickListener{
 
             val intent = Intent(activity, sesiTrainer::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, idLogin)
+            startActivity(intent)
+        }
+
+        _btnOnGoing.setOnClickListener{
+            val intent = Intent(activity, activityOngoing::class.java)
             intent.putExtra(utama.login, true)
             intent.putExtra(utama.userId, idLogin)
             startActivity(intent)
