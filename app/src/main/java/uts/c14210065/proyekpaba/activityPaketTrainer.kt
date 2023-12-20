@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import uts.c14210065.proyekpaba.model.TrainerModel
+import kotlin.math.log
 
 class activityPaketTrainer : AppCompatActivity() {
 
@@ -18,6 +20,13 @@ class activityPaketTrainer : AppCompatActivity() {
     lateinit var tvNama: TextView
     lateinit var tvClient: TextView
     lateinit var tvSkill: TextView
+
+    lateinit var btn1: Button
+    lateinit var btn2: Button
+    lateinit var btn3: Button
+    lateinit var btn4: Button
+    lateinit var btn5: Button
+    lateinit var btn6: Button
 
     lateinit var trainerId: String
     lateinit var loginId: String
@@ -46,6 +55,10 @@ class activityPaketTrainer : AppCompatActivity() {
             finish()
         }
         TampilkanData()
+
+        btn1.setOnClickListener {
+            
+        }
 
     }
 
@@ -82,14 +95,29 @@ class activityPaketTrainer : AppCompatActivity() {
         }
     }
 
-    fun PilihPaket() {
-//        db.collection("users").get().addOnSuccessListener { result ->
-//            for (document in result) {
-//                var member = document.getBoolean("member")
-//                if (member == false) {
-//
-//                }
-//            }
-//        }
+    fun PilihPaket(paket: Int) {
+        if (loginId != "0"){
+            db.collection("users").get().addOnSuccessListener { result ->
+                for (document in result) {
+                    var member = document.getBoolean("member")
+                    if (member == true) {
+                        val userPaketCollection = db.collection("UserPaket")
+                        val newDocument = userPaketCollection.document()
+
+                        // Set the data for the new document
+                        val newData = hashMapOf(
+                            "paket" to paket,
+                            "clientId" to loginId,
+                            "trainerId" to trainerId
+                        )
+
+                        newDocument.set(newData)
+                            .addOnSuccessListener {
+                                Log.d("Firestore", "Data inserted successfully!")
+                            }
+                    }
+                }
+            }
+        }
     }
 }
