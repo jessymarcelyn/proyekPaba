@@ -64,7 +64,7 @@ class utama : AppCompatActivity() {
             goToPage(fTrainer())
         }
     }
-    private fun goToPage(fragment: Fragment) {
+   fun goToPage(fragment: Fragment) {
 
         val mFragmentManager = supportFragmentManager
         val mfSatu = fragment

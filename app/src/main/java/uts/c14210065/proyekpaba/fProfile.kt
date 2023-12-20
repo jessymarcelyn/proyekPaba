@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +56,7 @@ class fProfile : Fragment() {
         val _btnHistory = view.findViewById<Button>(R.id.btnHistory)
         val _btnPayment = view.findViewById<Button>(R.id.btnPayment)
         val _btnMember = view.findViewById<Button>(R.id.btnMember)
+        val  _iconedit = view.findViewById<ImageView>(R.id.iconEdit)
 
         tvNama = view.findViewById<TextView>(R.id.tvNama2)
         val tvEmail = view.findViewById<TextView>(R.id.tvEmail3)
@@ -76,6 +80,10 @@ class fProfile : Fragment() {
             intent.putExtra(utama.login, true)
             intent.putExtra(utama.userId, idLogin)
             startActivity(intent)
+        }
+
+        _iconedit.setOnClickListener{
+            (activity as utama).goToPage(fEditProfile())
         }
     }
 
