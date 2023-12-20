@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fJoin">
+    tools:context=".fJoin"
+    android:background="#212122">
 
     <TextView
         android:id="@+id/textView5"

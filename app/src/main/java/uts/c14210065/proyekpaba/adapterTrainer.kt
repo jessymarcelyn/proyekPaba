@@ -23,7 +23,7 @@ class adapterTrainer (private val listTrainer: ArrayList<TrainerModel>) : Recycl
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(data : TrainerModel)
+        fun onItemClicked(data: TrainerModel, documentId: String)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -55,6 +55,13 @@ class adapterTrainer (private val listTrainer: ArrayList<TrainerModel>) : Recycl
         val skillsString = trainers.skills?.joinToString(", ") { it.capitalize() } ?: ""
         holder._skills.text = "Skills: $skillsString"
         holder._client.text = "Active clients: " + trainers.client?.toString()
+
+        holder._btnBook.setOnClickListener {
+            val documentId = trainers.documentId
+            if (documentId != null) {
+                onItemClickCallback.onItemClicked(trainers, documentId)
+            }
+        }
     }
 }
 

@@ -26,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [fTrainer.newInstance] factory method to
  * create an instance of this fragment.
  */
-class fTrainer : Fragment() {
+class fTrainer : Fragment(), adapterTrainer.OnItemClickCallback {
     private lateinit var rvTrainer: RecyclerView
     private lateinit var arTrainer: ArrayList<TrainerModel>
 
@@ -94,8 +94,15 @@ class fTrainer : Fragment() {
 
         rvTrainer.layoutManager = LinearLayoutManager(requireContext())
         val adapter = adapterTrainer(arTrainer)
+        adapter.setOnItemClickCallback(this)
         rvTrainer.adapter = adapter
 
+    }
+
+    override fun onItemClicked(data: TrainerModel, documentId: String) {
+        val intent = Intent(requireContext(), activityPaketTrainer::class.java)
+        intent.putExtra("documentId", documentId)
+        startActivity(intent)
     }
 
     private fun fetchDataFromFirestore(skill: String) {
@@ -105,13 +112,14 @@ class fTrainer : Fragment() {
             .addOnSuccessListener { result ->
             arTrainer.clear()
             for (document in result) {
+                var documentId = document.id
                 var namaTrainer = document.getString("nama")
                 val clientId = (document["clientId"] as? List<*>)?.map { it.toString() } ?: emptyList()
                 val skills = (document["skills"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
                 val fotoName = document.getString("foto")
 
-                arTrainer.add(TrainerModel(fotoName, namaTrainer, ArrayList(skills), clientId.size))
+                arTrainer.add(TrainerModel(documentId, fotoName, namaTrainer, ArrayList(skills), clientId.size))
                 Log.d("fetchTrainer", "Document data: ${document.data}")
                 Log.d("fetchTrainer", "Document data: ${clientId.size}")
             }
