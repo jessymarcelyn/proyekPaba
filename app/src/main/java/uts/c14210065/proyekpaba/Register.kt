@@ -59,23 +59,51 @@ class Register : AppCompatActivity() {
                 Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
             }else{
                 Log.d("masuk", "iya")
-                CreateData(_etNama.text.toString(),_etNomor.text.toString(),hashedPassword,selectedGender,_etEmail.text.toString())
-                _etNama.text.clear()
-                _etNomor.text.clear()
-                _etPassword.text.clear()
-                _etEmail.text.clear()
-                genderRadioGroup.clearCheck()
+                checkNumber(_etNomor.text.toString().toInt()){registered ->
+                    Log.d("registerd", registered.toString())
+                    if(registered){
+                        Toast.makeText(this@Register, "Nomor telah terdaftar", Toast.LENGTH_SHORT).show()
+                    }else {
+                        CreateData(
+                            _etNama.text.toString(),
+                            _etNomor.text.toString().toInt(),
+                            hashedPassword,
+                            selectedGender,
+                            _etEmail.text.toString()
+                        )
+                        _etNama.text.clear()
+                        _etNomor.text.clear()
+                        _etPassword.text.clear()
+                        _etEmail.text.clear()
+                        genderRadioGroup.clearCheck()
+                    }
+                }
+
             }
 
         }
 
     }
 
+    fun checkNumber(number:Int, callback: (Boolean) -> Unit) {
+
+        db.collection("user")
+            .whereEqualTo("nomor", number)
+            .get()
+            .addOnSuccessListener {documents ->
+                val isTerdaftar = documents.isEmpty
+                callback(isTerdaftar)
+            }
+            .addOnFailureListener { exception ->
+                callback(false)
+                Log.w("TAG", "Error getting documents: ", exception)
+            }
+    }
     private fun hashPassword(password: String): String {
         return BCrypt.hashpw(password, BCrypt.gensalt())
     }
 
-    fun CreateData(nama: String, nomor: String, password: String, gender: String, email: String){
+    fun CreateData(nama: String, nomor: Int, password: String, gender: String, email: String){
         val userCollection = db.collection("users")
 
         // Membuat data yang akan disimpan di Firestore
@@ -85,7 +113,9 @@ class Register : AppCompatActivity() {
             "password" to password,
             "gender" to gender,
             "email" to email,
-            "member" to false
+            "member" to false,
+            "berat" to 0,
+            "tinggi" to 0
         )
 
         // Menambahkan data ke Firestore
