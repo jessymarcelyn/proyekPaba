@@ -31,8 +31,9 @@
         android:textColor="@color/black"
         app:cornerRadius="20sp"
         app:layout_constraintEnd_toEndOf="@+id/iconEdit"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvNama2"
-        app:layout_constraintTop_toBottomOf="@+id/btnHistory" />
+        app:layout_constraintTop_toBottomOf="@+id/btnHistory3" />
 
     <Button
         android:id="@+id/btnMember"
@@ -85,7 +86,24 @@
         app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
 
     <Button
-        android:id="@+id/btnHistory"
+        android:id="@+id/btnOnGoing"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:drawableLeft="@drawable/baseline_history_24"
+        android:padding="0sp"
+        android:text="On Going"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:cornerRadius="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/iconEdit"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/btnTrainer" />
+
+    <Button
+        android:id="@+id/btnHistory3"
         android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginTop="16dp"
@@ -99,7 +117,7 @@
         app:layout_constraintEnd_toEndOf="@+id/iconEdit"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvNama2"
-        app:layout_constraintTop_toBottomOf="@+id/btnTrainer" />
+        app:layout_constraintTop_toBottomOf="@+id/btnOnGoing" />
 
     <TextView
         android:id="@+id/tvTinggi"
