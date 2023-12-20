@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -29,6 +30,7 @@ class fTrainer : Fragment() {
     private lateinit var rvTrainer: RecyclerView
     private lateinit var arTrainer: ArrayList<TrainerModel>
 
+    private lateinit var btnAll: Button
     private lateinit var btnSpecial: Button
     private lateinit var btnStrong: Button
     private lateinit var btnAthletic: Button
@@ -59,6 +61,7 @@ class fTrainer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        btnAll = view.findViewById(R.id.btnAll)
         btnSpecial = view.findViewById(R.id.btnSpecial)
         btnStrong = view.findViewById(R.id.btnStrong)
         btnAthletic = view.findViewById(R.id.btnAthletic)
@@ -68,6 +71,9 @@ class fTrainer : Fragment() {
         rvTrainer = view.findViewById(R.id.rvTrainer)
         arTrainer = ArrayList()
 
+        btnAll.setOnClickListener {
+            fetchDataFromFirestore("")
+        }
         btnSpecial.setOnClickListener {
             fetchDataFromFirestore("special")
         }
@@ -103,7 +109,9 @@ class fTrainer : Fragment() {
                 val clientId = (document["clientId"] as? List<*>)?.map { it.toString() } ?: emptyList()
                 val skills = (document["skills"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
-                arTrainer.add(TrainerModel(namaTrainer, ArrayList(skills), clientId.size))
+                val fotoName = document.getString("foto")
+
+                arTrainer.add(TrainerModel(fotoName, namaTrainer, ArrayList(skills), clientId.size))
                 Log.d("fetchTrainer", "Document data: ${document.data}")
                 Log.d("fetchTrainer", "Document data: ${clientId.size}")
             }
