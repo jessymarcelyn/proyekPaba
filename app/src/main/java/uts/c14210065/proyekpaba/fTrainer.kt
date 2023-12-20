@@ -37,6 +37,8 @@ class fTrainer : Fragment(), adapterTrainer.OnItemClickCallback {
     private lateinit var btnShape: Button
     private lateinit var btnWellness: Button
 
+    lateinit var idLogin: String
+
     val db = Firebase.firestore
 
     // TODO: Rename and change types of parameters
@@ -61,6 +63,10 @@ class fTrainer : Fragment(), adapterTrainer.OnItemClickCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        idLogin = arguments?.getString("userId", "")?: ""
+        Log.d("ftrainer", "idLogin: $idLogin")
+
         btnAll = view.findViewById(R.id.btnAll)
         btnSpecial = view.findViewById(R.id.btnSpecial)
         btnStrong = view.findViewById(R.id.btnStrong)
@@ -102,6 +108,7 @@ class fTrainer : Fragment(), adapterTrainer.OnItemClickCallback {
     override fun onItemClicked(data: TrainerModel, documentId: String) {
         val intent = Intent(requireContext(), activityPaketTrainer::class.java)
         intent.putExtra("documentId", documentId)
+        intent.putExtra("userId", idLogin)
         startActivity(intent)
     }
 

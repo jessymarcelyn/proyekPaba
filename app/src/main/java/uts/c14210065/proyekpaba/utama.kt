@@ -59,7 +59,6 @@ class utama : AppCompatActivity() {
         _ivClass.setOnClickListener{
             goToPage(fClass())
         }
-
         _ivTrainer.setOnClickListener{
             goToPage(fTrainer())
         }
@@ -80,7 +79,7 @@ class utama : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-//        supaya bisa back dari activity setelah fragment kembali ke fragment 
+//        supaya bisa back dari activity setelah fragment kembali ke fragment
         val navigateToFragment = intent.getStringExtra("navigateToFragment")
         if (navigateToFragment == "fTrainer") {
             goToPage(fTrainer())

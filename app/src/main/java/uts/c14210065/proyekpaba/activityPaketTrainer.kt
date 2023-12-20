@@ -20,6 +20,7 @@ class activityPaketTrainer : AppCompatActivity() {
     lateinit var tvSkill: TextView
 
     lateinit var trainerId: String
+    lateinit var loginId: String
 
     val db = Firebase.firestore
 
@@ -27,7 +28,10 @@ class activityPaketTrainer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paket_trainer)
 
+        loginId = intent.getStringExtra("userId")?: ""
         trainerId = intent.getStringExtra("documentId")?: ""
+        Log.d("paketTrainer", "loginId: $loginId")
+        Log.d("paketTrainer", "trainerId: $trainerId")
 
         ivDet = findViewById(R.id.ivDetTrainer)
         tvNama = findViewById(R.id.tvDetNamaTrainer)
@@ -41,8 +45,6 @@ class activityPaketTrainer : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-        Log.d("PaketTrainer", "documentId: $trainerId")
         TampilkanData()
 
     }
@@ -78,5 +80,16 @@ class activityPaketTrainer : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun PilihPaket() {
+//        db.collection("users").get().addOnSuccessListener { result ->
+//            for (document in result) {
+//                var member = document.getBoolean("member")
+//                if (member == false) {
+//
+//                }
+//            }
+//        }
     }
 }
