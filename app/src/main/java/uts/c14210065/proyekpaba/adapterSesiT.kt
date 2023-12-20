@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -48,7 +52,59 @@ class adapterSesiT(
 
         holder._tvStartSesiTrainer.text = sesiTrainer.sesi
 
+        val db = Firebase.firestore
+
+        holder._btnBookSesi.setOnClickListener {
+
+            // Update GymSesi untuk kuota dan userId
+            val documentId = sesiTrainer.idJadwal
+            val updateData = mapOf(
+                "userTrainerId" to sesiTrainer.userTrainerId
+            )
+            db.collection("JadwalTrainer").document(documentId)
+                .update(updateData)
+                .addOnSuccessListener {
+                    Log.d("BookingSesi", "berhasil update usertrainerId di jadwaltrainer")
+
+                    val documentId = sesiTrainer.userTrainerId
+                    val documentRef = db.collection("UserTrainer").document(documentId)
+                    documentRef.get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            Log.d("BookingSesi", "berhasil update kuota sesi")
+
+                            var sisaSesi = documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
+                            val updatedSisaSesi = sisaSesi - 1
+
+                            val updateData = mapOf(
+                                "sisaSesi" to updatedSisaSesi
+                            )
+                            db.collection("UserTrainer").document(documentId)
+                                .update(updateData)
+                                .addOnSuccessListener {
+                                    Log.d("BookingGym", "berhasil update")
+                                    showAlert(
+                                        holder.itemView.context,
+                                        "Booking Berhasil",
+                                        "Booking sesi dengan personal trainer anda pada tanggal ${sesiTrainer.tanggal} " +
+                                                " jam ${sesiTrainer.sesi} telah berhasil, Salam sehat! "
+                                    )
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.d("BookingGym", "gagal update")
+                                }
+                        }
+                }
+                .addOnFailureListener { e ->
+                    Log.d(
+                        "BookingGym",
+                        "gagal update"
+                    )
+                }
+
+        }
+
     }
+
 
 
 

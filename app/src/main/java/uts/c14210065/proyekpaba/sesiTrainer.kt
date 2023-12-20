@@ -41,6 +41,7 @@ class sesiTrainer : AppCompatActivity() {
     private lateinit var buttons: Array<Button>
     lateinit var idTrainer : String
     lateinit var _rvSesiT : RecyclerView
+    lateinit var userTrainerId : String
 
 
     @SuppressLint("MissingInflatedId")
@@ -152,7 +153,7 @@ class sesiTrainer : AppCompatActivity() {
 
                 if (idUser == idLogin && tanggalBerakhir >= currentDate) {
                     Log.d("sesiTrainerr", "masuk")
-                    var userTrainerId = document.id
+                    userTrainerId = document.id
                     var harga = document.getLong("harga")?.toInt() ?: 0
                     var sisaSesi = document.getLong("sisaSesi")?.toInt() ?: 0
                     var totalSesi = document.getLong("totalSesi")?.toInt() ?: 0
@@ -243,9 +244,9 @@ class sesiTrainer : AppCompatActivity() {
                 val trainerId = document.getString("trainerId") ?: ""
                 if(trainerId == idTrainer){
                     Log.d("tralala", "masuk")
-                    val userTrainerId = document.getString("userTrainerId") ?: ""
+                    val userTrainerIdd = document.getString("userTrainerId") ?: ""
                     val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
-                    if(cekDate(tanggal, btnDate) && userTrainerId == "") {
+                    if(cekDate(tanggal, btnDate) && userTrainerIdd == "") {
 
                         val calendar = Calendar.getInstance()
                         calendar.time = tanggal

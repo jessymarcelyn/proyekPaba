@@ -156,7 +156,7 @@
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="260dp"
         android:scrollbars="none"
@@ -165,30 +165,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="horizontal">
 
-            <!--            <Button-->
-            <!--                android:id="@+id/toggleButton"-->
-            <!--                android:layout_width="105dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/buttongym"-->
-            <!--                android:layout_marginEnd="10dp"-->
-            <!--                android:textOff="Option"-->
-            <!--                android:textOn="Option" />-->
-
-            <!--            <Button-->
-            <!--                android:id="@+id/btnMon"-->
-            <!--                android:layout_width="105dp"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginEnd="10dp"-->
-            <!--                android:background="@drawable/buttongym"-->
-            <!--                android:text="Mon\n17 Des" />-->
-
-            <!--                app:strokeColor="#6750A4"-->
-            <!--                app:strokeWidth="2dp"-->
 
             <Button
                 android:id="@+id/btnd1"
@@ -258,11 +240,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSesiT"
-        android:layout_width="339dp"
-        android:layout_height="469dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="355dp"
+        android:layout_height="382dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
