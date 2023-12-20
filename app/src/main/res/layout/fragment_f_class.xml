@@ -1,13 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#212122"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="75dp"
+    android:layout_marginBottom="100dp"
+    android:orientation="vertical"
     tools:context=".fClass">
 
-    <TextView
-        android:id="@+id/textView"
+
+    <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="class" />
-</FrameLayout>
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnMon"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Mon\n17 Des"
+                />
+
+            <!--                app:strokeColor="#6750A4"-->
+            <!--                app:strokeWidth="2dp"-->
+
+            <Button
+                android:id="@+id/btnTue"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Feb\n18 Des" />
+
+            <Button
+                android:id="@+id/btnWed"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Wed\n19 Des" />
+
+            <Button
+                android:id="@+id/btnThu"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Thu\n20 Des" />
+
+            <Button
+                android:id="@+id/btnFri"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Fri\n21 Des" />
+
+            <Button
+                android:id="@+id/btnSat"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Sat\n21 Des" />
+
+            <Button
+                android:id="@+id/btnSun"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:textColor="@color/black"
+                android:text="Sun\n22 Des" />
+        </LinearLayout>
+
+    </HorizontalScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvClass"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>

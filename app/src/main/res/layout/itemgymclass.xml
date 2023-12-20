@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    >
+
+    <TextView
+        android:id="@+id/tvNameClass"
+        android:layout_width="195dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="AEROBIC"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tvCapacity"-->
+    <!--        android:layout_width="103dp"-->
+    <!--        android:layout_height="19dp"-->
+    <!--        android:text="Easy"-->
+    <!--        android:textSize="15sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/tvNameClass"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tvCoach" />-->
+
+    <TextView
+        android:id="@+id/tvLevel"
+        android:layout_width="52dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="8dp"
+        android:text="Easy"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+    <TextView
+        android:id="@+id/tvCoach"
+        android:layout_width="196dp"
+        android:layout_height="36dp"
+        android:text="With Budi"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tvNameClass"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameClass" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="92dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="10:00"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnJoinClass"
+        android:layout_width="157dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="40dp"
+        android:text="1 More Left"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvTime"
+        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
