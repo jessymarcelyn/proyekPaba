@@ -69,8 +69,6 @@ class sesiTrainer : AppCompatActivity() {
         val _btnd6 = findViewById<Button>(R.id.btnd6)
         val _btnd7 = findViewById<Button>(R.id.btnd7)
 
-        TampilkanData1()
-
         // Get the current date
         var currentDate = Calendar.getInstance().time
         dayDate = currentDate
@@ -85,7 +83,7 @@ class sesiTrainer : AppCompatActivity() {
             val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale("id", "ID")).format(day.time)
 
             dayTextSet(buttons[i], formattedDate, fGym.size1, fGym.size2)
-
+            buttons[i].visibility = View.GONE
             buttons[i].setOnClickListener {
                 // Reset the background color of the last clicked button to white
                 lastClickedButton?.setBackgroundColor(Color.WHITE)
@@ -101,7 +99,6 @@ class sesiTrainer : AppCompatActivity() {
                 calendar.time = currentDate
                 calendar.add(Calendar.DATE, i)
                 dayDate = calendar.time
-
                 TampilkanData2(dayDate)
             }
         }
@@ -150,12 +147,12 @@ class sesiTrainer : AppCompatActivity() {
                 val currentDate = Calendar.getInstance().time
 
                 idTrainer = document.getString("idTrainer") ?: ""
+                var sisaSesi = document.getLong("sisaSesi")?.toInt() ?: 0
 
                 if (idUser == idLogin && tanggalBerakhir >= currentDate) {
                     Log.d("sesiTrainerr", "masuk")
                     userTrainerId = document.id
                     var harga = document.getLong("harga")?.toInt() ?: 0
-                    var sisaSesi = document.getLong("sisaSesi")?.toInt() ?: 0
                     var totalSesi = document.getLong("totalSesi")?.toInt() ?: 0
 
                     val tanggalMulaiConvert = convertTimestampToDate(tanggalMulai)
@@ -176,10 +173,13 @@ class sesiTrainer : AppCompatActivity() {
                     _tvTanggalExpired.text = tanggalBerakhirConvert.toString()
                     _tvTanggalMulai.text = tanggalMulaiConvert.toString()
 
-                    for (i in buttons.indices) {
-                        buttons[i].visibility = View.VISIBLE
+
+                    //apabila jumlah sisa sesi sudah habis maka tidak bisa melihat button
+                    if(sisaSesi != 0){
+                        for (i in buttons.indices) {
+                            buttons[i].visibility = View.VISIBLE
+                        }
                     }
-//                    TampilkanData2()
                     break
 
                 }
@@ -246,8 +246,9 @@ class sesiTrainer : AppCompatActivity() {
                     Log.d("tralala", "masuk")
                     val userTrainerIdd = document.getString("userTrainerId") ?: ""
                     val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
-                    if(cekDate(tanggal, btnDate) && userTrainerIdd == "") {
 
+                    // Jadwal masih kosong
+                    if(cekDate(tanggal, btnDate) && userTrainerIdd == "") {
                         val calendar = Calendar.getInstance()
                         calendar.time = tanggal
 

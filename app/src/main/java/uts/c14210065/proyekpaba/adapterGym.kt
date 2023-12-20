@@ -59,6 +59,7 @@ class adapterGym(
         holder._tvSlotMax.text = gym.kuotaMax.toString() + " Slot"
 
         holder._btnBookGym.setOnClickListener {
+            holder._btnBookGym.isEnabled = false
             // Assuming you have a reference to the Firestore database
             val db = Firebase.firestore
 

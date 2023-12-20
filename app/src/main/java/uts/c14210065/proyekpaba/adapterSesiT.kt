@@ -55,6 +55,7 @@ class adapterSesiT(
         val db = Firebase.firestore
 
         holder._btnBookSesi.setOnClickListener {
+            holder._btnBookSesi.isEnabled = false
 
             // Update GymSesi untuk kuota dan userId
             val documentId = sesiTrainer.idJadwal
