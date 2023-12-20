@@ -59,7 +59,7 @@ class adapterGym(
         holder._tvSlotMax.text = gym.kuotaMax.toString() + " Slot"
 
         holder._btnBookGym.setOnClickListener {
-            holder._btnBookGym.isEnabled = false
+
             // Assuming you have a reference to the Firestore database
             val db = Firebase.firestore
 
@@ -114,7 +114,7 @@ class adapterGym(
 
                                                 showAlert(context, "Booking Berhasil", "Booking Gym anda pada tanggal ${gym.tanggal} " +
                                                         " jam ${gym.sesi} telah berhasil, Salam sehat! ")
-
+                                                holder._btnBookGym.isEnabled = false
                                                 db.collection("GymSesi").document(documentId)
                                                     .update(updateData)
                                                     .addOnSuccessListener {
