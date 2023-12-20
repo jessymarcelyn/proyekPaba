@@ -76,4 +76,14 @@ class utama : AppCompatActivity() {
         mFragmentManager.findFragmentByTag(fragment::class.java.simpleName)
         mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fragment::class.java.simpleName).commit()
     }
+
+    override fun onResume() {
+        super.onResume()
+
+//        supaya bisa back dari activity setelah fragment kembali ke fragment 
+        val navigateToFragment = intent.getStringExtra("navigateToFragment")
+        if (navigateToFragment == "fTrainer") {
+            goToPage(fTrainer())
+        }
+    }
 }

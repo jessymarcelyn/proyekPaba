@@ -52,7 +52,7 @@ class adapterTrainer (private val listTrainer: ArrayList<TrainerModel>) : Recycl
             .into(holder._fotoTrainer)
 
         holder._namaTrainer.setText(trainers.nama)
-        val skillsString = trainers.skills?.joinToString(", ") { it.capitalize() } ?: ""
+        val skillsString = trainers.skills?.joinToString(", ") { it.capitalize() }?.dropLast(2) ?: ""
         holder._skills.text = "Skills: $skillsString"
         holder._client.text = "Active clients: " + trainers.client?.toString()
 
