@@ -12,8 +12,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import java.sql.Time
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class adapterGymClass (
     private val listClass: ArrayList<GymClass>,
@@ -39,7 +41,7 @@ class adapterGymClass (
         var _level : TextView = itemView.findViewById(R.id.tvLevel)
         var _btnBook : Button = itemView.findViewById(R.id.btnJoinClass)
         var _pelatih : TextView = itemView.findViewById(R.id.tvCoach)
-        var _waktu : TextView =  itemView.findViewById(R.id.tvTime)
+        var _jam : TextView =  itemView.findViewById(R.id.tvTime)
 
     }
 
@@ -59,7 +61,14 @@ class adapterGymClass (
         holder._btnBook.text = gymClass.capacity.toString() + " More left"
         holder._level.text = gymClass.level
         holder._pelatih.text = "With " + gymClass.coach
-        holder._waktu.text = gymClass.waktu
+
+        val selectedDate = gymClass.timestamp?.toDate()?.time ?: 0
+        val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
+        timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+        val waktu = timeFormat.format(Time(selectedDate))
+        holder._jam.text = waktu
+
+//        holder._jam.text = gymClass.jam
 //        holder.itemView.setOnClickListener{
 //            onItemClickCallback.onItemClicked(listClass[position])
 //
