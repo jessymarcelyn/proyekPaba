@@ -63,8 +63,9 @@ class Login : AppCompatActivity() {
         return BCrypt.hashpw(password, salt)
     }
 
-    fun checkPassword(candidate: String, hashed: String): Boolean {
-        return BCrypt.checkpw(candidate, hashed)
+    // Check if a password matches a hashed password
+    fun checkPassword(candidatePassword: String, storedPasswordHash: String): Boolean {
+        return BCrypt.checkpw(candidatePassword, storedPasswordHash)
     }
     fun ReadData() {
         val enteredNoTelp = _etNomor.text.toString()
@@ -75,11 +76,12 @@ class Login : AppCompatActivity() {
             for (document in result) {
                 var id = document.id
                 val noTelp = document.data.get("nomor").toString()
-                val password = document.data.get("password").toString()
+                val password = document.get("password").toString()
 
 //              check hashed password
-//                val passwordMatches = checkPassword(enteredPassword, enteredPassword)
-//                Log.d("pass", passwordMatches.toString())
+//                Log.d("pass match", enteredPassword +" - " + password)
+//                val passwordMatches = checkPassword(enteredPassword, password)
+//                Log.d("pass match", passwordMatches.toString())
 
 //                if (enteredNoTelp == noTelp && passwordMatches) {
                 if (enteredNoTelp == noTelp && enteredPassword==password) {

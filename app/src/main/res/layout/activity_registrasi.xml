@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etNomor" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etPasswordRegist"
         android:layout_width="294dp"
         android:layout_height="45dp"
         android:layout_marginTop="8dp"
@@ -74,7 +74,7 @@
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/etNama"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword">
+        app:layout_constraintTop_toBottomOf="@+id/etPasswordRegist">
 
         <RadioButton
             android:id="@+id/radioMale"
@@ -98,8 +98,8 @@
         android:layout_marginTop="8dp"
         android:enabled="true"
         android:text="Regist"
-        app:layout_constraintEnd_toEndOf="@+id/etPassword"
+        app:layout_constraintEnd_toEndOf="@+id/etPasswordRegist"
         app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/etPasswordRegist"
         app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
 </androidx.constraintlayout.widget.ConstraintLayout>

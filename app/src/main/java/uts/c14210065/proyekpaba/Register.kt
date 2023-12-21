@@ -30,7 +30,7 @@ class Register : AppCompatActivity() {
 
         _etNama = findViewById(R.id.etNama)
         _etNomor = findViewById(R.id.etNomor)
-        _etPassword = findViewById(R.id.etPassword)
+        _etPassword = findViewById(R.id.etPasswordRegist)
         _etEmail = findViewById(R.id.etEmail)
         val genderRadioGroup: RadioGroup = findViewById(R.id.genderRadioGroup)
         var selectedGender : String =""
@@ -49,7 +49,7 @@ class Register : AppCompatActivity() {
         }
 
 
-        val hashedPassword = hashPassword(_etPassword.text.toString())
+
 
         val btnRegist = findViewById<Button>(R.id.btnRegist)
 
@@ -58,6 +58,8 @@ class Register : AppCompatActivity() {
                 // Salah satu atau lebih field kosong
                 Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
             }else{
+                Log.d("pass match" , _etPassword.text.toString())
+                val hashedPassword = hashPassword(_etPassword.text.toString())
                 Log.d("masuk", "iya")
                 checkNumber(_etNomor.text.toString().toInt()){registered ->
                     Log.d("registerd", registered.toString())
@@ -68,6 +70,7 @@ class Register : AppCompatActivity() {
                             _etNama.text.toString(),
                             _etNomor.text.toString().toInt(),
                             hashedPassword,
+//                            _etPassword.text.toString(),
                             selectedGender,
                             _etEmail.text.toString()
                         )
@@ -87,11 +90,12 @@ class Register : AppCompatActivity() {
 
     fun checkNumber(number:Int, callback: (Boolean) -> Unit) {
 
-        db.collection("user")
+        db.collection("users")
             .whereEqualTo("nomor", number)
             .get()
-            .addOnSuccessListener {documents ->
-                val isTerdaftar = documents.isEmpty
+            .addOnSuccessListener { documents ->
+                val isTerdaftar = !documents.isEmpty
+                Log.d("trdaftar", isTerdaftar.toString())
                 callback(isTerdaftar)
             }
             .addOnFailureListener { exception ->
@@ -119,7 +123,7 @@ class Register : AppCompatActivity() {
         )
 
         // Menambahkan data ke Firestore
-        userCollection.add(userData)
+        userCollection.document(nomor.toString()).set(userData)
             .addOnSuccessListener { documentReference ->
                 // Handle ketika data berhasil ditambahkan
                 // documentReference.id berisi ID unik dari data yang baru ditambahkan
