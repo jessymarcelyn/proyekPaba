@@ -60,10 +60,11 @@ class fGym : Fragment() {
     private var arGym = arrayListOf<Gym>()
     private var lastClickedButton: Button? = null
     lateinit var dayDate : Date
+    lateinit var idLogin : String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var idLogin = arguments?.getString("userId")
+        idLogin = arguments?.getString("userId").toString()
         Log.d("trainer", "Gym" + idLogin)
         _rvGym = view.findViewById(R.id.rvGym)
 
@@ -139,33 +140,48 @@ class fGym : Fragment() {
                 val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 
                 if(cekDate(tanggal, btnDate) && kuotaSisa > 0) {
-                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
-//                    val sesi = document.getString("sesi") ?: ""
+                    val userId =
+                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
-                    val calendar = Calendar.getInstance()
-                    calendar.time = tanggal
+                    // apabila di sesi Gym tersebut belum ada userId dari user maka akan muncul
+                    // kalau sudah ada maka tidak muncul
+                    if (idLogin !in userId) {
+                        val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
 
-                    // ambil jam dan menit dari timestamp tanggal di database
-                    val jam = calendar.get(Calendar.HOUR_OF_DAY)
-                    val menit = calendar.get(Calendar.MINUTE)
+                        val calendar = Calendar.getInstance()
+                        calendar.time = tanggal
 
-                    //agar jadi 08.00 atau 17.00
-                    val formatJam = String.format("%02d", jam)
-                    val formatMenit = String.format("%02d", menit)
+                        // ambil jam dan menit dari timestamp tanggal di database
+                        val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                        val menit = calendar.get(Calendar.MINUTE)
 
-                    val sesi = "$formatJam:$formatMenit"
+                        //agar jadi 08.00 atau 17.00
+                        val formatJam = String.format("%02d", jam)
+                        val formatMenit = String.format("%02d", menit)
 
-                    val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
-                    val member = document.getBoolean("member") ?: false
+                        val sesi = "$formatJam:$formatMenit"
 
-                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
-                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                    val formattedDate = dateFormat.format(tanggal)
-                    Log.d("formatted tanggal : ", formattedDate)
+                        val member = document.getBoolean("member") ?: false
 
-                    arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId), member))
-                    Log.d("haes", "Document data: ${document.data}")
-                    Log.d("haes", formattedDate)
+                        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                        val formattedDate = dateFormat.format(tanggal)
+                        Log.d("formatted tanggal : ", formattedDate)
+
+                        arGym.add(
+                            Gym(
+                                Gymid,
+                                formattedDate,
+                                sesi,
+                                kuotaMax,
+                                kuotaSisa,
+                                ArrayList(userId),
+                                member
+                            )
+                        )
+                        Log.d("haes", "Document data: ${document.data}")
+                        Log.d("haes", formattedDate)
+                    }
                 }
             }
             arGym.sortBy { it.sesi }
