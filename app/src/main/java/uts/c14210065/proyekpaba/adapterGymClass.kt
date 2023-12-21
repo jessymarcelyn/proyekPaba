@@ -1,12 +1,19 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class adapterGymClass (
     private val listClass: ArrayList<GymClass>,
@@ -19,6 +26,8 @@ class adapterGymClass (
     interface OnItemClickCallback {
         fun  onItemClicked(data : GymClass)
         fun delData(pos:Int)
+
+        fun bookClass(data : GymClass)
     }
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
         this.onItemClickCallback = onItemClickCallback
@@ -28,7 +37,7 @@ class adapterGymClass (
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var _nama: TextView = itemView.findViewById(R.id.tvNameClass)
         var _level : TextView = itemView.findViewById(R.id.tvLevel)
-        var _btn : Button = itemView.findViewById(R.id.btnJoinClass)
+        var _btnBook : Button = itemView.findViewById(R.id.btnJoinClass)
         var _pelatih : TextView = itemView.findViewById(R.id.tvCoach)
         var _waktu : TextView =  itemView.findViewById(R.id.tvTime)
 
@@ -47,13 +56,17 @@ class adapterGymClass (
         var gymClass = listClass[position]
 
         holder._nama.text = gymClass.name
-        holder._btn.text = gymClass.capacity.toString() + " More left"
+        holder._btnBook.text = gymClass.capacity.toString() + " More left"
         holder._level.text = gymClass.level
         holder._pelatih.text = "With " + gymClass.coach
         holder._waktu.text = gymClass.waktu
-        holder.itemView.setOnClickListener{
-            onItemClickCallback.onItemClicked(listClass[position])
+//        holder.itemView.setOnClickListener{
+//            onItemClickCallback.onItemClicked(listClass[position])
+//
+//        }
 
+        holder._btnBook.setOnClickListener{
+            onItemClickCallback.bookClass(listClass[position])
         }
     }
 

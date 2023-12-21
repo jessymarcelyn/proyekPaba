@@ -138,6 +138,10 @@ class fClass : Fragment() {
             override fun delData(pos: Int) {
                 TODO("Not yet implemented")
             }
+
+            override fun bookClass(data: GymClass) {
+                CreateData(data)
+            }
         })
 
     }
@@ -164,6 +168,7 @@ class fClass : Fragment() {
                 val selectedDate = (document["waktu"] as? Timestamp)?.toDate()?.time ?: 0
                 Log.d("sDate",selectedDate.toString())
                 if(cekDate(selectedDate, date)) {
+                    val id = document.id
                     val nama = document.getString("nama") ?:""
                     val kapasitas = document.getLong("kapasitas")?.toInt() ?: 0
 
@@ -189,7 +194,7 @@ class fClass : Fragment() {
                     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                     val formattedDate = dateFormat.format(Date(selectedDate))
 
-                    arClass.add(GymClass(nama,kapasitas,durasi,pelatih,waktu,level))
+                    arClass.add(GymClass(id,nama,kapasitas,durasi,pelatih,waktu,level))
                     Log.d("haes", "Document data: ${document.data}")
 //                    Log.d("haes", formattedDate)
                 }
@@ -211,6 +216,53 @@ class fClass : Fragment() {
         Log.d("cektanggal", "button " + date)
 
         return formattedDate == date
+    }
+    fun CreateData(data : GymClass){
+
+        val bookedClass = hashMapOf(
+            "tanggal" to data.waktu, "user" to "ani"
+        )
+
+        db.collection("ClassBooking")
+            .add(bookedClass)
+            .addOnSuccessListener { documentReference ->
+                Log.d(
+                    "Booking Class",
+                    "berhasil tambahkan user ke database GymBooking"
+                )
+
+                val documentId = data.idClass
+                val kapasitas = data.capacity - 1
+
+
+                val updateData = mapOf(
+                    "kapasitas" to kapasitas
+                )
+                Log.d(
+                    "Booking Class",
+                    "berhasil"
+                )
+//                                            Toast.makeText(context, "Booking Berhasil", "Booking Gym anda pada tanggal ${data.waktu} " +
+//                                                    " jam telah berhasil, Salam sehat! ")
+//                                            holder._btnBookGym.isEnabled = false
+                db.collection("Class").document(documentId)
+                    .update(updateData)
+                    .addOnSuccessListener {
+                        Log.d(
+                            "Booking Class",
+                            "berhasil update"
+                        )
+                    }
+                    .addOnFailureListener { e ->
+                        Log.d(
+                            "Booking Classs",
+                            "gagal update"
+                        )
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.e("TAG", "Error adding document", e)
+            }
     }
 
     companion object {
