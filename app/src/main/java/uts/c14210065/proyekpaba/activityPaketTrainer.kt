@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import uts.c14210065.proyekpaba.model.TrainerModel
@@ -48,6 +49,13 @@ class activityPaketTrainer : AppCompatActivity() {
         tvSkill = findViewById(R.id.tvDetSkillTrainer)
         btnBack = findViewById(R.id.btnDetTrainerBack)
 
+        btn1 = findViewById(R.id.btnPaket1)
+        btn2 = findViewById(R.id.btnPaket2)
+        btn3 = findViewById(R.id.btnPaket3)
+        btn4 = findViewById(R.id.btnPaket4)
+        btn5 = findViewById(R.id.btnPaket5)
+        btn6 = findViewById(R.id.btnPaket6)
+
         btnBack.setOnClickListener {
             val intent = Intent(this, utama::class.java)
             intent.putExtra("navigateToFragment", "fTrainer")
@@ -57,7 +65,22 @@ class activityPaketTrainer : AppCompatActivity() {
         TampilkanData()
 
         btn1.setOnClickListener {
-            
+            PilihPaket(1)
+        }
+        btn2.setOnClickListener {
+            PilihPaket(2)
+        }
+        btn3.setOnClickListener {
+            PilihPaket(3)
+        }
+        btn4.setOnClickListener {
+            PilihPaket(4)
+        }
+        btn5.setOnClickListener {
+            PilihPaket(5)
+        }
+        btn6.setOnClickListener {
+            PilihPaket(6)
         }
 
     }
@@ -97,26 +120,71 @@ class activityPaketTrainer : AppCompatActivity() {
 
     fun PilihPaket(paket: Int) {
         if (loginId != "0"){
-            db.collection("users").get().addOnSuccessListener { result ->
-                for (document in result) {
-                    var member = document.getBoolean("member")
-                    if (member == true) {
-                        val userPaketCollection = db.collection("UserPaket")
-                        val newDocument = userPaketCollection.document()
+            db.collection("users").document(loginId).get().addOnSuccessListener { result ->
+                var member = result.getBoolean("member")
+                if (member == true) {
+                    db.collection("PilihanPaket").document(paket.toString()).get()
+                        .addOnSuccessListener { doc ->
+                            var harga = doc.getLong("harga")?.toInt()
+                            var totalSesi = doc.getLong("totalSesi")?.toInt()
 
-                        // Set the data for the new document
-                        val newData = hashMapOf(
-                            "paket" to paket,
-                            "clientId" to loginId,
-                            "trainerId" to trainerId
-                        )
+                            val userTrainerCollection = db.collection("UserTrainer")
+                            val newDocument = userTrainerCollection.document()
 
-                        newDocument.set(newData)
-                            .addOnSuccessListener {
-                                Log.d("Firestore", "Data inserted successfully!")
-                            }
-                    }
+                            val newData = hashMapOf(
+                                "idUser" to loginId,
+                                "idTrainer" to trainerId,
+                                "totalSesi" to totalSesi,
+                                "harga" to harga
+                            )
+
+                            UpdateClient(loginId)
+                            
+                            newDocument.set(newData)
+                                .addOnSuccessListener {
+                                    Toast.makeText(this, "Data inserted successfully!", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this, utama::class.java)
+                                    intent.putExtra("navigateToFragment", "fTrainer")
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                .addOnFailureListener { er ->
+                                    Log.d("paketTrainer", "Data not inserted. Error: $er")
+                                }
+                        }
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Silakan menjadi member terlebih dahulu",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d("paketTrainer", "Not member")
                 }
+            }
+        }
+        else {
+            Toast.makeText(this, "Register/Login terlebih dahulu", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun UpdateClient(userId: String) {
+        val documentReference = db.collection("Trainer").document(trainerId)
+        documentReference.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                val currentArray = documentSnapshot.get("clientId") as? List<String> ?: emptyList()
+
+                val newArray = currentArray.toMutableList()
+                newArray.add(userId)
+
+                documentReference.update("clientId", newArray)
+                    .addOnSuccessListener {
+                        Log.d("paketTrainer", "Array updated successfully")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("paketTrainer", "Error updating array", e)
+                    }
+            } else {
+                Log.d("paketTrainer", "Document does not exist")
             }
         }
     }

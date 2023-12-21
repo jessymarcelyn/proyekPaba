@@ -49,11 +49,12 @@ class Register : AppCompatActivity() {
         }
 
 
-        val hashedPassword = hashPassword(_etPassword.text.toString())
+
 
         val btnRegist = findViewById<Button>(R.id.btnRegist)
 
         btnRegist.setOnClickListener{
+            val hashedPassword = hashPassword(_etPassword.text.toString())
             if (_etNama.text.toString().isNullOrBlank() || _etNomor.text.toString().isNullOrBlank() || _etPassword.text.toString().isNullOrBlank()||_etEmail.text.toString().isNullOrBlank()) {
                 // Salah satu atau lebih field kosong
                 Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
@@ -87,11 +88,11 @@ class Register : AppCompatActivity() {
 
     fun checkNumber(number:Int, callback: (Boolean) -> Unit) {
 
-        db.collection("user")
+        db.collection("users")
             .whereEqualTo("nomor", number)
             .get()
             .addOnSuccessListener {documents ->
-                val isTerdaftar = documents.isEmpty
+                val isTerdaftar = !documents.isEmpty
                 callback(isTerdaftar)
             }
             .addOnFailureListener { exception ->
@@ -119,7 +120,7 @@ class Register : AppCompatActivity() {
         )
 
         // Menambahkan data ke Firestore
-        userCollection.add(userData)
+        userCollection.document(nomor.toString()).set(userData)
             .addOnSuccessListener { documentReference ->
                 // Handle ketika data berhasil ditambahkan
                 // documentReference.id berisi ID unik dari data yang baru ditambahkan
