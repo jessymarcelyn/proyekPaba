@@ -26,26 +26,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-<!--            <Button-->
-<!--                android:id="@+id/toggleButton"-->
-<!--                android:layout_width="105dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/buttongym"-->
-<!--                android:layout_marginEnd="10dp"-->
-<!--                android:textOff="Option"-->
-<!--                android:textOn="Option" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btnMon"-->
-<!--                android:layout_width="105dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginEnd="10dp"-->
-<!--                android:background="@drawable/buttongym"-->
-<!--                android:text="Mon\n17 Des" />-->
-
             <Button
                 android:id="@+id/btnd1"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -58,7 +41,7 @@
 
             <Button
                 android:id="@+id/btnd2"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -67,7 +50,7 @@
 
             <Button
                 android:id="@+id/btnd3"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -76,7 +59,7 @@
 
             <Button
                 android:id="@+id/btnd4"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -85,7 +68,7 @@
 
             <Button
                 android:id="@+id/btnd5"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -94,7 +77,7 @@
 
             <Button
                 android:id="@+id/btnd6"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -103,7 +86,7 @@
 
             <Button
                 android:id="@+id/btnd7"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"

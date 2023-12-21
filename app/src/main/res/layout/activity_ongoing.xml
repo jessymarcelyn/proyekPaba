@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#212122"
@@ -49,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#C9F24D"
+        android:backgroundTint="#FFFFFF"
         android:text="Gym"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,7 @@
         android:id="@+id/btnOClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#C9F24D"
+        android:backgroundTint="#FFFFFF"
         android:text="Class"
         android:textColor="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/btnOTrainer"
@@ -71,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
-        android:backgroundTint="#C9F24D"
+        android:backgroundTint="#FFFFFF"
         android:text="Trainer"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +80,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:text="Pilih Kategori"
         android:textColor="#FFFFFF"
@@ -90,14 +89,110 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/flTop" />
 
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="349dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="10dp"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/btnd1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Mon\n17 Des"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnd2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Feb\n18 Des"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnd3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Wed\n19 Des"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnd4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Thu\n20 Des"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnd5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Fri\n21 Des"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnd6"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Sat\n21 Des"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/btnd7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#FFFDFD"
+                android:text="Sun\n22 Des"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvOngoing"
-        android:layout_width="326dp"
-        android:layout_height="580dp"
+        android:layout_width="319dp"
+        android:layout_height="417dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnOClass" />
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Pilih Hari"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/btnOGym" />
 </androidx.constraintlayout.widget.ConstraintLayout>

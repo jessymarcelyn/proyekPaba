@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/rounded_background2" />
+        app:srcCompat="@drawable/rounded_background" />
 
     <TextView
         android:id="@+id/tvSesi"
@@ -156,13 +156,13 @@
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
+        android:layout_width="359dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -174,7 +174,7 @@
 
             <Button
                 android:id="@+id/btnd1"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -183,7 +183,7 @@
 
             <Button
                 android:id="@+id/btnd2"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -192,7 +192,7 @@
 
             <Button
                 android:id="@+id/btnd3"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -201,7 +201,7 @@
 
             <Button
                 android:id="@+id/btnd4"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -210,7 +210,7 @@
 
             <Button
                 android:id="@+id/btnd5"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -219,7 +219,7 @@
 
             <Button
                 android:id="@+id/btnd6"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
@@ -228,7 +228,7 @@
 
             <Button
                 android:id="@+id/btnd7"
-                android:layout_width="105dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="#FFFDFD"
