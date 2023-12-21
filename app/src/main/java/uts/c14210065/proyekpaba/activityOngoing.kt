@@ -270,6 +270,7 @@ class activityOngoing : AppCompatActivity() {
                         calendar.time = tanggal
 
                         // ambil jam dan menit dari timestamp tanggal di database
+
                         val jam = calendar.get(Calendar.HOUR_OF_DAY)
                         val menit = calendar.get(Calendar.MINUTE)
 
@@ -279,23 +280,53 @@ class activityOngoing : AppCompatActivity() {
 
                         val sesi = "$formatJam:$formatMenit"
 
+                        //jam sekarang
+                        val currentTime = Calendar.getInstance()
+                        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                        val currentMinute = currentTime.get(Calendar.MINUTE)
+
+                        //tanggal diubah dengan format
                         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                         val formattedDate = dateFormat.format(tanggal)
-                        Log.d("formatted tanggal : ", formattedDate)
+                        val currentDate = dateFormat.format(Date())
 
-                        arOngoingG.add(
-                            Gym(
-                                Gymid,
-                                formattedDate,
-                                sesi,
-                                kuotaMax,
-                                kuotaSisa,
-                                ArrayList(userId)
+                        //jam ditambah 2 jam
+                        calendar.add(Calendar.HOUR_OF_DAY,2)
+                        val jamm = calendar.get(Calendar.HOUR_OF_DAY)
+
+                        // kalau jam hari ini sudah lewat berarti tidak masuk ongoing
+                        if(formattedDate == currentDate) {
+                            Log.d("ppp", "masuk1")
+                            if (jamm  > currentHour) {
+                                Log.d("ppp", "masuk2")
+                                if (menit > currentMinute)
+                                    Log.d("ppp", "masuk3")
+                                    arOngoingG.add(
+                                        Gym(
+                                            Gymid,
+                                            formattedDate,
+                                            sesi,
+                                            kuotaMax,
+                                            kuotaSisa,
+                                            ArrayList(userId)
+                                        )
+                                    )
+                                Log.d("haes", "Document data: ${document.data}")
+                                Log.d("haes", formattedDate)
+                            }
+                        }else{
+                            arOngoingG.add(
+                                Gym(
+                                    Gymid,
+                                    formattedDate,
+                                    sesi,
+                                    kuotaMax,
+                                    kuotaSisa,
+                                    ArrayList(userId)
+                                )
                             )
-                        )
-                        Log.d("haes", "Document data: ${document.data}")
-                        Log.d("haes", formattedDate)
+                        }
                     }
                 }
             }
