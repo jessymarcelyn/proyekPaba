@@ -95,11 +95,9 @@ class adapterOngoingG(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return Timestamp.now() // Return a default timestamp in case of an error
+        return Timestamp.now()
     }
-
-
-    //sek blm paham cara kerja
+    
     fun isMoreThan24HoursBefore(tanggal: Timestamp?): Boolean {
         if (tanggal != null) {
             Log.d("uuu", "tanggal : $tanggal")
