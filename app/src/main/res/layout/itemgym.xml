@@ -8,7 +8,7 @@
     android:background="@drawable/rounded_background">
 
     <TextView
-        android:id="@+id/tvSession"
+        android:id="@+id/tvSessionO"
         android:layout_width="109dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -30,7 +30,7 @@
         android:textSize="18sp"
         android:textColor="#fff"
         app:layout_constraintStart_toStartOf="@+id/btnCancelGym"
-        app:layout_constraintTop_toBottomOf="@+id/tvSession" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSessionO" />
 
     <Button
         android:id="@+id/btnCancelGym"
@@ -73,7 +73,7 @@
         android:layout_width="28dp"
         android:layout_height="27dp"
         app:layout_constraintBottom_toBottomOf="@+id/tvSlot"
-        app:layout_constraintStart_toStartOf="@+id/tvSession"
+        app:layout_constraintStart_toStartOf="@+id/tvSessionO"
         app:layout_constraintTop_toTopOf="@+id/tvSlot"
         app:srcCompat="@drawable/duration" />
 

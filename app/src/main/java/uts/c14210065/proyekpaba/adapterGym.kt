@@ -1,7 +1,6 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +34,7 @@ class adapterGym(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartGym: TextView = itemView.findViewById(R.id.tvSession)
+        var _tvStartGym: TextView = itemView.findViewById(R.id.tvSessionO)
         var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
         var _btnBookGym: Button = itemView.findViewById(R.id.btnCancelGym)
         var _tvSlotMax: TextView = itemView.findViewById(R.id.tvSlotMax)

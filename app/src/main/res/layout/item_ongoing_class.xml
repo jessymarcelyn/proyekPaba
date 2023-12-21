@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/rounded_background"
     android:layout_marginBottom="8dp"
     >
 
@@ -14,6 +15,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="AEROBIC"
+        android:textColor="#FFFFFF"
         android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +38,7 @@
         android:layout_height="37dp"
         android:layout_marginEnd="8dp"
         android:text="Easy"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/tvTimeO"
@@ -46,6 +49,7 @@
         android:layout_width="196dp"
         android:layout_height="36dp"
         android:text="With Budi"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvNameClassO"
@@ -58,6 +62,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:text="10:00"
+        android:textColor="#FFFFFF"
         android:textSize="35sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,12 +70,17 @@
 
     <Button
         android:id="@+id/btnJoinClass"
-        android:layout_width="157dp"
-        android:layout_height="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="1 More Left"
+        android:layout_marginBottom="11dp"
+        android:backgroundTint="@color/red"
+        android:text="CANCEL"
+        android:textColor="@color/black"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvTimeO"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimeO" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTimeO"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

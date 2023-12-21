@@ -31,7 +31,7 @@ class adapterSesiT(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartSesiTrainer: TextView = itemView.findViewById(R.id.tvSession)
+        var _tvStartSesiTrainer: TextView = itemView.findViewById(R.id.tvSessionO)
         var _btnBookSesi: Button = itemView.findViewById(R.id.btnCancelGym)
     }
 

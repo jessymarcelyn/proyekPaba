@@ -11,11 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -36,7 +34,7 @@ class adapterOngoingG(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvSession: TextView = itemView.findViewById(R.id.tvSession)
+        var _tvSession: TextView = itemView.findViewById(R.id.tvSessionO)
         var _btnCancelGym: Button = itemView.findViewById(R.id.btnCancelGym)
     }
 
@@ -97,7 +95,7 @@ class adapterOngoingG(
         }
         return Timestamp.now()
     }
-    
+
     fun isMoreThan24HoursBefore(tanggal: Timestamp?): Boolean {
         if (tanggal != null) {
             Log.d("uuu", "tanggal : $tanggal")
