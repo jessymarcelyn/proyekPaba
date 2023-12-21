@@ -33,10 +33,20 @@ class adapterGym(
         this.onItemClickCallback = onItemClickCallback
     }
 
+    interface OnBookingSuccessListener {
+        fun onBookingSuccess()
+    }
+
+    private lateinit var onBookingSuccessListener: OnBookingSuccessListener
+
+    fun setOnBookingSuccessListener(listener: OnBookingSuccessListener) {
+        this.onBookingSuccessListener = listener
+    }
+
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartGym: TextView = itemView.findViewById(R.id.tvStartSesiTrainer)
+        var _tvStartGym: TextView = itemView.findViewById(R.id.tvSession)
         var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
-        var _btnBookGym: Button = itemView.findViewById(R.id.btnBookSesi)
+        var _btnBookGym: Button = itemView.findViewById(R.id.btnCancelGym)
         var _tvSlotMax: TextView = itemView.findViewById(R.id.tvSlotMax)
     }
 
@@ -122,6 +132,7 @@ class adapterGym(
                                                             "BookingGym",
                                                             "berhasil update"
                                                         )
+                                                        onBookingSuccessListener.onBookingSuccess()
                                                     }
                                                     .addOnFailureListener { e ->
                                                         Log.d(

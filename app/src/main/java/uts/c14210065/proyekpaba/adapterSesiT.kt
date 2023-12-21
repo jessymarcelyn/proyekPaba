@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -32,8 +31,8 @@ class adapterSesiT(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartSesiTrainer: TextView = itemView.findViewById(R.id.tvStartSesiTrainer)
-        var _btnBookSesi: Button = itemView.findViewById(R.id.btnBookSesi)
+        var _tvStartSesiTrainer: TextView = itemView.findViewById(R.id.tvSession)
+        var _btnBookSesi: Button = itemView.findViewById(R.id.btnCancelGym)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {

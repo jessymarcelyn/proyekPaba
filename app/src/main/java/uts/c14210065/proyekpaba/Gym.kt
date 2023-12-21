@@ -7,7 +7,5 @@ data class Gym(
 //    val endTime: String,
     var kuotaMax: Int,
     var kuotaSisa: Int,
-    var userId: ArrayList<String>,
-    val member: Boolean
-
+    var userId: ArrayList<String>
 )

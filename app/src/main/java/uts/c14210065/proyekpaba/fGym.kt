@@ -161,8 +161,6 @@ class fGym : Fragment() {
 
                         val sesi = "$formatJam:$formatMenit"
 
-                        val member = document.getBoolean("member") ?: false
-
                         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                         val formattedDate = dateFormat.format(tanggal)
@@ -175,8 +173,7 @@ class fGym : Fragment() {
                                 sesi,
                                 kuotaMax,
                                 kuotaSisa,
-                                ArrayList(userId),
-                                member
+                                ArrayList(userId)
                             )
                         )
                         Log.d("haes", "Document data: ${document.data}")
