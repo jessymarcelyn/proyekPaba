@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -153,26 +154,46 @@ class activityOngoing : AppCompatActivity() {
                                 .document(documentId)
                                 .update("userId", FieldValue.arrayRemove(userIdToDelete))
                                 .addOnSuccessListener {
-                                    Toast.makeText(
-                                        this@activityOngoing,
-                                        "Gym session canceled successfully.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showAlert(this@activityOngoing, "Pembatalan berhasil", "Sesi gym berhasil dibatalkan.")
+
                                     // BLM UPDATE JUMLAH KUOTA SESI
-                                    TampilkanDataGym(dayDate)
+                                    val documentId = arOngoingG[pos].idGym
+                                    val newKuotaSisa = arOngoingG[pos].kuotaSisa + 1
+
+                                    val updateData = mapOf(
+                                        "kuotaSisa" to newKuotaSisa,
+                                    )
+
+                                    db.collection("GymSesi").document(documentId)
+                                        .update(updateData)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+                                            TampilkanDataGym(dayDate)
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+
                                 }
                                 .addOnFailureListener {
-                                    Toast.makeText(
-                                        this@activityOngoing,
-                                        "Failed to cancel gym session.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    showAlert(this@activityOngoing, "Pembatalan Gagal", "Sesi gym gagal dibatalkan.")
                                 }
                         })
                         .setNegativeButton(
                             "Tidak", DialogInterface.OnClickListener { dialog, which ->
-                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
-                                    .show()
+//                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
+//                                    .show()
                             })
                         .show()
                 }
@@ -284,6 +305,17 @@ class activityOngoing : AppCompatActivity() {
         }.addOnFailureListener { e ->
             Log.e("haes", "Error fetching data from Firebase", e)
         }
+    }
+
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     fun cekDate(timestamp: Date?, btnDate: Date): Boolean {

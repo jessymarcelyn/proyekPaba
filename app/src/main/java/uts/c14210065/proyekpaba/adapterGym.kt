@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -33,16 +34,6 @@ class adapterGym(
         this.onItemClickCallback = onItemClickCallback
     }
 
-    interface OnBookingSuccessListener {
-        fun onBookingSuccess()
-    }
-
-    private lateinit var onBookingSuccessListener: OnBookingSuccessListener
-
-    fun setOnBookingSuccessListener(listener: OnBookingSuccessListener) {
-        this.onBookingSuccessListener = listener
-    }
-
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var _tvStartGym: TextView = itemView.findViewById(R.id.tvSession)
         var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
@@ -68,18 +59,31 @@ class adapterGym(
         holder._tvSlot.text = gym.kuotaSisa.toString()
         holder._tvSlotMax.text = gym.kuotaMax.toString() + " Slot"
 
+        val db = Firebase.firestore
+
+
+        // SEK SALAH (blm bisa yang udah book atau kuota == 0 jadi disabled dan ganti warna)
+//        val documentRef = db.collection("GymSesi").document(gym.idGym)
+//        documentRef.get().addOnSuccessListener { documentSnapshot ->
+//            val userIds = documentSnapshot.get("userId") as? List<String> ?: emptyList()
+//            val kuotaSisa = documentSnapshot.getLong("kuotaSisa")?.toInt() ?: 0
+//
+//            // Set the default state
+//            holder._btnBookGym.isEnabled = true
+//            holder._btnBookGym.setBackgroundColor(Color.parseColor("#C9F24D"))
+//
+//            if (userIds.contains(idLogin) && kuotaSisa == 0) {
+//                // If idLogin is in userId and kuotaSisa is 0, change button color to white
+//                holder._btnBookGym.isEnabled = false
+//                holder._btnBookGym.setBackgroundColor(Color.WHITE)
+//            }
+//        }
+
         holder._btnBookGym.setOnClickListener {
-
-            // Assuming you have a reference to the Firestore database
-            val db = Firebase.firestore
-
             val gymTanggal = convertDateTimeToTimestamp(gym.tanggal, gym.sesi)
 
             Log.d("gymTanggal", "tanggal : " + gym.tanggal)
             Log.d("gymTanggal", "sesi : " +gym.sesi)
-            val gymSesi = hashMapOf(
-                "tanggal" to gymTanggal, "userId" to idLogin
-            )
 
             if (idLogin != null) {
                 Log.d("iduser", idLogin)
@@ -91,66 +95,61 @@ class adapterGym(
                 documentRef.get()
                     .addOnSuccessListener { documentSnapshot ->
                         val userIds = documentSnapshot.get("userId") as? List<String> ?: emptyList()
-                        //cek user sudah ada atau belum
-                        //JANGAN LUPA BALIKIN
-                        if (!userIds.contains(idLogin)) {
-//                        if (userIds.contains(idLogin)) {
 
+                        //cek user sudah ada atau belum
+                        if (!userIds.contains(idLogin)) {
                             val documentRef = db.collection("users").document(idLogin.toString())
                             documentRef.get()
                                 .addOnSuccessListener { documentSnapshot ->
                                     val member = documentSnapshot.getBoolean("member")
                                     Log.d("MEMBERR", member.toString())
                                     Log.d("IDLOGIN", idLogin.toString())
-                                    if(member == true){
-                                        db.collection("GymBooking")
-                                            .add(gymSesi)
-                                            .addOnSuccessListener { documentReference ->
+                                    if (member == true) {
+                                        // Update GymSesi untuk kuota dan userId
+                                        val documentId = gym.idGym
+                                        val newKuotaSisa = gym.kuotaSisa - 1
+                                        val fieldName1 = "kuotaSisa"
+                                        val fieldName2 = "userId"
+
+                                        val updateData = mapOf(
+                                            fieldName1 to newKuotaSisa,
+                                            fieldName2 to FieldValue.arrayUnion(idLogin)
+                                        )
+
+                                        showAlert(
+                                            context,
+                                            "Booking Berhasil",
+                                            "Booking Gym anda pada tanggal ${gym.tanggal} " +
+                                                    " jam ${gym.sesi} telah berhasil, Salam sehat! "
+                                        )
+                                        holder._btnBookGym.isEnabled = false
+                                        db.collection("GymSesi").document(documentId)
+                                            .update(updateData)
+                                            .addOnSuccessListener {
                                                 Log.d(
                                                     "BookingGym",
-                                                    "berhasil tambahkan user ke database GymBooking"
+                                                    "berhasil update"
                                                 )
-
-                                                // Update GymSesi untuk kuota dan userId
-                                                val documentId = gym.idGym
-                                                val newKuotaSisa = gym.kuotaSisa - 1
-                                                val fieldName1 = "kuotaSisa"
-                                                val fieldName2 = "userId"
-
-                                                val updateData = mapOf(
-                                                    fieldName1 to newKuotaSisa,
-                                                    fieldName2 to FieldValue.arrayUnion(idLogin)
-                                                )
-
-                                                showAlert(context, "Booking Berhasil", "Booking Gym anda pada tanggal ${gym.tanggal} " +
-                                                        " jam ${gym.sesi} telah berhasil, Salam sehat! ")
-                                                holder._btnBookGym.isEnabled = false
-                                                db.collection("GymSesi").document(documentId)
-                                                    .update(updateData)
-                                                    .addOnSuccessListener {
-                                                        Log.d(
-                                                            "BookingGym",
-                                                            "berhasil update"
-                                                        )
-                                                        onBookingSuccessListener.onBookingSuccess()
-                                                    }
-                                                    .addOnFailureListener { e ->
-                                                        Log.d(
-                                                            "BookingGym",
-                                                            "gagal update"
-                                                        )
-                                                    }
                                             }
+                                            .addOnFailureListener { e ->
+                                                Log.d(
+                                                    "BookingGym",
+                                                    "gagal update"
+                                                )
+                                            }
+
                                             .addOnFailureListener { e ->
                                                 Log.e("TAG", "Error adding document", e)
                                             }
-                                    }
-                                    else{
-                                        showAlert(context, "Booking Gagal", "Anda belum berlangganan")
+                                    } else {
+                                        showAlert(
+                                            context,
+                                            "Booking Gagal",
+                                            "Anda belum berlangganan"
+                                        )
                                     }
                                 }
-
-                        } else {
+                        }else{
                             Log.d("BookingGym", "userId sudah terdaftar di sesi tersebut")
                             showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +
                                     " jam ${gym.sesi}.")

@@ -139,46 +139,32 @@ class fGym : Fragment() {
                 val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
                 val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 
-                if(cekDate(tanggal, btnDate) && kuotaSisa > 0) {
-                    val userId =
-                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                if(cekDate(tanggal, btnDate)) {
+                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
 
-                    // apabila di sesi Gym tersebut belum ada userId dari user maka akan muncul
-                    // kalau sudah ada maka tidak muncul
-                    if (idLogin !in userId) {
-                        val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
+                    val calendar = Calendar.getInstance()
+                    calendar.time = tanggal
 
-                        val calendar = Calendar.getInstance()
-                        calendar.time = tanggal
+                    // ambil jam dan menit dari timestamp tanggal di database
+                    val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                    val menit = calendar.get(Calendar.MINUTE)
 
-                        // ambil jam dan menit dari timestamp tanggal di database
-                        val jam = calendar.get(Calendar.HOUR_OF_DAY)
-                        val menit = calendar.get(Calendar.MINUTE)
+                    //agar jadi 08.00 atau 17.00
+                    val formatJam = String.format("%02d", jam)
+                    val formatMenit = String.format("%02d", menit)
 
-                        //agar jadi 08.00 atau 17.00
-                        val formatJam = String.format("%02d", jam)
-                        val formatMenit = String.format("%02d", menit)
+                    val sesi = "$formatJam:$formatMenit"
 
-                        val sesi = "$formatJam:$formatMenit"
+                    val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
-                        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
-                        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                        val formattedDate = dateFormat.format(tanggal)
-                        Log.d("formatted tanggal : ", formattedDate)
+                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                    val formattedDate = dateFormat.format(tanggal)
+                    Log.d("formatted tanggal : ", formattedDate)
 
-                        arGym.add(
-                            Gym(
-                                Gymid,
-                                formattedDate,
-                                sesi,
-                                kuotaMax,
-                                kuotaSisa,
-                                ArrayList(userId)
-                            )
-                        )
-                        Log.d("haes", "Document data: ${document.data}")
-                        Log.d("haes", formattedDate)
-                    }
+                    arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId)))
+                    Log.d("haes", "Document data: ${document.data}")
+                    Log.d("haes", formattedDate)
                 }
             }
             arGym.sortBy { it.sesi }
