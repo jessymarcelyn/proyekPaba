@@ -58,13 +58,10 @@ class adapterOngoingG(
         val db = Firebase.firestore
 
         holder._btnCancelGym.setOnClickListener {
-            // BLM DIBERI IF KALAU CUMA BISA  LEBIH DARI 24 JAM
-
-            // Get the timestamp for the formattedDate and sesi
-            Log.d("TimeComparison", "gym tanggal : ${gym.tanggal} ")
-            Log.d("TimeComparison", "gym sesi : ${gym.sesi} ")
+            Log.d("uuu", "gym tanggal : ${gym.tanggal} ")
+            Log.d("uuu", "gym sesi : ${gym.sesi} ")
             val timestamp = convertDateTimeToTimestamp(gym.tanggal, gym.sesi)
-            Log.d("TimeComparison", "timestamp : ${timestamp} ")
+            Log.d("uuu", "timestamp : ${timestamp} ")
             if (isMoreThan24HoursBefore(timestamp)) {
                 onItemClickCallback.delData(position)
             } else {
@@ -92,14 +89,11 @@ class adapterOngoingG(
         try {
             val date = dateFormat.parse(dateTimeString)
             if (date != null) {
-                Log.d("Conversion", "Parsed date: $date")
                 return Timestamp(date)
             } else {
-                Log.e("Conversion", "Failed to parse date: $dateTimeString")
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("Conversion", "Exception: $e")
         }
         return Timestamp.now() // Return a default timestamp in case of an error
     }
@@ -108,21 +102,21 @@ class adapterOngoingG(
     //sek blm paham cara kerja
     fun isMoreThan24HoursBefore(tanggal: Timestamp?): Boolean {
         if (tanggal != null) {
-            Log.d("TimeComparison", "tanggal : $tanggal")
-            val timeZone = TimeZone.getTimeZone("Asia/Jakarta") // Set the time zone to Indonesia
+            Log.d("uuu", "tanggal : $tanggal")
+            val timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
             val currentTimeInTimeZone = Calendar.getInstance(timeZone).timeInMillis
             val twentyFourHoursInMillis = 24 * 60 * 60 * 1000
 
-            // Set the time zone for the target time
+            // set timezone
             val targetTimeInTimeZone = Calendar.getInstance(timeZone).apply {
-                time = tanggal.toDate() // Convert the Timestamp to Date
+                time = tanggal.toDate() // Convert timestamp ke date
             }.timeInMillis
 
-            val twentyFourHoursBefore = targetTimeInTimeZone - twentyFourHoursInMillis // Corrected calculation
+            val twentyFourHoursBefore = targetTimeInTimeZone - twentyFourHoursInMillis
 
-            Log.d("TimeComparison", "currentTime: $currentTimeInTimeZone")
-            Log.d("TimeComparison", "twentyFourHoursBefore: $twentyFourHoursBefore")
+            Log.d("uuu", "currentTime: $currentTimeInTimeZone")
+            Log.d("uuu", "twentyFourHoursBefore: $twentyFourHoursBefore")
 
             return currentTimeInTimeZone < twentyFourHoursBefore
         }
