@@ -259,21 +259,23 @@ class fClass : Fragment() {
                                         .update(bookedClass)
                                         .addOnSuccessListener {
                                             Log.d(
-                                                "BookingGym",
+                                                "Booking Class",
                                                 "berhasil update"
+                                                
                                             )
+                                            ReadData(dayDate)
 //                                            onBookingSuccessListener.onBookingSuccess()
                                         }
                                         .addOnFailureListener { e ->
                                             Log.d(
-                                                "BookingGym",
+                                                "Booking Class",
                                                 "gagal update"
                                             )
                                         }
                                 }
                             }
                     } else {
-                        Log.d("BookingGym", "userId sudah terdaftar di sesi tersebut")
+                        Log.d("Booking Class", "userId sudah terdaftar di sesi tersebut")
 //                        showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +
 //                                " jam ${gym.sesi}.")
                     }
@@ -281,7 +283,7 @@ class fClass : Fragment() {
                 }
         }else {
                 Log.d(
-                    "BookingGym", "user belum login"
+                    "Booking Class", "user belum login"
                 )
                 context?.let {
                     showAlert(
