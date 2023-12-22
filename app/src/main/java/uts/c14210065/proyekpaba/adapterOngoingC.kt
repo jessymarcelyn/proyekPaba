@@ -58,7 +58,7 @@ class adapterOngoingC(
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var classo = listOClass[position]
 
-        holder._tvCoachOC.text = classo.coach
+        holder._tvCoachOC.text = "With " + classo.coach
         holder._tvNameClassOC.text = classo.name
         holder._tvLevelOC.text = classo.level
 
