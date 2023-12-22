@@ -1,6 +1,8 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import java.sql.Time
@@ -41,7 +44,7 @@ class fClass : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    val db = FirebaseFirestore.getInstance()
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +66,13 @@ class fClass : Fragment() {
     private var arClass = arrayListOf<GymClass>()
     private var lastClickedButton: Button? = null
     lateinit var dayDate : Date
+    lateinit var idLogin : String
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        idLogin = arguments?.getString("userId").toString()
+        Log.d("userId", "Class" + idLogin)
         _rvClass = view.findViewById(R.id.rvClass)
 
         val _btnd1 = view.findViewById<Button>(R.id.btnMon)
@@ -81,33 +88,42 @@ class fClass : Fragment() {
         dayDate = currentDate
 
         // Generate text for the next 7 days
-        for (i in 0 until 7) {
+//        for (i in 0 until 7) {
+//            val day = Calendar.getInstance()
+//            day.time = currentDate
+//            day.add(Calendar.DATE, i)
+//
+//            val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale.getDefault()).format(day.time)
+//
+//            when (i) {
+//                0 -> dayTextSet(_btnd1, formattedDate, size1, size2)
+//                1 -> dayTextSet(_btnd2, formattedDate, size1, size2)
+//                2 -> dayTextSet(_btnd3, formattedDate, size1, size2)
+//                3 -> dayTextSet(_btnd4, formattedDate, size1, size2)
+//                4 -> dayTextSet(_btnd5, formattedDate, size1, size2)
+//                5 -> dayTextSet(_btnd6, formattedDate, size1, size2)
+//                6 -> dayTextSet(_btnd7, formattedDate, size1, size2)
+//            }
+//        }
+
+        ReadData(dayDate)
+
+        val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
+        for (i in buttons.indices) {
             val day = Calendar.getInstance()
             day.time = currentDate
             day.add(Calendar.DATE, i)
 
-            val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale.getDefault()).format(day.time)
+            val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale("id", "ID")).format(day.time)
 
-            when (i) {
-                0 -> dayTextSet(_btnd1, formattedDate, size1, size2)
-                1 -> dayTextSet(_btnd2, formattedDate, size1, size2)
-                2 -> dayTextSet(_btnd3, formattedDate, size1, size2)
-                3 -> dayTextSet(_btnd4, formattedDate, size1, size2)
-                4 -> dayTextSet(_btnd5, formattedDate, size1, size2)
-                5 -> dayTextSet(_btnd6, formattedDate, size1, size2)
-                6 -> dayTextSet(_btnd7, formattedDate, size1, size2)
-            }
-        }
+            dayTextSet(buttons[i], formattedDate, fGym.size1, fGym.size2)
 
-        val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
-        ReadData(dayDate)
-        for (i in buttons.indices) {
             buttons[i].setOnClickListener {
                 // Reset the background color of the last clicked button to white
                 lastClickedButton?.setBackgroundColor(Color.WHITE)
 
                 // Set the background color of the current clicked button to purple
-                buttons[i].setBackgroundColor(Color.parseColor("#6750A4"))
+                buttons[i].setBackgroundColor(Color.parseColor("#C9F24D"))
 
                 // Update the last clicked button
                 lastClickedButton = buttons[i]
@@ -177,28 +193,30 @@ class fClass : Fragment() {
                     val level = document.getString("level") ?:""
 
 
-                    val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
-                    timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                    val waktu = timeFormat.format(Time(selectedDate))
-                    Log.d("wkatu", waktu)
+//                    val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
+//                    timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+//                    val waktu = timeFormat.format(Time(selectedDate))
+//                    Log.d("wkatu", waktu)
 //                    val waktu = selectedDate.toDate()?.time?.div(1000) ?: 0
 //                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
 //                    val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 //                    val sesi = document.getString("sesi") ?: ""
 
-                    val userId =
-                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+//                    val userId =
+//                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+//
+//
+//                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
+//                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+//                    val formattedDate = dateFormat.format(Date(selectedDate))
 
-
-                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                    val formattedDate = dateFormat.format(Date(selectedDate))
-
-                    arClass.add(GymClass(id,nama,kapasitas,durasi,pelatih,waktu,level))
+                    val timestamp = document.getTimestamp("waktu")
+                    arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level))
                     Log.d("haes", "Document data: ${document.data}")
 //                    Log.d("haes", formattedDate)
                 }
             }
+            arClass.sortBy { it.timestamp}
             _rvClass.adapter?.notifyDataSetChanged()
         }.addOnFailureListener { e ->
             Log.e("haes", "Error fetching data from Firebase", e)
@@ -217,53 +235,80 @@ class fClass : Fragment() {
 
         return formattedDate == date
     }
-    fun CreateData(data : GymClass){
+    fun CreateData(data : GymClass) {
+        Log.d("idlogin", idLogin)
+        if (idLogin != "0") {
+            db.collection("Class")
+                .document(data.idClass).get()
+                .addOnSuccessListener { document ->
+                    Log.d("class", "masuk")
+                    val userIds = document.get("userId") as? List<String> ?: emptyList()
 
-        val bookedClass = hashMapOf(
-            "tanggal" to data.waktu, "user" to "ani"
-        )
+                    if (!userIds.contains(idLogin)) {
+                        db.collection("users").document(idLogin).get()
+                            .addOnSuccessListener { document ->
+                                val member = document.getBoolean("member")
+                                if (member == true) {
+                                    Log.d("cek user", "masuk")
 
-        db.collection("ClassBooking")
-            .add(bookedClass)
-            .addOnSuccessListener { documentReference ->
-                Log.d(
-                    "Booking Class",
-                    "berhasil tambahkan user ke database GymBooking"
-                )
-
-                val documentId = data.idClass
-                val kapasitas = data.capacity - 1
+                                    val documentId = data.idClass
+                                    val kapasitas = data.capacity - 1
+                                    val bookedClass = hashMapOf(
+                                        "kapasitas" to kapasitas,
+                                        "userId" to FieldValue.arrayUnion(idLogin)
+                                    )
 
 
-                val updateData = mapOf(
-                    "kapasitas" to kapasitas
-                )
-                Log.d(
-                    "Booking Class",
-                    "berhasil"
-                )
-//                                            Toast.makeText(context, "Booking Berhasil", "Booking Gym anda pada tanggal ${data.waktu} " +
-//                                                    " jam telah berhasil, Salam sehat! ")
-//                                            holder._btnBookGym.isEnabled = false
-                db.collection("Class").document(documentId)
-                    .update(updateData)
-                    .addOnSuccessListener {
-                        Log.d(
-                            "Booking Class",
-                            "berhasil update"
-                        )
+                                    db.collection("Class").document(documentId)
+                                        .update(bookedClass)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+//                                            onBookingSuccessListener.onBookingSuccess()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+                                }
+                            }
+                    } else {
+                        Log.d("BookingGym", "userId sudah terdaftar di sesi tersebut")
+//                        showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +
+//                                " jam ${gym.sesi}.")
                     }
-                    .addOnFailureListener { e ->
-                        Log.d(
-                            "Booking Classs",
-                            "gagal update"
-                        )
-                    }
+
+                }
+        }else {
+                Log.d(
+                    "BookingGym", "user belum login"
+                )
+                context?.let {
+                    showAlert(
+                        it!!,
+                        "Booking Gagal",
+                        "Untuk melakukan booking, silahkan login terlebih dahulu."
+                    )
+                }
             }
-            .addOnFailureListener { e ->
-                Log.e("TAG", "Error adding document", e)
-            }
+        }
+
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Handle the "OK" button click if needed
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
+
 
     companion object {
         /**

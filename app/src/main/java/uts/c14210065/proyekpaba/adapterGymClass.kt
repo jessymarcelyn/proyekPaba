@@ -1,11 +1,15 @@
 package uts.c14210065.proyekpaba
 
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.sql.Time
+import java.util.Locale
 
 class adapterGymClass (
     private val listClass: ArrayList<GymClass>,
@@ -31,7 +35,7 @@ class adapterGymClass (
         var _level : TextView = itemView.findViewById(R.id.tvLevelO)
         var _btnBook : Button = itemView.findViewById(R.id.btnJoinClass)
         var _pelatih : TextView = itemView.findViewById(R.id.tvCoachO)
-        var _waktu : TextView =  itemView.findViewById(R.id.tvTimeO)
+        var _jam: TextView =  itemView.findViewById(R.id.tvTimeO)
 
     }
 
@@ -51,7 +55,15 @@ class adapterGymClass (
         holder._btnBook.text = gymClass.capacity.toString() + " More left"
         holder._level.text = gymClass.level
         holder._pelatih.text = "With " + gymClass.coach
-        holder._waktu.text = gymClass.waktu
+
+
+        val selectedDate = gymClass.timestamp?.toDate()?.time ?: 0
+        val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
+        timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+        val waktu = timeFormat.format(Time(selectedDate))
+        holder._jam.text = waktu
+
+//        holder._waktu.text = gymClass.waktu
 //        holder.itemView.setOnClickListener{
 //            onItemClickCallback.onItemClicked(listClass[position])
 //

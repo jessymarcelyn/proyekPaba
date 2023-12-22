@@ -6,6 +6,7 @@ data class GymClass(
     var capacity:Int,
     var durasi:Int,
     var coach:String,
-    var waktu:String,
+//    var waktu:String,
+    var timestamp: com.google.firebase.Timestamp?,
     var level:String
 )
