@@ -35,11 +35,11 @@ class adapterGymClass (
 
 
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        var _nama: TextView = itemView.findViewById(R.id.tvNameClassO)
-        var _level : TextView = itemView.findViewById(R.id.tvLevelO)
-        var _btnBook : Button = itemView.findViewById(R.id.btnJoinClass)
-        var _pelatih : TextView = itemView.findViewById(R.id.tvCoachO)
-        var _jam: TextView =  itemView.findViewById(R.id.tvTimeO)
+        var _nama: TextView = itemView.findViewById(R.id.tvNameClassOC)
+        var _level : TextView = itemView.findViewById(R.id.tvLevelOC)
+        var _btnBook : Button = itemView.findViewById(R.id.btnCancelClass)
+        var _pelatih : TextView = itemView.findViewById(R.id.tvCoachOC)
+        var _jam: TextView =  itemView.findViewById(R.id.tvTimeOC)
 
     }
 

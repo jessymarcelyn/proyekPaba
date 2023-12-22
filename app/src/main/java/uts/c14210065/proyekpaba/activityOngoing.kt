@@ -36,6 +36,7 @@ class activityOngoing : AppCompatActivity() {
 
     private var arOngoingG = arrayListOf<Gym>()
     private var arOngoingT = arrayListOf<SesiT>()
+    private var arOngoingC = arrayListOf<GymClass>()
     private var lastClickedButton: Button? = null
     lateinit var dayDate: Date
     var idLogin: String = ""
@@ -125,6 +126,8 @@ class activityOngoing : AppCompatActivity() {
                 dayDate = calendar.time
                 if (state == 1) {
                     TampilkanDataGym(dayDate)
+                } else if (state == 2) {
+                    TampilkanDataClass(dayDate)
                 } else if (state == 3) {
                     TampilkanDataTrainer(dayDate)
                 }
@@ -183,6 +186,93 @@ class activityOngoing : AppCompatActivity() {
                                         .addOnFailureListener { e ->
                                             Log.d(
                                                 "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+
+                                }
+                                .addOnFailureListener {
+                                    showAlert(
+                                        this@activityOngoing,
+                                        "Pembatalan Gagal",
+                                        "Sesi gym gagal dibatalkan."
+                                    )
+                                }
+                        })
+                        .setNegativeButton(
+                            "Tidak", DialogInterface.OnClickListener { dialog, which ->
+//                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
+//                                    .show()
+                            })
+                        .show()
+                }
+            })
+        } else if (state == 2) {
+            Log.d("mmm", "masuk")
+            _rvOngoing.layoutManager = LinearLayoutManager(this)
+            val adapterP = adapterOngoingC(arOngoingC, idLogin)
+            _rvOngoing.adapter = adapterP
+
+            adapterP.setOnItemClickCallback(object : adapterOngoingC.OnItemClickCallback {
+                override fun onItemClicked(data: Gym) {
+
+                }
+
+                override fun delData(pos: Int) {
+                    val timestamp = arOngoingC[pos].timestamp
+                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                    val formattedDate = timestamp?.toDate()?.let { dateFormat.format(it) } ?: ""
+                    val calendar = Calendar.getInstance()
+                    calendar.time = timestamp?.toDate()
+
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    val formattedTime = String.format("%02d:%02d", hour, minute)
+
+                    AlertDialog.Builder(this@activityOngoing)
+                        .setTitle("Pembatalan Sesi Class")
+                        .setMessage("Apakah anda yakin membatalkan sesi class pada $formattedDate pukul $formattedTime?")
+                        .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
+                            val documentId = arOngoingC[pos].idClass
+                            val userIdToDelete = idLogin
+
+                            Log.d("www", "docuemntid $documentId")
+                            db.collection("Class")
+                                .document(documentId)
+                                .update("userId", FieldValue.arrayRemove(userIdToDelete))
+                                .addOnSuccessListener {
+                                    showAlert(
+                                        this@activityOngoing,
+                                        "Pembatalan berhasil",
+                                        "Sesi class berhasil dibatalkan."
+                                    )
+
+
+                                    val documentId = arOngoingC[pos].idClass
+                                    val newKuotaSisa = arOngoingC[pos].capacity + 1
+
+                                    val updateData = mapOf(
+                                        "kapasitas" to newKuotaSisa,
+                                    )
+
+                                    db.collection("Class").document(documentId)
+                                        .update(updateData)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "Cancelclass",
+                                                "berhasil update"
+                                            )
+                                            TampilkanDataClass(dayDate)
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "Cancelclass",
                                                 "gagal update"
                                             )
                                         }
@@ -549,39 +639,157 @@ class activityOngoing : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 
-    fun showAlert(context: Context, title: String, message: String) {
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(title)
-        builder.setMessage(message)
-        builder.setPositiveButton("OK") { dialog, which ->
-            dialog.dismiss()
+    //menampilkan data class
+    private fun TampilkanDataClass(date: Date) {
+        db.collection("Class").get().addOnSuccessListener { result ->
+            arOngoingC.clear()
+            for (document in result) {
+
+                val userId =
+                    (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                if (idLogin in userId) {
+                    val selectedDate = (document["waktu"] as? Timestamp)?.toDate()?.time ?: 0
+                    Log.d("sDate", selectedDate.toString())
+                    if (cekDateLong(selectedDate, date)) {
+                        val id = document.id
+                        val nama = document.getString("nama") ?: ""
+                        val kapasitas = document.getLong("kapasitas")?.toInt() ?: 0
+
+                        val pelatih = document.getString("pelatih") ?: ""
+                        val durasi = document.getLong("kapasitas")?.toInt() ?: 0
+                        val level = document.getString("level") ?: ""
+                        val arrUser = document.get("userId") as? List<String> ?: emptyList()
+
+                        val timestamp = document.getTimestamp("waktu")
+
+                        val timestampJes = (document["waktu"] as? Timestamp)?.toDate()
+
+                        val calendar = Calendar.getInstance()
+                        calendar.time = timestampJes
+
+                        // ambil jam dan menit dari timestamp tanggal di database
+                        val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                        val menit = calendar.get(Calendar.MINUTE)
+
+                        //jam sekarang
+                        val currentTime = Calendar.getInstance()
+                        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                        val currentMinute = currentTime.get(Calendar.MINUTE)
+
+                        //tanggal diubah dengan format
+                        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                        val formattedDate = dateFormat.format(timestampJes)
+                        val currentDate = dateFormat.format(Date())
+
+                        // kalau jam hari ini sudah lewat berarti tidak masuk ongoing
+                        if (formattedDate == currentDate) {
+                            Log.d("ppp", "masuk1")
+                            if (jam > currentHour) {
+                                Log.d("ppp", "masuk2")
+                                arOngoingC.add(
+                                    GymClass(
+                                        id,
+                                        nama,
+                                        kapasitas,
+                                        durasi,
+                                        pelatih,
+                                        timestamp,
+                                        level,
+                                        arrUser
+                                    )
+                                )
+                            }
+                            if (jam == currentHour) {
+                                if (menit > currentMinute) {
+                                    Log.d("ppp", "masuk3")
+                                    arOngoingC.add(
+                                        GymClass(
+                                            id,
+                                            nama,
+                                            kapasitas,
+                                            durasi,
+                                            pelatih,
+                                            timestamp,
+                                            level,
+                                            arrUser
+                                        )
+                                    )
+                                    Log.d("haes", "Document data: ${document.data}")
+                                    Log.d("haes", formattedDate)
+                                }
+                            }
+                        } else {
+                            arOngoingC.add(
+                                GymClass(
+                                    id,
+                                    nama,
+                                    kapasitas,
+                                    durasi,
+                                    pelatih,
+                                    timestamp,
+                                    level,
+                                    arrUser
+                                )
+                            )
+                        }
+                    }
+
+                    Log.d("haes", "Document data: ${document.data}")
+//                    Log.d("haes", formattedDate)
+                }
+            }
+            arOngoingC.sortBy { it.timestamp }
+            _rvOngoing.adapter?.notifyDataSetChanged()
+        }.addOnFailureListener { e ->
+            Log.e("haes", "Error fetching data from Firebase", e)
         }
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
     }
 
-    // menghitung tanggal berakhir
-    fun addMonthsToTimestamp(originalTimestamp: Long, monthsToAdd: Int): Date {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = originalTimestamp
-        calendar.add(Calendar.MONTH, monthsToAdd)
-        return calendar.time
+fun showAlert(context: Context, title: String, message: String) {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(title)
+    builder.setMessage(message)
+    builder.setPositiveButton("OK") { dialog, which ->
+        dialog.dismiss()
     }
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
 
-    fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
-        val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
-        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+// menghitung tanggal berakhir
+fun addMonthsToTimestamp(originalTimestamp: Long, monthsToAdd: Int): Date {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = originalTimestamp
+    calendar.add(Calendar.MONTH, monthsToAdd)
+    return calendar.time
+}
 
-        val formattedDate = dateFormat.format(timestamp)
-        val date = dateFormat.format(btnDate)
+fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
+    val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
+    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
-        Log.d("cektanggal", "format" + formattedDate)
-        Log.d("cektanggal", "button " + date)
+    val formattedDate = dateFormat.format(timestamp)
+    val date = dateFormat.format(btnDate)
 
-        return formattedDate == date
-    }
+    Log.d("cektanggal", "format" + formattedDate)
+    Log.d("cektanggal", "button " + date)
+
+    return formattedDate == date
+}
+
+fun cekDateLong(timestamp: Long, btnDate: Date): Boolean {
+    val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
+    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+
+    val formattedDate = dateFormat.format(Date(timestamp))
+    val date = dateFormat.format(btnDate)
+
+    Log.d("cektanggal", "format" + formattedDate)
+    Log.d("cektanggal", "button " + date)
+
+    return formattedDate == date
+}
 }

@@ -9,7 +9,7 @@
     >
 
     <TextView
-        android:id="@+id/tvNameClassO"
+        android:id="@+id/tvNameClassOC"
         android:layout_width="195dp"
         android:layout_height="52dp"
         android:layout_marginStart="24dp"
@@ -33,7 +33,7 @@
     <!--        app:layout_constraintTop_toBottomOf="@+id/tvCoach" />-->
 
     <TextView
-        android:id="@+id/tvLevelO"
+        android:id="@+id/tvLevelOC"
         android:layout_width="52dp"
         android:layout_height="37dp"
         android:layout_marginEnd="8dp"
@@ -41,22 +41,22 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/tvTimeO"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimeO" />
+        app:layout_constraintEnd_toEndOf="@+id/tvTimeOC"
+        app:layout_constraintTop_toBottomOf="@+id/tvTimeOC" />
 
     <TextView
-        android:id="@+id/tvCoachO"
+        android:id="@+id/tvCoachOC"
         android:layout_width="196dp"
         android:layout_height="36dp"
         android:text="With Budi"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvNameClassO"
-        app:layout_constraintTop_toBottomOf="@+id/tvNameClassO" />
+        app:layout_constraintStart_toStartOf="@+id/tvNameClassOC"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameClassOC" />
 
     <TextView
-        android:id="@+id/tvTimeO"
+        android:id="@+id/tvTimeOC"
         android:layout_width="92dp"
         android:layout_height="55dp"
         android:layout_marginTop="24dp"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnJoinClass"
+        android:id="@+id/btnCancelClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -79,8 +79,8 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tvTimeO"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimeO"
+        app:layout_constraintEnd_toEndOf="@+id/tvTimeOC"
+        app:layout_constraintTop_toBottomOf="@+id/tvTimeOC"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
