@@ -1,6 +1,9 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +40,6 @@ class adapterGym(
         var _tvStartGym: TextView = itemView.findViewById(R.id.tvSessionO)
         var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
         var _btnBookGym: Button = itemView.findViewById(R.id.btnCancelGym)
-        var _tvSlotMax: TextView = itemView.findViewById(R.id.tvSlotMax)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -55,117 +57,181 @@ class adapterGym(
 
         holder._tvStartGym.text = gym.sesi
 //        holder._tvEndGym.text = gym.endTime
-        holder._tvSlot.text = gym.kuotaSisa.toString()
-        holder._tvSlotMax.text = gym.kuotaMax.toString() + " Slot"
+        holder._tvSlot.text = gym.kuotaSisa.toString() + " / " + gym.kuotaMax.toString() + " Slot"
 
         val db = Firebase.firestore
 
+        if (gym.kuotaSisa == 0) {
+            holder._btnBookGym.text = "FULLY BOOKED"
+            holder._btnBookGym.isActivated = false
+            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
-        // SEK SALAH (blm bisa yang udah book atau kuota == 0 jadi disabled dan ganti warna)
-//        val documentRef = db.collection("GymSesi").document(gym.idGym)
-//        documentRef.get().addOnSuccessListener { documentSnapshot ->
-//            val userIds = documentSnapshot.get("userId") as? List<String> ?: emptyList()
-//            val kuotaSisa = documentSnapshot.getLong("kuotaSisa")?.toInt() ?: 0
-//
-//            // Set the default state
-//            holder._btnBookGym.isEnabled = true
-//            holder._btnBookGym.setBackgroundColor(Color.parseColor("#C9F24D"))
-//
-//            if (userIds.contains(idLogin) && kuotaSisa == 0) {
-//                // If idLogin is in userId and kuotaSisa is 0, change button color to white
-//                holder._btnBookGym.isEnabled = false
-//                holder._btnBookGym.setBackgroundColor(Color.WHITE)
-//            }
-//        }
+        } else if (gym.userId.contains(idLogin)) {
+            holder._btnBookGym.text = "BOOKED"
+            holder._btnBookGym.isActivated = false
+            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+        } else {
+            holder._btnBookGym.text = "BOOK SEKARANG"
+            holder._btnBookGym.setOnClickListener {
+                if (idLogin != "0") {
+                    val documentRef =
+                        db.collection("users").document(idLogin.toString())
+                    documentRef.get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val member = documentSnapshot.getBoolean("member")
+                            Log.d("MEMBERR", member.toString())
+                            Log.d("IDLOGIN", idLogin.toString())
+                            if (member == true) {
+                                // Update GymSesi untuk kuota dan userId
+                                val documentId = gym.idGym
+                                val newKuotaSisa = gym.kuotaSisa - 1
+                                val fieldName1 = "kuotaSisa"
+                                val fieldName2 = "userId"
 
-        holder._btnBookGym.setOnClickListener {
-            val gymTanggal = convertDateTimeToTimestamp(gym.tanggal, gym.sesi)
+                                val updateData = mapOf(
+                                    fieldName1 to newKuotaSisa,
+                                    fieldName2 to FieldValue.arrayUnion(idLogin)
+                                )
 
-            Log.d("gymTanggal", "tanggal : " + gym.tanggal)
-            Log.d("gymTanggal", "sesi : " +gym.sesi)
-
-            if (idLogin != null) {
-                Log.d("iduser", idLogin)
-            }
-
-            // booking gym
-            if (idLogin != "0") {
-                val documentRef = db.collection("GymSesi").document(gym.idGym)
-                documentRef.get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        val userIds = documentSnapshot.get("userId") as? List<String> ?: emptyList()
-
-                        //cek user sudah ada atau belum
-                        if (!userIds.contains(idLogin)) {
-                            val documentRef = db.collection("users").document(idLogin.toString())
-                            documentRef.get()
-                                .addOnSuccessListener { documentSnapshot ->
-                                    val member = documentSnapshot.getBoolean("member")
-                                    Log.d("MEMBERR", member.toString())
-                                    Log.d("IDLOGIN", idLogin.toString())
-                                    if (member == true) {
-                                        // Update GymSesi untuk kuota dan userId
-                                        val documentId = gym.idGym
-                                        val newKuotaSisa = gym.kuotaSisa - 1
-                                        val fieldName1 = "kuotaSisa"
-                                        val fieldName2 = "userId"
-
-                                        val updateData = mapOf(
-                                            fieldName1 to newKuotaSisa,
-                                            fieldName2 to FieldValue.arrayUnion(idLogin)
-                                        )
-
-                                        showAlert(
-                                            context,
-                                            "Booking Berhasil",
-                                            "Booking Gym anda pada tanggal ${gym.tanggal} " +
-                                                    " jam ${gym.sesi} telah berhasil, Salam sehat! "
-                                        )
-                                        holder._btnBookGym.isEnabled = false
-                                        db.collection("GymSesi").document(documentId)
-                                            .update(updateData)
-                                            .addOnSuccessListener {
-                                                Log.d(
-                                                    "BookingGym",
-                                                    "berhasil update"
-                                                )
-                                            }
-                                            .addOnFailureListener { e ->
-                                                Log.d(
-                                                    "BookingGym",
-                                                    "gagal update"
-                                                )
-                                            }
-
-                                            .addOnFailureListener { e ->
-                                                Log.e("TAG", "Error adding document", e)
-                                            }
-                                    } else {
-                                        showAlert(
-                                            context,
-                                            "Booking Gagal",
-                                            "Anda belum berlangganan"
+                                showAlert(
+                                    context,
+                                    "Booking Berhasil",
+                                    "Booking Gym anda pada tanggal ${gym.tanggal} " +
+                                            " jam ${gym.sesi} telah berhasil, Salam sehat! "
+                                )
+                                holder._btnBookGym.isEnabled = false
+                                db.collection("GymSesi").document(documentId)
+                                    .update(updateData)
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "BookingGym",
+                                            "berhasil update"
                                         )
                                     }
-                                }
-                        }else{
-                            Log.d("BookingGym", "userId sudah terdaftar di sesi tersebut")
-                            showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +
-                                    " jam ${gym.sesi}.")
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        // Handle the failure to get the document
-                        Log.e("TAG", "Error getting document: $e")
-                    }
-            } else {
-                Log.d(
-                    "BookingGym", "user belum login")
-                showAlert(context, "Booking Gagal", "Untuk melakukan booking, silahkan login terlebih dahulu.")
-            }
-        }
+                                    .addOnFailureListener { e ->
+                                        Log.d(
+                                            "BookingGym",
+                                            "gagal update"
+                                        )
+                                    }
 
+                                    .addOnFailureListener { e ->
+                                        Log.e("TAG", "Error adding document", e)
+                                    }
+                            } else {
+                                showAlert(
+                                    context,
+                                    "Booking Gagal",
+                                    "Anda belum berlangganan membership gym"
+                                )
+                            }
+
+                        }
+                        .addOnFailureListener { e ->
+                            // Handle the failure to get the document
+                            Log.e("TAG", "Error getting document: $e")
+                        }
+                } else {
+                    Log.d(
+                        "BookingGym", "user belum login"
+                    )
+                    showAlert(
+                        context,
+                        "Booking Gagal",
+                        "Silahkan login terlebih dahulu."
+                    )
+                }
+            }
+
+            holder._btnBookGym.isActivated = true
+            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBookGym.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+        }
     }
+
+
+//        holder._btnBookGym.setOnClickListener {
+//            // booking gym
+//            if (idLogin != "0") {
+//                val documentRef = db.collection("GymSesi").document(gym.idGym)
+//                documentRef.get()
+//                    .addOnSuccessListener { documentSnapshot ->
+//                        val userIds = documentSnapshot.get("userId") as? List<String> ?: emptyList()
+//
+//                        //cek user sudah ada atau belum
+//                        if (!userIds.contains(idLogin)) {
+//                            val documentRef = db.collection("users").document(idLogin.toString())
+//                            documentRef.get()
+//                                .addOnSuccessListener { documentSnapshot ->
+//                                    val member = documentSnapshot.getBoolean("member")
+//                                    Log.d("MEMBERR", member.toString())
+//                                    Log.d("IDLOGIN", idLogin.toString())
+//                                    if (member == true) {
+//                                        // Update GymSesi untuk kuota dan userId
+//                                        val documentId = gym.idGym
+//                                        val newKuotaSisa = gym.kuotaSisa - 1
+//                                        val fieldName1 = "kuotaSisa"
+//                                        val fieldName2 = "userId"
+//
+//                                        val updateData = mapOf(
+//                                            fieldName1 to newKuotaSisa,
+//                                            fieldName2 to FieldValue.arrayUnion(idLogin)
+//                                        )
+//
+//                                        showAlert(
+//                                            context,
+//                                            "Booking Berhasil",
+//                                            "Booking Gym anda pada tanggal ${gym.tanggal} " +
+//                                                    " jam ${gym.sesi} telah berhasil, Salam sehat! "
+//                                        )
+//                                        holder._btnBookGym.isEnabled = false
+//                                        db.collection("GymSesi").document(documentId)
+//                                            .update(updateData)
+//                                            .addOnSuccessListener {
+//                                                Log.d(
+//                                                    "BookingGym",
+//                                                    "berhasil update"
+//                                                )
+//                                            }
+//                                            .addOnFailureListener { e ->
+//                                                Log.d(
+//                                                    "BookingGym",
+//                                                    "gagal update"
+//                                                )
+//                                            }
+//
+//                                            .addOnFailureListener { e ->
+//                                                Log.e("TAG", "Error adding document", e)
+//                                            }
+//                                    } else {
+//                                        showAlert(
+//                                            context,
+//                                            "Booking Gagal",
+//                                            "Anda belum berlangganan"
+//                                        )
+//                                    }
+//                                }
+//                        }else{
+//                            Log.d("BookingGym", "userId sudah terdaftar di sesi tersebut")
+//                            showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +
+//                                    " jam ${gym.sesi}.")
+//                        }
+//                    }
+//                    .addOnFailureListener { e ->
+//                        // Handle the failure to get the document
+//                        Log.e("TAG", "Error getting document: $e")
+//                    }
+//            } else {
+//                Log.d(
+//                    "BookingGym", "user belum login")
+//                showAlert(context, "Booking Gagal", "Untuk melakukan booking, silahkan login terlebih dahulu.")
+//            }
+//        }
+//
+
 
     fun showAlert(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
@@ -178,24 +244,5 @@ class adapterGym(
         val dialog: AlertDialog = builder.create()
         dialog.show()
     }
-
-    fun convertDateTimeToTimestamp(dateString: String, timeString: String): Timestamp {
-        val dateTimeString = "$dateString $timeString"
-        val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-        try {
-            val date = dateFormat.parse(dateTimeString)
-            if (date != null) {
-                Log.d("Conversion", "Parsed date: $date")
-                return Timestamp(date)
-            } else {
-                Log.e("Conversion", "Failed to parse date: $dateTimeString")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("Conversion", "Exception: $e")
-        }
-        return Timestamp.now() // Return a default timestamp in case of an error
-    }
-
 
 }

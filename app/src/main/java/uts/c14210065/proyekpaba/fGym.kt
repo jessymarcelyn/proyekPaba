@@ -82,6 +82,11 @@ class fGym : Fragment() {
 
         val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
 
+        // Ketika awal tombol dengan tanggal hari ini otomatis tertekan.
+        TampilkanData(dayDate)
+        buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
+        lastClickedButton = buttons[0]
+
         for (i in buttons.indices) {
             val day = Calendar.getInstance()
             day.time = currentDate
@@ -102,10 +107,10 @@ class fGym : Fragment() {
                 lastClickedButton = buttons[i]
 
                 // tanggal di button
-                 val calendar = Calendar.getInstance()
-                 calendar.time = currentDate
-                 calendar.add(Calendar.DATE, i)
-                 dayDate = calendar.time
+                val calendar = Calendar.getInstance()
+                calendar.time = currentDate
+                calendar.add(Calendar.DATE, i)
+                dayDate = calendar.time
 
                 TampilkanData(dayDate)
             }
@@ -160,11 +165,71 @@ class fGym : Fragment() {
                     val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                     val formattedDate = dateFormat.format(tanggal)
+                    val currentDate = dateFormat.format(Date())
                     Log.d("formatted tanggal : ", formattedDate)
 
-                    arGym.add(Gym(Gymid,formattedDate, sesi, kuotaMax, kuotaSisa, ArrayList(userId)))
-                    Log.d("haes", "Document data: ${document.data}")
-                    Log.d("haes", formattedDate)
+                    //jam sekarang
+                    val currentTime = Calendar.getInstance()
+                    val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                    val currentMinute = currentTime.get(Calendar.MINUTE)
+
+//                    arGym.add(
+//                        Gym(
+//                            Gymid,
+//                            formattedDate,
+//                            sesi,
+//                            kuotaMax,
+//                            kuotaSisa,
+//                            ArrayList(userId)
+//                        )
+//                    )
+                    // kalau jam hari ini sudah lewat berarti tidak masuk ongoing
+                    if (formattedDate == currentDate) {
+                        Log.d("ooo", "masuk1")
+                        Log.d("ooo", "jam : $jam")
+                        Log.d("ooo", "currentHour : $currentHour")
+                        if (jam > currentHour) {
+                            Log.d("ooo", "masuk2")
+                            Log.d("ooo", "menit : $menit")
+                            Log.d("ooo", "currentMinute : $currentMinute")
+                            arGym.add(
+                                Gym(
+                                    Gymid,
+                                    formattedDate,
+                                    sesi,
+                                    kuotaMax,
+                                    kuotaSisa,
+                                    ArrayList(userId)
+                                )
+                            )
+                        }
+                        if(jam == currentHour){
+                            if (menit > currentMinute) {
+                                Log.d("ooo", "masuk3")
+                                arGym.add(
+                                    Gym(
+                                        Gymid,
+                                        formattedDate,
+                                        sesi,
+                                        kuotaMax,
+                                        kuotaSisa,
+                                        ArrayList(userId)
+                                    )
+                                )
+                            }
+                        }
+                    }else{
+                        arGym.add(
+                            Gym(
+                                Gymid,
+                                formattedDate,
+                                sesi,
+                                kuotaMax,
+                                kuotaSisa,
+                                ArrayList(userId)
+                            )
+                        )
+                    }
                 }
             }
             arGym.sortBy { it.sesi }

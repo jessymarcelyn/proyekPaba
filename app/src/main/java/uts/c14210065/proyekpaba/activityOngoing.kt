@@ -40,11 +40,11 @@ class activityOngoing : AppCompatActivity() {
     var idLogin: String = ""
     private lateinit var buttons: Array<Button>
     private lateinit var buttonsCategory: Array<Button>
-    lateinit var idTrainer : String
-    lateinit var _rvOngoing : RecyclerView
-    lateinit var userTrainerId : String
-    lateinit var _tvHari : TextView
-    var state : Int = 0
+    lateinit var idTrainer: String
+    lateinit var _rvOngoing: RecyclerView
+    lateinit var userTrainerId: String
+    lateinit var _tvHari: TextView
+    var state: Int = 0
     private var selectedCategoryButton: Button? = null
 
     @SuppressLint("MissingInflatedId")
@@ -122,7 +122,7 @@ class activityOngoing : AppCompatActivity() {
                 calendar.time = currentDate
                 calendar.add(Calendar.DATE, i)
                 dayDate = calendar.time
-                if(state == 1) {
+                if (state == 1) {
                     TampilkanDataGym(dayDate)
                 }
             }
@@ -136,8 +136,8 @@ class activityOngoing : AppCompatActivity() {
             val adapterP = adapterOngoingG(arOngoingG, idLogin)
             _rvOngoing.adapter = adapterP
 
-            adapterP.setOnItemClickCallback(object: adapterOngoingG.OnItemClickCallback{
-                override fun onItemClicked(data: Gym){
+            adapterP.setOnItemClickCallback(object : adapterOngoingG.OnItemClickCallback {
+                override fun onItemClicked(data: Gym) {
 
                 }
 
@@ -154,7 +154,11 @@ class activityOngoing : AppCompatActivity() {
                                 .document(documentId)
                                 .update("userId", FieldValue.arrayRemove(userIdToDelete))
                                 .addOnSuccessListener {
-                                    showAlert(this@activityOngoing, "Pembatalan berhasil", "Sesi gym berhasil dibatalkan.")
+                                    showAlert(
+                                        this@activityOngoing,
+                                        "Pembatalan berhasil",
+                                        "Sesi gym berhasil dibatalkan."
+                                    )
 
                                     // BLM UPDATE JUMLAH KUOTA SESI
                                     val documentId = arOngoingG[pos].idGym
@@ -187,7 +191,11 @@ class activityOngoing : AppCompatActivity() {
 
                                 }
                                 .addOnFailureListener {
-                                    showAlert(this@activityOngoing, "Pembatalan Gagal", "Sesi gym gagal dibatalkan.")
+                                    showAlert(
+                                        this@activityOngoing,
+                                        "Pembatalan Gagal",
+                                        "Sesi gym gagal dibatalkan."
+                                    )
                                 }
                         })
                         .setNegativeButton(
@@ -200,6 +208,7 @@ class activityOngoing : AppCompatActivity() {
             })
         }
     }
+
     private fun changeButtonColor(clickedButton: Button) {
         selectedCategoryButton?.setBackgroundColor(Color.WHITE)
         clickedButton.setBackgroundColor(Color.parseColor("#C9F24D"))
@@ -215,7 +224,7 @@ class activityOngoing : AppCompatActivity() {
         }
         // Apabila button gym, trainer dan class ditekan maka baru muncul
         when (state) {
-            1,2,3 -> {
+            1, 2, 3 -> {
                 _tvHari.visibility = View.VISIBLE
                 for (i in buttons.indices) {
                     buttons[i].visibility = View.VISIBLE
@@ -259,7 +268,7 @@ class activityOngoing : AppCompatActivity() {
                 val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
                 val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 
-                if(cekDate(tanggal, btnDate)) {
+                if (cekDate(tanggal, btnDate)) {
                     val userId =
                         (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
@@ -292,15 +301,28 @@ class activityOngoing : AppCompatActivity() {
                         val currentDate = dateFormat.format(Date())
 
                         //jam ditambah 2 jam
-                        calendar.add(Calendar.HOUR_OF_DAY,2)
+                        calendar.add(Calendar.HOUR_OF_DAY, 2)
                         val jamm = calendar.get(Calendar.HOUR_OF_DAY)
 
                         // kalau jam hari ini sudah lewat berarti tidak masuk ongoing
-                        if(formattedDate == currentDate) {
+                        if (formattedDate == currentDate) {
                             Log.d("ppp", "masuk1")
-                            if (jamm  > currentHour) {
+                            if (jamm > currentHour) {
                                 Log.d("ppp", "masuk2")
-                                if (menit > currentMinute)
+                                arOngoingG.add(
+                                    Gym(
+                                        Gymid,
+                                        formattedDate,
+                                        sesi,
+                                        kuotaMax,
+                                        kuotaSisa,
+                                        ArrayList(userId)
+                                    )
+                                )
+
+                            }
+                            if(jamm == currentHour){
+                                if (menit > currentMinute) {
                                     Log.d("ppp", "masuk3")
                                     arOngoingG.add(
                                         Gym(
@@ -312,10 +334,11 @@ class activityOngoing : AppCompatActivity() {
                                             ArrayList(userId)
                                         )
                                     )
-                                Log.d("haes", "Document data: ${document.data}")
-                                Log.d("haes", formattedDate)
+                                    Log.d("haes", "Document data: ${document.data}")
+                                    Log.d("haes", formattedDate)
+                                }
                             }
-                        }else{
+                        } else {
                             arOngoingG.add(
                                 Gym(
                                     Gymid,

@@ -255,8 +255,6 @@ class fClass : Fragment() {
                                         "kapasitas" to kapasitas,
                                         "userId" to FieldValue.arrayUnion(idLogin)
                                     )
-
-
                                     db.collection("Class").document(documentId)
                                         .update(bookedClass)
                                         .addOnSuccessListener {
