@@ -30,6 +30,7 @@ class sesiTrainer : AppCompatActivity() {
     }
 
     private var arSesiT = arrayListOf<SesiT>()
+    private var arCard = arrayListOf<UserTrainer>()
     private var lastClickedButton: Button? = null
     lateinit var dayDate: Date
     var idLogin: String = ""
@@ -39,8 +40,10 @@ class sesiTrainer : AppCompatActivity() {
     private lateinit var _tvTanggalExpired: TextView
     private lateinit var _tvSesi: TextView
     private lateinit var buttons: Array<Button>
+    var namaTrainer: String = ""
     lateinit var idTrainer: String
     lateinit var _rvSesiT: RecyclerView
+    lateinit var _rvUserTrainer: RecyclerView
     lateinit var userTrainerId: String
 
 
@@ -52,14 +55,15 @@ class sesiTrainer : AppCompatActivity() {
         idLogin = intent.getStringExtra(utama.userId).toString()
         Log.d("trainer", idLogin)
 
-        _tvNamaT = findViewById<TextView>(R.id.tvNamaT)
-        _tvTanggalMulai = findViewById<TextView>(R.id.tvTanggalMulai)
-        _tvDurasi = findViewById<TextView>(R.id.tvDurasi)
-        _tvTanggalExpired = findViewById<TextView>(R.id.tvTanggalExpired)
-        _tvSesi = findViewById<TextView>(R.id.tvSesi)
+//        _tvNamaT = findViewById<TextView>(R.id.tvNamaT)
+//        _tvTanggalMulai = findViewById<TextView>(R.id.tvTanggalMulai)
+//        _tvDurasi = findViewById<TextView>(R.id.tvDurasi)
+//        _tvTanggalExpired = findViewById<TextView>(R.id.tvTanggalExpired)
+//        _tvSesi = findViewById<TextView>(R.id.tvSesi)
 
         TampilkanData1()
         _rvSesiT = findViewById<RecyclerView>(R.id.rvSesiT)
+        _rvUserTrainer = findViewById<RecyclerView>(R.id.rvUserTrainer)
 
         val _btnd1 = findViewById<Button>(R.id.btnd1)
         val _btnd2 = findViewById<Button>(R.id.btnd2)
@@ -104,6 +108,12 @@ class sesiTrainer : AppCompatActivity() {
         }
 
 
+
+        _rvUserTrainer.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val adapterW = adapterUserTrainer(arCard, idLogin)
+        _rvUserTrainer.adapter = adapterW
+
         _rvSesiT.layoutManager = LinearLayoutManager(this)
         val adapterP = adapterSesiT(arSesiT, idLogin)
         _rvSesiT.adapter = adapterP
@@ -135,9 +145,40 @@ class sesiTrainer : AppCompatActivity() {
     val db = Firebase.firestore
 
     // untuk menampilkan informasi yang atas
+    private fun fetchNamaTrainer(idTrainer: String) {
+
+    }
+
     private fun TampilkanData1() {
         db.collection("UserTrainer").get().addOnSuccessListener { result ->
+
+            if (result.isEmpty) {
+                // kalau sudah expired hapus id client di Trainer
+                Log.d("HHH", "MASUK")
+                val db = Firebase.firestore
+                val documentReference = db.collection("Trainer").document(idTrainer)
+
+                val elementToRemove = idLogin
+
+                documentReference.update("clientId", FieldValue.arrayRemove(elementToRemove))
+                    .addOnSuccessListener {
+                        Log.d(
+                            "FirestoreArrayRemove",
+                            "Element successfully removed from the array!"
+                        )
+
+                        arCard.add(
+                            UserTrainer(
+                                "",
+                                0, "-", "-", 0, "-", "-", 0, 0
+                            )
+                        )
+                        _rvUserTrainer.adapter?.notifyDataSetChanged()
+                        return@addOnSuccessListener
+                    }
+            }
             for (document in result) {
+                var idUserTrainer = document.id
                 var idUser = document.getString("idUser") ?: ""
                 var durasi = document.getLong("durasiPaket")?.toInt() ?: 0
 
@@ -147,10 +188,11 @@ class sesiTrainer : AppCompatActivity() {
                 val currentDate = Calendar.getInstance().time
 
                 idTrainer = document.getString("idTrainer") ?: ""
+                Log.d("ccc", "idTrainer : $idTrainer")
                 var sisaSesi = document.getLong("sisaSesi")?.toInt() ?: 0
 
                 if (idUser == idLogin && tanggalBerakhir >= currentDate) {
-                    Log.d("sesiTrainerr", "masuk")
+                    Log.d("jjj", "idUserTrainer : $idUserTrainer")
                     userTrainerId = document.id
                     var harga = document.getLong("harga")?.toInt() ?: 0
                     var totalSesi = document.getLong("totalSesi")?.toInt() ?: 0
@@ -158,62 +200,35 @@ class sesiTrainer : AppCompatActivity() {
                     val tanggalMulaiConvert = convertTimestampToDate(tanggalMulai)
                     val tanggalBerakhirConvert = formatDateToString(tanggalBerakhir)
 
-                    db.collection("Trainer").get().addOnSuccessListener { result ->
-                        for (document in result) {
 
-                            if (document.id == idTrainer) {
-                                var namaTrainer = document.getString("nama") ?: ""
-                                _tvNamaT.text = namaTrainer.toString()
-                            }
-                        }
-                    }
-
-                    _tvSesi.text = sisaSesi.toString() + " / " + totalSesi.toString() + " Sesi"
-                    _tvDurasi.text = durasi.toString() + " Bulan"
-                    _tvTanggalExpired.text = tanggalBerakhirConvert.toString()
-                    _tvTanggalMulai.text = tanggalMulaiConvert.toString()
-
+                    Log.d("ccc", "namatrainer2 : $namaTrainer")
+                    arCard.add(
+                        UserTrainer(
+                            idUserTrainer,
+                            durasi,
+                            idTrainer,
+                            userId,
+                            sisaSesi,
+                            tanggalMulaiConvert,
+                            tanggalBerakhirConvert,
+                            totalSesi,
+                            harga
+                        )
+                    )
+                    Log.d("ccc", arCard.toString())
+                    arCard.sortBy { it.tanggalMulai }
+                    _rvUserTrainer.adapter?.notifyDataSetChanged()
 
                     //apabila jumlah sisa sesi sudah habis maka tidak bisa melihat button
                     if (sisaSesi > 0) {
                         for (i in buttons.indices) {
                             buttons[i].visibility = View.VISIBLE
                         }
-                        TampilkanData2(dayDate)
+//                        TampilkanData2(dayDate)
                         buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
                         lastClickedButton = buttons[0]
                     }
-                    break
-
-                } else {
-                    // kalau sudah expired hapus id client di Trainer
-                    Log.d("HHH", "MASUK")
-                    val db = Firebase.firestore
-                    val documentReference = db.collection("Trainer").document(idTrainer)
-
-                    val elementToRemove = idUser // Replace with the actual value you want to remove
-
-                    documentReference.update("clientId", FieldValue.arrayRemove(elementToRemove))
-                        .addOnSuccessListener {
-                            Log.d(
-                                "FirestoreArrayRemove",
-                                "Element successfully removed from the array!"
-                            )
-                            _tvNamaT.text = "-"
-                            _tvSesi.text = "Unavailable"
-//                            _tvSesi.textSize = 14f
-                            _tvDurasi.text = "-"
-                            _tvTanggalExpired.text = "-"
-                            _tvTanggalMulai.text = "-"
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(
-                                "FirestoreArrayRemove",
-                                "Error removing element from the array",
-                                e
-                            )
-                        }
-
+//                    break
 
                 }
             }
