@@ -17,10 +17,10 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
-class adapterOngoingG(
-    private val listOGym: ArrayList<Gym>,
+class adapterOngoingT(
+    private val listOTrainer: ArrayList<SesiT>,
     private val idLogin: String?,
-) : RecyclerView.Adapter<adapterOngoingG.ListViewHolder>() {
+) : RecyclerView.Adapter<adapterOngoingT.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
@@ -34,36 +34,44 @@ class adapterOngoingG(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvSession: TextView = itemView.findViewById(R.id.tvSessionOT)
+        var _tvSessionOT: TextView = itemView.findViewById(R.id.tvSessionOT)
+        var _tvCoachNameO: TextView = itemView.findViewById(R.id.tvCoachNameO)
         var _btnCancelGym: Button = itemView.findViewById(R.id.btnCancelGym)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_ongoing, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_ongoing_trainer, parent, false)
         return ListViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return listOGym.size
+        return listOTrainer.size
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        var gym = listOGym[position]
+        var sesi = listOTrainer[position]
 
-        holder._tvSession.text = gym.sesi
+        holder._tvSessionOT.text = sesi.sesi
 
         val db = Firebase.firestore
+        db.collection("Trainer").get().addOnSuccessListener { result ->
+            for (document in result) {
+
+                if (document.id == sesi.trainerId) {
+                    var namaTrainer = document.getString("nama") ?: ""
+                    holder._tvCoachNameO.text = namaTrainer.toString()
+                }
+            }
+        }
 
         holder._btnCancelGym.setOnClickListener {
-            Log.d("uuu", "gym tanggal : ${gym.tanggal} ")
-            Log.d("uuu", "gym sesi : ${gym.sesi} ")
-            val timestamp = convertDateTimeToTimestamp(gym.tanggal, gym.sesi)
+            val timestamp = convertDateTimeToTimestamp(sesi.tanggal, sesi.sesi)
             Log.d("uuu", "timestamp : ${timestamp} ")
             if (isMoreThan24HoursBefore(timestamp)) {
                 onItemClickCallback.delData(position)
             } else {
-                showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi gym tidak bisa dibatalkan karena sudah lebih dari 24 jam.")
+                showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi pt tidak bisa dibatalkan karena sudah lebih dari 24 jam.")
             }
 
         }

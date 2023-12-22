@@ -35,12 +35,13 @@ class activityOngoing : AppCompatActivity() {
     }
 
     private var arOngoingG = arrayListOf<Gym>()
+    private var arOngoingT = arrayListOf<SesiT>()
     private var lastClickedButton: Button? = null
     lateinit var dayDate: Date
     var idLogin: String = ""
     private lateinit var buttons: Array<Button>
     private lateinit var buttonsCategory: Array<Button>
-    lateinit var idTrainer: String
+    private lateinit var idTrainer: String
     lateinit var _rvOngoing: RecyclerView
     lateinit var userTrainerId: String
     lateinit var _tvHari: TextView
@@ -124,6 +125,8 @@ class activityOngoing : AppCompatActivity() {
                 dayDate = calendar.time
                 if (state == 1) {
                     TampilkanDataGym(dayDate)
+                } else if (state == 3) {
+                    TampilkanDataTrainer(dayDate)
                 }
             }
         }
@@ -195,6 +198,85 @@ class activityOngoing : AppCompatActivity() {
                                         this@activityOngoing,
                                         "Pembatalan Gagal",
                                         "Sesi gym gagal dibatalkan."
+                                    )
+                                }
+                        })
+                        .setNegativeButton(
+                            "Tidak", DialogInterface.OnClickListener { dialog, which ->
+//                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
+//                                    .show()
+                            })
+                        .show()
+                }
+            })
+        } else if (state == 3) {
+            Log.d("mmm", "masuk")
+            _rvOngoing.layoutManager = LinearLayoutManager(this)
+            val adapterP = adapterOngoingT(arOngoingT, idLogin)
+            _rvOngoing.adapter = adapterP
+
+            adapterP.setOnItemClickCallback(object : adapterOngoingT.OnItemClickCallback {
+                override fun onItemClicked(data: Gym) {
+                }
+
+                override fun delData(pos: Int) {
+                    AlertDialog.Builder(this@activityOngoing)
+                        .setTitle("Pembatalan Sesi")
+                        .setMessage("Apakah anda yakin membatalkan sesi personal trainer pada " + arOngoingT[pos].tanggal + " pukul ${arOngoingT[pos].sesi} ?")
+                        .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
+                            val documentId = arOngoingT[pos].idJadwal
+
+                            db.collection("JadwalTrainer")
+                                .document(documentId)
+                                .update("userTrainerId", "")
+                                .addOnSuccessListener {
+                                    showAlert(
+                                        this@activityOngoing,
+                                        "Pembatalan berhasil",
+                                        "Sesi personal trainer berhasil dibatalkan."
+                                    )
+
+                                    val documentId = arOngoingT[pos].userTrainerId
+//                                    val newKuotaSisa = arOngoingT[pos].kuotaSisa + 1
+
+                                    db.collection("UserTrainer").get()
+                                        .addOnSuccessListener { result ->
+                                            for (document in result) {
+                                                if (document.id == arOngoingT[pos].userTrainerId) {
+                                                    val sisaSesi =
+                                                        document.getLong("sisaSesi")?.toInt() ?: 0
+
+                                                    val newsisaSesi = sisaSesi + 1
+
+                                                    val updateData = mapOf(
+                                                        "sisaSesi" to newsisaSesi,
+                                                    )
+                                                    db.collection("UserTrainer")
+                                                        .document(documentId)
+                                                        .update(updateData)
+                                                        .addOnSuccessListener {
+                                                            Log.d(
+                                                                "OngoingT",
+                                                                "berhasil update"
+                                                            )
+                                                            TampilkanDataTrainer(dayDate)
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            Log.d(
+                                                                "OngoingT",
+                                                                "gagal update"
+                                                            )
+                                                        }
+                                                }
+                                            }
+                                        }
+
+                                }
+                                .addOnFailureListener {
+                                    showAlert(
+                                        this@activityOngoing,
+                                        "Pembatalan Gagal",
+                                        "Sesi personal trainer gagal dibatalkan."
                                     )
                                 }
                         })
@@ -321,7 +403,7 @@ class activityOngoing : AppCompatActivity() {
                                 )
 
                             }
-                            if(jamm == currentHour){
+                            if (jamm == currentHour) {
                                 if (menit > currentMinute) {
                                     Log.d("ppp", "masuk3")
                                     arOngoingG.add(
@@ -361,6 +443,116 @@ class activityOngoing : AppCompatActivity() {
         }
     }
 
+    //menampilkan data gym
+    private fun TampilkanDataTrainer(btnDate: Date) {
+        arOngoingT.clear()
+        db.collection("UserTrainer").get().addOnSuccessListener { result ->
+            for (document in result) {
+                var idUser = document.getString("idUser") ?: ""
+                var durasi = document.getLong("durasiPaket")?.toInt() ?: 0
+
+                val tanggalMulai = (document["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
+
+                val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
+                val currentDate = Calendar.getInstance().time
+
+                idTrainer = document.getString("idTrainer") ?: ""
+
+                if (idUser == idLogin && tanggalBerakhir >= currentDate) {
+                    Log.d("sesiTrainerr", "masuk")
+                    userTrainerId = document.id
+                    db.collection("JadwalTrainer").get().addOnSuccessListener { result ->
+                        arOngoingT.clear()
+                        for (document in result) {
+                            var jadwalTrainerId = document.id
+                            Log.d("bbb", "jadwalTrainerId : $jadwalTrainerId")
+                            val trainerId = document.getString("trainerId") ?: ""
+                            val userTrainerIdd = document.getString("userTrainerId") ?: ""
+
+                            Log.d("bbb", "userTrainerId : $userTrainerId")
+                            Log.d("bbb", "userTrainerIdd : $userTrainerIdd")
+                            if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
+                                Log.d("bbb", "masuk")
+
+                                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
+
+                                if (cekDate(tanggal, btnDate)) {
+                                    Log.d("bbb", "masuk2")
+                                    val calendar = Calendar.getInstance()
+                                    calendar.time = tanggal
+
+                                    // ambil jam dan menit dari timestamp tanggal di database
+                                    val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                                    val menit = calendar.get(Calendar.MINUTE)
+
+                                    //agar jadi 08.00 atau 17.00
+                                    val formatJam = String.format("%02d", jam)
+                                    val formatMenit = String.format("%02d", menit)
+
+                                    val sesi = "$formatJam:$formatMenit"
+
+                                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                                    val formattedDate = dateFormat.format(tanggal)
+                                    val currentDate = dateFormat.format(Date())
+
+                                    //jam sekarang
+                                    val currentTime = Calendar.getInstance()
+                                    val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                                    val currentMinute = currentTime.get(Calendar.MINUTE)
+
+                                    if (formattedDate == currentDate) {
+                                        if (jam > currentHour) {
+                                            arOngoingT.add(
+                                                SesiT(
+                                                    jadwalTrainerId,
+                                                    formattedDate,
+                                                    trainerId,
+                                                    sesi,
+                                                    userTrainerIdd, userTrainerId
+                                                )
+                                            )
+                                        } else if (jam == currentHour) {
+                                            if (menit > currentMinute) {
+                                                arOngoingT.add(
+                                                    SesiT(
+                                                        jadwalTrainerId,
+                                                        formattedDate,
+                                                        trainerId,
+                                                        sesi,
+                                                        userTrainerIdd, userTrainerId
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        Log.d("bbb", "masuk3")
+                                        arOngoingT.add(
+                                            SesiT(
+                                                jadwalTrainerId,
+                                                formattedDate,
+                                                trainerId,
+                                                sesi,
+                                                userTrainerIdd, userTrainerId
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        arOngoingT.sortBy { it.sesi }
+                        _rvOngoing.adapter?.notifyDataSetChanged()
+                    }.addOnFailureListener { e ->
+                        Log.e("haes", "Error fetching data from Firebase", e)
+                    }
+                    break
+                }
+            }
+        }
+
+
+    }
+
     fun showAlert(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
@@ -370,6 +562,14 @@ class activityOngoing : AppCompatActivity() {
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    // menghitung tanggal berakhir
+    fun addMonthsToTimestamp(originalTimestamp: Long, monthsToAdd: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = originalTimestamp
+        calendar.add(Calendar.MONTH, monthsToAdd)
+        return calendar.time
     }
 
     fun cekDate(timestamp: Date?, btnDate: Date): Boolean {

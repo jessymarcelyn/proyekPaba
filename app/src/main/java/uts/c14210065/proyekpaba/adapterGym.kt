@@ -13,11 +13,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class adapterGym(
     private val listGym: ArrayList<Gym>,
@@ -37,7 +34,7 @@ class adapterGym(
     }
 
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var _tvStartGym: TextView = itemView.findViewById(R.id.tvSessionO)
+        var _tvStartGym: TextView = itemView.findViewById(R.id.tvSessionOT)
         var _tvSlot: TextView = itemView.findViewById(R.id.tvSlot)
         var _btnBookGym: Button = itemView.findViewById(R.id.btnCancelGym)
     }
