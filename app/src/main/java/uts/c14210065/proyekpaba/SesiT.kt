@@ -5,5 +5,7 @@ data class SesiT(
     var tanggal: String,
     var trainerId:String,
     var sesi:String,
-    var userTrainerId: String
+    var userTrainerIdSesi: String,
+    var userTrainerId: String,
+
 )

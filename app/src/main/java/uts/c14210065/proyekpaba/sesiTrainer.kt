@@ -39,9 +39,9 @@ class sesiTrainer : AppCompatActivity() {
     private lateinit var _tvTanggalExpired: TextView
     private lateinit var _tvSesi: TextView
     private lateinit var buttons: Array<Button>
-    lateinit var idTrainer : String
-    lateinit var _rvSesiT : RecyclerView
-    lateinit var userTrainerId : String
+    lateinit var idTrainer: String
+    lateinit var _rvSesiT: RecyclerView
+    lateinit var userTrainerId: String
 
 
     @SuppressLint("MissingInflatedId")
@@ -175,15 +175,17 @@ class sesiTrainer : AppCompatActivity() {
 
 
                     //apabila jumlah sisa sesi sudah habis maka tidak bisa melihat button
-                    if(sisaSesi != 0){
+                    if (sisaSesi > 0) {
                         for (i in buttons.indices) {
                             buttons[i].visibility = View.VISIBLE
                         }
+                        TampilkanData2(dayDate)
+                        buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
+                        lastClickedButton = buttons[0]
                     }
                     break
 
-                }
-                else{
+                } else {
                     // kalau sudah expired hapus id client di Trainer
                     Log.d("HHH", "MASUK")
                     val db = Firebase.firestore
@@ -193,7 +195,10 @@ class sesiTrainer : AppCompatActivity() {
 
                     documentReference.update("clientId", FieldValue.arrayRemove(elementToRemove))
                         .addOnSuccessListener {
-                            Log.d("FirestoreArrayRemove", "Element successfully removed from the array!")
+                            Log.d(
+                                "FirestoreArrayRemove",
+                                "Element successfully removed from the array!"
+                            )
                             _tvNamaT.text = "-"
                             _tvSesi.text = "Unavailable"
 //                            _tvSesi.textSize = 14f
@@ -202,7 +207,11 @@ class sesiTrainer : AppCompatActivity() {
                             _tvTanggalMulai.text = "-"
                         }
                         .addOnFailureListener { e ->
-                            Log.w("FirestoreArrayRemove", "Error removing element from the array", e)
+                            Log.w(
+                                "FirestoreArrayRemove",
+                                "Error removing element from the array",
+                                e
+                            )
                         }
 
 
@@ -242,13 +251,12 @@ class sesiTrainer : AppCompatActivity() {
             for (document in result) {
                 var jadwalTrainerId = document.id
                 val trainerId = document.getString("trainerId") ?: ""
-                if(trainerId == idTrainer){
+                if (trainerId == idTrainer) {
                     Log.d("tralala", "masuk")
                     val userTrainerIdd = document.getString("userTrainerId") ?: ""
                     val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
 
-                    // Jadwal masih kosong
-                    if(cekDate(tanggal, btnDate) && userTrainerIdd == "") {
+                    if (cekDate(tanggal, btnDate)) {
                         val calendar = Calendar.getInstance()
                         calendar.time = tanggal
 
@@ -265,10 +273,48 @@ class sesiTrainer : AppCompatActivity() {
                         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                         val formattedDate = dateFormat.format(tanggal)
+                        val currentDate = dateFormat.format(Date())
 
-                    arSesiT.add(SesiT(jadwalTrainerId,formattedDate, trainerId, sesi, userTrainerId))
-                        Log.d("haes", "Document data: ${document.data}")
-                        Log.d("haes", formattedDate)
+                        //jam sekarang
+                        val currentTime = Calendar.getInstance()
+                        val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                        val currentMinute = currentTime.get(Calendar.MINUTE)
+
+                        if (formattedDate == currentDate) {
+                            if (jam > currentHour) {
+                                arSesiT.add(
+                                    SesiT(
+                                        jadwalTrainerId,
+                                        formattedDate,
+                                        trainerId,
+                                        sesi,
+                                        userTrainerIdd, userTrainerId
+                                    )
+                                )
+                            } else if (jam == currentHour) {
+                                if (menit > currentMinute) {
+                                    arSesiT.add(
+                                        SesiT(
+                                            jadwalTrainerId,
+                                            formattedDate,
+                                            trainerId,
+                                            sesi,
+                                            userTrainerIdd, userTrainerId
+                                        )
+                                    )
+                                }
+                            }
+                        } else {
+                            arSesiT.add(
+                                SesiT(
+                                    jadwalTrainerId,
+                                    formattedDate,
+                                    trainerId,
+                                    sesi,
+                                    userTrainerIdd, userTrainerId
+                                )
+                            )
+                        }
                     }
                 }
             }

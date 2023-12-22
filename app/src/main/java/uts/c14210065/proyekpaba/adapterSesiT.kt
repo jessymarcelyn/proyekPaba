@@ -1,6 +1,9 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -52,60 +55,90 @@ class adapterSesiT(
         holder._tvStartSesiTrainer.text = sesiTrainer.sesi
 
         val db = Firebase.firestore
+        val documentId = sesiTrainer.idJadwal
 
-        holder._btnBookSesi.setOnClickListener {
-            holder._btnBookSesi.isEnabled = false
-
-            // Update GymSesi untuk kuota dan userId
-            val documentId = sesiTrainer.idJadwal
-            val updateData = mapOf(
-                "userTrainerId" to sesiTrainer.userTrainerId
-            )
-            db.collection("JadwalTrainer").document(documentId)
-                .update(updateData)
-                .addOnSuccessListener {
-                    Log.d("BookingSesi", "berhasil update usertrainerId di jadwaltrainer")
-
-                    val documentId = sesiTrainer.userTrainerId
-                    val documentRef = db.collection("UserTrainer").document(documentId)
-                    documentRef.get()
-                        .addOnSuccessListener { documentSnapshot ->
-                            Log.d("BookingSesi", "berhasil update kuota sesi")
-
-                            var sisaSesi = documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
-                            val updatedSisaSesi = sisaSesi - 1
-
-                            val updateData = mapOf(
-                                "sisaSesi" to updatedSisaSesi
-                            )
-                            db.collection("UserTrainer").document(documentId)
-                                .update(updateData)
-                                .addOnSuccessListener {
-                                    Log.d("BookingGym", "berhasil update")
-                                    showAlert(
-                                        holder.itemView.context,
-                                        "Booking Berhasil",
-                                        "Booking sesi dengan personal trainer anda pada tanggal ${sesiTrainer.tanggal} " +
-                                                " jam ${sesiTrainer.sesi} telah berhasil, Salam sehat! "
-                                    )
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.d("BookingGym", "gagal update")
-                                }
-                        }
+        Log.d("qqq", "-------------------------------------------")
+        Log.d("qqqq", "jadwal id : ${sesiTrainer.idJadwal}")
+        Log.d("qqqq", "sesiTrainer.userTrainerId : ${sesiTrainer.userTrainerId}")
+        if (sesiTrainer.userTrainerIdSesi != "") {
+            db.collection("UserTrainer").document(sesiTrainer.userTrainerIdSesi).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val idUser = documentSnapshot.getString("idUser") ?: ""
+                    Log.d("qqqq", "idUser : ${idUser}")
+                    if (idUser == idLogin) {
+                        Log.d("qqqq", "masuk booked")
+                        holder._btnBookSesi.text = "BOOKED"
+                        holder._btnBookSesi.isActivated = false
+                        holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                        holder._btnBookSesi.backgroundTintList =
+                            ColorStateList.valueOf(Color.WHITE)
+                    } else {
+                        Log.d("qqqq", "masuk fully booked")
+                        holder._btnBookSesi.text = "FULLY BOOKED"
+                        holder._btnBookSesi.isActivated = false
+                        holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                        holder._btnBookSesi.backgroundTintList =
+                            ColorStateList.valueOf(Color.GRAY)
+                    }
                 }
-                .addOnFailureListener { e ->
-                    Log.d(
-                        "BookingGym",
-                        "gagal update"
-                    )
-                }
+        } else {
+            holder._btnBookSesi.text = "BOOK SEKARANG"
+            holder._btnBookSesi.setOnClickListener {
+
+                // Update GymSesi untuk kuota dan userId
+                val updateData = mapOf(
+                    "userTrainerId" to sesiTrainer.userTrainerId
+                )
+                db.collection("JadwalTrainer").document(sesiTrainer.idJadwal)
+                    .update(updateData)
+                    .addOnSuccessListener {
+                        Log.d(
+                            "BookingSesi",
+                            "berhasil update usertrainerId di jadwaltrainer"
+                        )
+                        val documentRef = db.collection("UserTrainer").document(sesiTrainer.userTrainerId)
+                        documentRef.get()
+                            .addOnSuccessListener { documentSnapshot ->
+                                Log.d("BookingSesi", "berhasil update kuota sesi")
+
+                                var sisaSesi =
+                                    documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
+                                val updatedSisaSesi = sisaSesi - 1
+
+                                val updateData = mapOf(
+                                    "sisaSesi" to updatedSisaSesi
+                                )
+                                db.collection("UserTrainer").document(sesiTrainer.userTrainerId)
+                                    .update(updateData)
+                                    .addOnSuccessListener {
+                                        Log.d("BookingGym", "berhasil update")
+                                        showAlert(
+                                            holder.itemView.context,
+                                            "Booking Berhasil",
+                                            "Booking sesi dengan personal trainer anda pada tanggal ${sesiTrainer.tanggal} " +
+                                                    " jam ${sesiTrainer.sesi} telah berhasil, Salam sehat! "
+                                        )
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.d("BookingGym", "gagal update")
+                                    }
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Log.d(
+                            "BookingGym",
+                            "gagal update"
+                        )
+                    }
+
+            }
+            holder._btnBookSesi.isActivated = true  // Set to true if you want it to be interactive
+            holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBookSesi.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+
 
         }
-
     }
-
-
 
 
     fun showAlert(context: Context, title: String, message: String) {
@@ -113,7 +146,6 @@ class adapterSesiT(
         builder.setTitle(title)
         builder.setMessage(message)
         builder.setPositiveButton("OK") { dialog, which ->
-            // Handle the "OK" button click if needed
             dialog.dismiss()
         }
         val dialog: AlertDialog = builder.create()
