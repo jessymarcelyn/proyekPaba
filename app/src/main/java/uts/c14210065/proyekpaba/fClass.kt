@@ -139,7 +139,7 @@ class fClass : Fragment() {
         }
 //        ReadData()
         _rvClass.layoutManager = LinearLayoutManager(context)
-        val adapterP = adapterGymClass(arClass)
+        val adapterP = adapterGymClass(arClass, idLogin)
         _rvClass.adapter = adapterP
 
         adapterP.setOnItemClickCallback(object : adapterGymClass.OnItemClickCallback{
@@ -191,7 +191,7 @@ class fClass : Fragment() {
                     val pelatih = document.getString("pelatih" )?:""
                     val durasi = document.getLong("kapasitas")?.toInt() ?: 0
                     val level = document.getString("level") ?:""
-
+                    val arrUser = document.get("userId") as? List<String> ?: emptyList()
 
 //                    val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
 //                    timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
@@ -204,14 +204,12 @@ class fClass : Fragment() {
 
 //                    val userId =
 //                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
-//
-//
 //                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
 //                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 //                    val formattedDate = dateFormat.format(Date(selectedDate))
 
                     val timestamp = document.getTimestamp("waktu")
-                    arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level))
+                    arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level, arrUser))
                     Log.d("haes", "Document data: ${document.data}")
 //                    Log.d("haes", formattedDate)
                 }

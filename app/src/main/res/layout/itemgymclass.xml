@@ -65,12 +65,13 @@
 
     <Button
         android:id="@+id/btnJoinClass"
-        android:layout_width="157dp"
-        android:layout_height="44dp"
+        android:layout_width="353dp"
+        android:layout_height="41dp"
         android:layout_marginTop="40dp"
         android:text="1 More Left"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/tvTimeO"
+        app:layout_constraintStart_toStartOf="@+id/tvCoachO"
         app:layout_constraintTop_toBottomOf="@+id/tvTimeO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

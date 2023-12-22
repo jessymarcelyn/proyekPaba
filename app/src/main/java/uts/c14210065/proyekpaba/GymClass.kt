@@ -8,5 +8,6 @@ data class GymClass(
     var coach:String,
 //    var waktu:String,
     var timestamp: com.google.firebase.Timestamp?,
-    var level:String
+    var level:String,
+    val arrUser: List<String>
 )

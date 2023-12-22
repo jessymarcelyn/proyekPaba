@@ -1,5 +1,8 @@
 package uts.c14210065.proyekpaba
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
 import android.view.LayoutInflater
@@ -13,7 +16,8 @@ import java.util.Locale
 
 class adapterGymClass (
     private val listClass: ArrayList<GymClass>,
-//    private val idLogin: String?,
+    private val idLogin: String?
+//    ,
 //    private val context: Context
 ): RecyclerView.Adapter<adapterGymClass.ListViewHolder>(){
     private lateinit var  onItemClickCallback: OnItemClickCallback
@@ -52,7 +56,29 @@ class adapterGymClass (
         var gymClass = listClass[position]
 
         holder._nama.text = gymClass.name
-        holder._btnBook.text = gymClass.capacity.toString() + " More left"
+        if(gymClass.capacity == 0){
+            holder._btnBook.text = "FULL BOOKED"
+            holder._btnBook.isActivated = false
+            holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
+        }else if(gymClass.arrUser.contains(idLogin)){
+            holder._btnBook.text = "BOOKED"
+            holder._btnBook.isActivated = false
+            holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.BLACK)
+
+        }
+        else{
+            holder._btnBook.text = gymClass.capacity.toString() + " More left"
+            holder._btnBook.setOnClickListener{
+                onItemClickCallback.bookClass(listClass[position])
+            }
+            holder._btnBook.isActivated = true
+            holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.BLUE)
+        }
+
         holder._level.text = gymClass.level
         holder._pelatih.text = "With " + gymClass.coach
 
@@ -69,9 +95,7 @@ class adapterGymClass (
 //
 //        }
 
-        holder._btnBook.setOnClickListener{
-            onItemClickCallback.bookClass(listClass[position])
-        }
+
     }
 
 }
