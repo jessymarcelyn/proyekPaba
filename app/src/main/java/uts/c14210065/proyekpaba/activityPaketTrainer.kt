@@ -164,6 +164,8 @@ class activityPaketTrainer : AppCompatActivity() {
         }
         else {
             Toast.makeText(this, "Register/Login terlebih dahulu", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, Register::class.java)
+            startActivity(intent)
         }
     }
 

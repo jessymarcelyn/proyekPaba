@@ -13,7 +13,16 @@
         android:theme="@style/Theme.ProyekPaba"
         tools:targetApi="31">
         <activity
+            android:name=".Pembayaran"
+            android:exported="false" />
+        <activity
             android:name=".Membership"
+            android:exported="false" />
+        <activity
+            android:name=".activityOngoing"
+            android:exported="false" />
+        <activity
+            android:name=".activityPaketTrainer"
             android:exported="false" />
         <activity
             android:name=".Register"

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pembayaran"
+    android:background="#212122">
+
+    <ImageView
+        android:id="@+id/btnPembayaranBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_24" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pilih Pembayaran"
+
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioButton
+                android:id="@+id/bca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#313133"
+                android:textColor="#fff"
+                android:layout_marginTop="20dp"
+                android:paddingStart="20dp"
+                android:text="BCA Virtual Account" />
+
+            <RadioButton
+                android:id="@+id/mandiri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#313133"
+                android:textColor="#fff"
+                android:layout_marginTop="20dp"
+                android:paddingStart="20dp"
+                android:text="Mandiri Virtual Account" />
+
+            <RadioButton
+                android:id="@+id/creditdebit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#313133"
+                android:textColor="#fff"
+                android:layout_marginTop="20dp"
+                android:paddingStart="20dp"
+                android:text="Credit/Debit Card" />
+
+            <RadioButton
+                android:id="@+id/ovo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#313133"
+                android:textColor="#fff"
+                android:layout_marginTop="20dp"
+                android:paddingStart="20dp"
+                android:text="Ovo" />
+
+            <RadioButton
+                android:id="@+id/gopay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#313133"
+                android:textColor="#fff"
+                android:layout_marginTop="20dp"
+                android:paddingStart="20dp"
+                android:text="Gopay" />
+
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#313133"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textColor="#fff"
+                android:text="Total Pembayaran" />
+
+            <TextView
+                android:id="@+id/tvTotalPembayaran"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:layout_marginStart="20dp"
+                android:textSize="20dp"
+                android:text="Rp.xxx.xxx" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnBayar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:backgroundTint="#C9F24D"
+                android:textColor="@color/black"
+                android:text="Bayar" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

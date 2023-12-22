@@ -53,7 +53,8 @@ class utama : AppCompatActivity() {
         }
 
         _ivJoin.setOnClickListener{
-            goToPage(fJoin())
+            val intent = Intent(this, Membership::class.java)
+            startActivity(intent)
         }
 
         _ivClass.setOnClickListener{
