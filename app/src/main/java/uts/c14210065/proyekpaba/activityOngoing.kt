@@ -533,90 +533,88 @@ class activityOngoing : AppCompatActivity() {
         }
     }
 
-    //menampilkan data gym
+    //menampilkan data trainer
     private fun TampilkanDataTrainer(btnDate: Date) {
         arOngoingT.clear()
-        db.collection("UserTrainer").get().addOnSuccessListener { result ->
-            for (document in result) {
-                var idUser = document.getString("idUser") ?: ""
-                var durasi = document.getLong("durasiPaket")?.toInt() ?: 0
+        db.collection("UserTrainer").get().addOnSuccessListener { userTrainerResult ->
+            for (userTrainerDocument in userTrainerResult) {
+                var userTrainerId = userTrainerDocument.id
+                Log.d("rrr", "UserTrainerId : $userTrainerId")
+                var idUser = userTrainerDocument.getString("idUser") ?: ""
+                var durasi = userTrainerDocument.getLong("durasiPaket")?.toInt() ?: 0
 
-                val tanggalMulai = (document["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
+                val tanggalMulai =
+                    (userTrainerDocument["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
 
                 val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
                 val currentDate = Calendar.getInstance().time
 
-                idTrainer = document.getString("idTrainer") ?: ""
+                idTrainer = userTrainerDocument.getString("idTrainer") ?: ""
 
                 if (idUser == idLogin && tanggalBerakhir >= currentDate) {
                     Log.d("sesiTrainerr", "masuk")
-                    userTrainerId = document.id
-                    db.collection("JadwalTrainer").get().addOnSuccessListener { result ->
-                        arOngoingT.clear()
-                        for (document in result) {
-                            var jadwalTrainerId = document.id
-                            Log.d("bbb", "jadwalTrainerId : $jadwalTrainerId")
-                            val trainerId = document.getString("trainerId") ?: ""
-                            val userTrainerIdd = document.getString("userTrainerId") ?: ""
+                    userTrainerId = userTrainerDocument.id
+                    fetchJadwalTrainer(userTrainerId, btnDate, idTrainer)
+                } else {
+                    Log.d("sesiTrainerr", "tidak masuk: idUser=$idUser, idLogin=$idLogin, tanggalBerakhir=$tanggalBerakhir, currentDate=$currentDate")
+                }
+            }
+        }
+    }
 
-                            Log.d("bbb", "userTrainerId : $userTrainerId")
-                            Log.d("bbb", "userTrainerIdd : $userTrainerIdd")
-                            if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
-                                Log.d("bbb", "masuk")
+    private fun fetchJadwalTrainer(userTrainerId: String, btnDate: Date, idTrainer:String) {
+        db.collection("JadwalTrainer").whereEqualTo("userTrainerId", userTrainerId)
+            .get().addOnSuccessListener { jadwalTrainerResult ->
+                for (jadwalTrainerDocument in jadwalTrainerResult) {
+                    var jadwalTrainerId = jadwalTrainerDocument.id
 
-                                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
+                    val trainerId = jadwalTrainerDocument.getString("trainerId") ?: ""
+                    val userTrainerIdd = jadwalTrainerDocument.getString("userTrainerId") ?: ""
 
-                                if (cekDate(tanggal, btnDate)) {
-                                    Log.d("bbb", "masuk2")
-                                    val calendar = Calendar.getInstance()
-                                    calendar.time = tanggal
+                    if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
+                        Log.d("bbb", "masuk")
 
-                                    // ambil jam dan menit dari timestamp tanggal di database
-                                    val jam = calendar.get(Calendar.HOUR_OF_DAY)
-                                    val menit = calendar.get(Calendar.MINUTE)
+                        val tanggal = (jadwalTrainerDocument["tanggal"] as? Timestamp)?.toDate()
 
-                                    //agar jadi 08.00 atau 17.00
-                                    val formatJam = String.format("%02d", jam)
-                                    val formatMenit = String.format("%02d", menit)
+                        if (cekDate(tanggal, btnDate)) {
+                            val calendar = Calendar.getInstance()
+                            calendar.time = tanggal
 
-                                    val sesi = "$formatJam:$formatMenit"
+                            // ambil jam dan menit dari timestamp tanggal di database
+                            val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                            val menit = calendar.get(Calendar.MINUTE)
 
-                                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
-                                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                                    val formattedDate = dateFormat.format(tanggal)
-                                    val currentDate = dateFormat.format(Date())
+                            //agar jadi 08.00 atau 17.00
+                            val formatJam = String.format("%02d", jam)
+                            val formatMenit = String.format("%02d", menit)
 
-                                    //jam sekarang
-                                    val currentTime = Calendar.getInstance()
-                                    val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
-                                    val currentMinute = currentTime.get(Calendar.MINUTE)
+                            val sesi = "$formatJam:$formatMenit"
 
-                                    if (formattedDate == currentDate) {
-                                        if (jam > currentHour) {
-                                            arOngoingT.add(
-                                                SesiT(
-                                                    jadwalTrainerId,
-                                                    formattedDate,
-                                                    trainerId,
-                                                    sesi,
-                                                    userTrainerIdd, userTrainerId
-                                                )
-                                            )
-                                        } else if (jam == currentHour) {
-                                            if (menit > currentMinute) {
-                                                arOngoingT.add(
-                                                    SesiT(
-                                                        jadwalTrainerId,
-                                                        formattedDate,
-                                                        trainerId,
-                                                        sesi,
-                                                        userTrainerIdd, userTrainerId
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    } else {
-                                        Log.d("bbb", "masuk3")
+                            val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                            dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                            val formattedDate = dateFormat.format(tanggal)
+                            val currentDate = dateFormat.format(Date())
+
+                            //jam sekarang
+                            val currentTime = Calendar.getInstance()
+                            val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                            val currentMinute = currentTime.get(Calendar.MINUTE)
+
+                            if (formattedDate == currentDate) {
+                                if (jam > currentHour) {
+                                    Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
+                                    arOngoingT.add(
+                                        SesiT(
+                                            jadwalTrainerId,
+                                            formattedDate,
+                                            trainerId,
+                                            sesi,
+                                            userTrainerIdd, userTrainerId
+                                        )
+                                    )
+                                } else if (jam == currentHour) {
+                                    if (menit > currentMinute) {
+                                        Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
                                         arOngoingT.add(
                                             SesiT(
                                                 jadwalTrainerId,
@@ -628,18 +626,140 @@ class activityOngoing : AppCompatActivity() {
                                         )
                                     }
                                 }
+                            } else {
+                                Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
+                                arOngoingT.add(
+                                    SesiT(
+                                        jadwalTrainerId,
+                                        formattedDate,
+                                        trainerId,
+                                        sesi,
+                                        userTrainerIdd, userTrainerId
+                                    )
+                                )
                             }
+                        } else {
+                            Log.d("bbb", "tidak masuk cekDate: tanggal=$tanggal, btnDate=$btnDate")
                         }
-                        arOngoingT.sortBy { it.sesi }
-                        _rvOngoing.adapter?.notifyDataSetChanged()
-                    }.addOnFailureListener { e ->
-                        Log.e("haes", "Error fetching data from Firebase", e)
                     }
-                    break
                 }
+                arOngoingT.sortBy { it.sesi }
+                _rvOngoing.adapter?.notifyDataSetChanged()
+            }.addOnFailureListener { e ->
+                Log.e("haes", "Error fetching data from Firebase", e)
             }
-        }
     }
+
+
+
+    //menampilkan data trainer
+//    private fun TampilkanDataTrainer(btnDate: Date) {
+//        arOngoingT.clear()
+//        db.collection("UserTrainer").get().addOnSuccessListener { result ->
+//            for (document in result) {
+//                var tes = document.id
+//                Log.d("rrr", "UserTrainerId : $tes")
+//                var idUser = document.getString("idUser") ?: ""
+//                var durasi = document.getLong("durasiPaket")?.toInt() ?: 0
+//
+//                val tanggalMulai = (document["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
+//
+//                val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
+//                val currentDate = Calendar.getInstance().time
+//
+//                idTrainer = document.getString("idTrainer") ?: ""
+//
+//                if (idUser == idLogin && tanggalBerakhir >= currentDate) {
+//                    Log.d("sesiTrainerr", "masuk")
+//                    userTrainerId = document.id
+//                    db.collection("JadwalTrainer").get().addOnSuccessListener { result ->
+//                        arOngoingT.clear()
+//                        for (document in result) {
+//                            var jadwalTrainerId = document.id
+//                            Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
+//                            val trainerId = document.getString("trainerId") ?: ""
+//                            val userTrainerIdd = document.getString("userTrainerId") ?: ""
+//
+//                            Log.d("bbb", "userTrainerId : $userTrainerId")
+//                            Log.d("bbb", "userTrainerIdd : $userTrainerIdd")
+//                            if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
+//                                Log.d("bbb", "masuk")
+//
+//                                val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
+//
+//                                if (cekDate(tanggal, btnDate)) {
+//                                    val calendar = Calendar.getInstance()
+//                                    calendar.time = tanggal
+//
+//                                    // ambil jam dan menit dari timestamp tanggal di database
+//                                    val jam = calendar.get(Calendar.HOUR_OF_DAY)
+//                                    val menit = calendar.get(Calendar.MINUTE)
+//
+//                                    //agar jadi 08.00 atau 17.00
+//                                    val formatJam = String.format("%02d", jam)
+//                                    val formatMenit = String.format("%02d", menit)
+//
+//                                    val sesi = "$formatJam:$formatMenit"
+//
+//                                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+//                                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+//                                    val formattedDate = dateFormat.format(tanggal)
+//                                    val currentDate = dateFormat.format(Date())
+//
+//                                    //jam sekarang
+//                                    val currentTime = Calendar.getInstance()
+//                                    val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+//                                    val currentMinute = currentTime.get(Calendar.MINUTE)
+//
+//                                    if (formattedDate == currentDate) {
+//                                        if (jam > currentHour) {
+//                                            arOngoingT.add(
+//                                                SesiT(
+//                                                    jadwalTrainerId,
+//                                                    formattedDate,
+//                                                    trainerId,
+//                                                    sesi,
+//                                                    userTrainerIdd, userTrainerId
+//                                                )
+//                                            )
+//                                        } else if (jam == currentHour) {
+//                                            if (menit > currentMinute) {
+//                                                arOngoingT.add(
+//                                                    SesiT(
+//                                                        jadwalTrainerId,
+//                                                        formattedDate,
+//                                                        trainerId,
+//                                                        sesi,
+//                                                        userTrainerIdd, userTrainerId
+//                                                    )
+//                                                )
+//                                            }
+//                                        }
+//                                    } else {
+//                                        Log.d("bbb", "masuk3")
+//                                        arOngoingT.add(
+//                                            SesiT(
+//                                                jadwalTrainerId,
+//                                                formattedDate,
+//                                                trainerId,
+//                                                sesi,
+//                                                userTrainerIdd, userTrainerId
+//                                            )
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        arOngoingT.sortBy { it.sesi }
+//                        _rvOngoing.adapter?.notifyDataSetChanged()
+//                    }.addOnFailureListener { e ->
+//                        Log.e("haes", "Error fetching data from Firebase", e)
+//                    }
+////                    break
+//                }
+//            }
+//        }
+//    }
 
     //menampilkan data class
     private fun TampilkanDataClass(date: Date) {
@@ -748,48 +868,48 @@ class activityOngoing : AppCompatActivity() {
         }
     }
 
-fun showAlert(context: Context, title: String, message: String) {
-    val builder = AlertDialog.Builder(context)
-    builder.setTitle(title)
-    builder.setMessage(message)
-    builder.setPositiveButton("OK") { dialog, which ->
-        dialog.dismiss()
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
-}
 
-// menghitung tanggal berakhir
-fun addMonthsToTimestamp(originalTimestamp: Long, monthsToAdd: Int): Date {
-    val calendar = Calendar.getInstance()
-    calendar.timeInMillis = originalTimestamp
-    calendar.add(Calendar.MONTH, monthsToAdd)
-    return calendar.time
-}
+    // menghitung tanggal berakhir
+    fun addMonthsToTimestamp(originalTimestamp: Long, monthsToAdd: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = originalTimestamp
+        calendar.add(Calendar.MONTH, monthsToAdd)
+        return calendar.time
+    }
 
-fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
-    val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
-    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+    fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
+        val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
+        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
-    val formattedDate = dateFormat.format(timestamp)
-    val date = dateFormat.format(btnDate)
+        val formattedDate = dateFormat.format(timestamp)
+        val date = dateFormat.format(btnDate)
 
-    Log.d("cektanggal", "format" + formattedDate)
-    Log.d("cektanggal", "button " + date)
+        Log.d("cektanggal", "format" + formattedDate)
+        Log.d("cektanggal", "button " + date)
 
-    return formattedDate == date
-}
+        return formattedDate == date
+    }
 
-fun cekDateLong(timestamp: Long, btnDate: Date): Boolean {
-    val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
-    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+    fun cekDateLong(timestamp: Long, btnDate: Date): Boolean {
+        val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
+        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 
-    val formattedDate = dateFormat.format(Date(timestamp))
-    val date = dateFormat.format(btnDate)
+        val formattedDate = dateFormat.format(Date(timestamp))
+        val date = dateFormat.format(btnDate)
 
-    Log.d("cektanggal", "format" + formattedDate)
-    Log.d("cektanggal", "button " + date)
+        Log.d("cektanggal", "format" + formattedDate)
+        Log.d("cektanggal", "button " + date)
 
-    return formattedDate == date
-}
+        return formattedDate == date
+    }
 }
