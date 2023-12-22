@@ -78,11 +78,11 @@ class Login : AppCompatActivity() {
                 val password = document.data.get("password").toString()
 
 //              check hashed password
-//                val passwordMatches = checkPassword(enteredPassword, enteredPassword)
-//                Log.d("pass", passwordMatches.toString())
+                val passwordMatches = checkPassword(enteredPassword, password)
+                Log.d("pass", passwordMatches.toString())
 
-//                if (enteredNoTelp == noTelp && passwordMatches) {
-                if (enteredNoTelp == noTelp && enteredPassword==password) {
+                if (enteredNoTelp == noTelp && passwordMatches) {
+//                if (enteredNoTelp == noTelp && enteredPassword==password) {
 
                     val intentWithData = Intent(this@Login, utama::class.java).apply {
                         putExtra(utama.login, true)
