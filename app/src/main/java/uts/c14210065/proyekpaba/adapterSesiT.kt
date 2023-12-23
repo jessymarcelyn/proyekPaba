@@ -25,8 +25,9 @@ class adapterSesiT(
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: User)
+        fun onItemClicked(data: SesiT)
         fun delData(pos: Int)
+        fun bookSesi(data: SesiT)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -84,74 +85,13 @@ class adapterSesiT(
         } else {
             holder._btnBookSesi.text = "BOOK SEKARANG"
             holder._btnBookSesi.setOnClickListener {
-                Log.d("iii", "sesiTrainer.userTrainerId : ${sesiTrainer.userTrainerId}")
-                db.collection("UserTrainer").document(sesiTrainer.userTrainerId).get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        var sisaSesi = documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
-                        Log.d("iii", "sisaSesi : $sisaSesi")
-                        if(sisaSesi > 0) {
-                            // Update GymSesi untuk kuota dan userId
-                            val updateData = mapOf(
-                                "userTrainerId" to sesiTrainer.userTrainerId
-                            )
-                            db.collection("JadwalTrainer").document(sesiTrainer.idJadwal)
-                                .update(updateData)
-                                .addOnSuccessListener {
-                                    Log.d(
-                                        "BookingSesi",
-                                        "berhasil update usertrainerId di jadwaltrainer"
-                                    )
-                                    val documentRef =
-                                        db.collection("UserTrainer").document(sesiTrainer.userTrainerId)
-                                    documentRef.get()
-                                        .addOnSuccessListener { documentSnapshot ->
-                                            Log.d("BookingSesi", "berhasil update kuota sesi")
-
-                                            var sisaSesi =
-                                                documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
-                                            val updatedSisaSesi = sisaSesi - 1
-
-                                            val updateData = mapOf(
-                                                "sisaSesi" to updatedSisaSesi
-                                            )
-                                            db.collection("UserTrainer").document(sesiTrainer.userTrainerId)
-                                                .update(updateData)
-                                                .addOnSuccessListener {
-                                                    Log.d("BookingGym", "berhasil update")
-                                                    showAlert(
-                                                        holder.itemView.context,
-                                                        "Booking Berhasil",
-                                                        "Booking sesi dengan personal trainer anda pada tanggal ${sesiTrainer.tanggal} " +
-                                                                " jam ${sesiTrainer.sesi} telah berhasil, Salam sehat! "
-                                                    )
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    Log.d("BookingGym", "gagal update")
-                                                }
-                                        }
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.d(
-                                        "BookingGym",
-                                        "gagal update"
-                                    )
-                                }
-                        }else{
-                            showAlert(
-                                holder.itemView.context,
-                                "Booking Gagal",
-                                "Sesi anda sudah habis, silahkan diperpanjang. "
-                            )
-                        }
-
-                    }
-
-
+                onItemClickCallback.bookSesi(sesiTrainer)
 
             }
             holder._btnBookSesi.isActivated = true  // Set to true if you want it to be interactive
             holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBookSesi.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+            holder._btnBookSesi.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#C9F24D"))
 
 
         }

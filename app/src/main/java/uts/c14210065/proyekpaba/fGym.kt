@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -12,10 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SimpleAdapter
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -39,7 +43,6 @@ class fGym : Fragment() {
     private var param2: String? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,11 +59,11 @@ class fGym : Fragment() {
         return inflater.inflate(R.layout.fragment_f_gym, container, false)
     }
 
-    private lateinit var _rvGym : RecyclerView
+    private lateinit var _rvGym: RecyclerView
     private var arGym = arrayListOf<Gym>()
     private var lastClickedButton: Button? = null
-    lateinit var dayDate : Date
-    lateinit var idLogin : String
+    lateinit var dayDate: Date
+    lateinit var idLogin: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,7 +86,7 @@ class fGym : Fragment() {
         val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
 
         // Ketika awal tombol dengan tanggal hari ini otomatis tertekan.
-        TampilkanData(dayDate)
+        TampilkanData()
         buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
         lastClickedButton = buttons[0]
 
@@ -112,20 +115,113 @@ class fGym : Fragment() {
                 calendar.add(Calendar.DATE, i)
                 dayDate = calendar.time
 
-                TampilkanData(dayDate)
+                TampilkanData()
             }
         }
 
         _rvGym.layoutManager = LinearLayoutManager(context)
         val adapterP = adapterGym(arGym, idLogin, requireContext())
         _rvGym.adapter = adapterP
+
+        adapterP.setOnItemClickCallback(object : adapterGym.OnItemClickCallback {
+            //            Log.d("toast", "dependee")
+            override fun onItemClicked(data: Gym) {
+//                Toast.makeText(this@fClass, data.name, Toast.LENGTH_LONG). show()
+            }
+
+            override fun delData(pos: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun bookGym(data: Gym) {
+                if (idLogin != "0") {
+                    val documentRef =
+                        db.collection("users").document(idLogin.toString())
+                    documentRef.get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val member = documentSnapshot.getBoolean("member")
+                            Log.d("MEMBERR", member.toString())
+                            Log.d("IDLOGIN", idLogin.toString())
+                            if (member == true) {
+                                // Update GymSesi untuk kuota dan userId
+                                val documentId = data.idGym
+                                val newKuotaSisa = data.kuotaSisa - 1
+                                val fieldName1 = "kuotaSisa"
+                                val fieldName2 = "userId"
+
+                                val updateData = mapOf(
+                                    fieldName1 to newKuotaSisa,
+                                    fieldName2 to FieldValue.arrayUnion(idLogin)
+                                )
+
+                                showAlert(
+                                    requireContext(),
+                                    "Booking Berhasil",
+                                    "Booking Gym anda pada tanggal ${data.tanggal} " +
+                                            " jam ${data.sesi} telah berhasil, Salam sehat! "
+                                )
+//                                holder._btnBookGym.isEnabled = false
+                                db.collection("GymSesi").document(documentId)
+                                    .update(updateData)
+                                    .addOnSuccessListener {
+                                        Log.d(
+                                            "BookingGym",
+                                            "berhasil update"
+                                        )
+                                        TampilkanData()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.d(
+                                            "BookingGym",
+                                            "gagal update"
+                                        )
+                                    }
+
+                                    .addOnFailureListener { e ->
+                                        Log.e("TAG", "Error adding document", e)
+                                    }
+                            } else {
+                                showAlert(
+                                    requireContext(),
+                                    "Booking Gagal",
+                                    "Anda belum berlangganan membership gym"
+                                )
+                            }
+
+                        }
+                        .addOnFailureListener { e ->
+                            // Handle the failure to get the document
+                            Log.e("TAG", "Error getting document: $e")
+                        }
+                } else {
+                    Log.d(
+                        "BookingGym", "user belum login"
+                    )
+                    showAlert(
+                        requireContext(),
+                        "Booking Gagal",
+                        "Silahkan login terlebih dahulu."
+                    )
+                }
+            }
+        })
     }
 
     fun dayTextSet(button: Button, text: String, size1: Int, size2: Int) {
         val spannableString = SpannableString(text)
 
-        spannableString.setSpan(AbsoluteSizeSpan(size1, true), 0, text.indexOf('\n'), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(AbsoluteSizeSpan(size2, true), text.indexOf('\n') + 1, spannableString.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(
+            AbsoluteSizeSpan(size1, true),
+            0,
+            text.indexOf('\n'),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            AbsoluteSizeSpan(size2, true),
+            text.indexOf('\n') + 1,
+            spannableString.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         button.text = spannableString
 
@@ -136,7 +232,7 @@ class fGym : Fragment() {
 
     val db = Firebase.firestore
 
-    private fun TampilkanData(btnDate: Date) {
+    private fun TampilkanData() {
         db.collection("GymSesi").get().addOnSuccessListener { result ->
             arGym.clear()
             for (document in result) {
@@ -144,7 +240,7 @@ class fGym : Fragment() {
                 val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
                 val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 
-                if(cekDate(tanggal, btnDate)) {
+                if (cekDate(tanggal, dayDate)) {
                     val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
 
                     val calendar = Calendar.getInstance()
@@ -160,7 +256,8 @@ class fGym : Fragment() {
 
                     val sesi = "$formatJam:$formatMenit"
 
-                    val userId = (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                    val userId =
+                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
                     val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
@@ -203,7 +300,7 @@ class fGym : Fragment() {
                                 )
                             )
                         }
-                        if(jam == currentHour){
+                        if (jam == currentHour) {
                             if (menit > currentMinute) {
                                 Log.d("ooo", "masuk3")
                                 arGym.add(
@@ -218,7 +315,7 @@ class fGym : Fragment() {
                                 )
                             }
                         }
-                    }else{
+                    } else {
                         arGym.add(
                             Gym(
                                 Gymid,
@@ -239,6 +336,18 @@ class fGym : Fragment() {
         }
     }
 
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Handle the "OK" button click if needed
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
     fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
         val dateFormat = SimpleDateFormat("dd MMM", Locale("id", "ID"))
         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
@@ -255,6 +364,7 @@ class fGym : Fragment() {
     companion object {
         val size1 = 18
         val size2 = 15
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

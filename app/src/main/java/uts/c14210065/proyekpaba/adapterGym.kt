@@ -25,8 +25,10 @@ class adapterGym(
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: User)
+        fun onItemClicked(data: Gym)
         fun delData(pos: Int)
+
+        fun bookGym(data : Gym)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -72,74 +74,8 @@ class adapterGym(
         } else {
             holder._btnBookGym.text = "BOOK SEKARANG"
             holder._btnBookGym.setOnClickListener {
-                if (idLogin != "0") {
-                    val documentRef =
-                        db.collection("users").document(idLogin.toString())
-                    documentRef.get()
-                        .addOnSuccessListener { documentSnapshot ->
-                            val member = documentSnapshot.getBoolean("member")
-                            Log.d("MEMBERR", member.toString())
-                            Log.d("IDLOGIN", idLogin.toString())
-                            if (member == true) {
-                                // Update GymSesi untuk kuota dan userId
-                                val documentId = gym.idGym
-                                val newKuotaSisa = gym.kuotaSisa - 1
-                                val fieldName1 = "kuotaSisa"
-                                val fieldName2 = "userId"
+                onItemClickCallback.bookGym(listGym[position])
 
-                                val updateData = mapOf(
-                                    fieldName1 to newKuotaSisa,
-                                    fieldName2 to FieldValue.arrayUnion(idLogin)
-                                )
-
-                                showAlert(
-                                    context,
-                                    "Booking Berhasil",
-                                    "Booking Gym anda pada tanggal ${gym.tanggal} " +
-                                            " jam ${gym.sesi} telah berhasil, Salam sehat! "
-                                )
-                                holder._btnBookGym.isEnabled = false
-                                db.collection("GymSesi").document(documentId)
-                                    .update(updateData)
-                                    .addOnSuccessListener {
-                                        Log.d(
-                                            "BookingGym",
-                                            "berhasil update"
-                                        )
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.d(
-                                            "BookingGym",
-                                            "gagal update"
-                                        )
-                                    }
-
-                                    .addOnFailureListener { e ->
-                                        Log.e("TAG", "Error adding document", e)
-                                    }
-                            } else {
-                                showAlert(
-                                    context,
-                                    "Booking Gagal",
-                                    "Anda belum berlangganan membership gym"
-                                )
-                            }
-
-                        }
-                        .addOnFailureListener { e ->
-                            // Handle the failure to get the document
-                            Log.e("TAG", "Error getting document: $e")
-                        }
-                } else {
-                    Log.d(
-                        "BookingGym", "user belum login"
-                    )
-                    showAlert(
-                        context,
-                        "Booking Gagal",
-                        "Silahkan login terlebih dahulu."
-                    )
-                }
             }
 
             holder._btnBookGym.isActivated = true

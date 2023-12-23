@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
@@ -49,7 +51,6 @@ class sesiTrainer : AppCompatActivity() {
     private var currentVisiblePosition = 0
 
 
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +77,86 @@ class sesiTrainer : AppCompatActivity() {
         _rvSesiT.layoutManager = LinearLayoutManager(this)
         val adapterP = adapterSesiT(arSesiT, idLogin)
         _rvSesiT.adapter = adapterP
+
+        adapterP.setOnItemClickCallback(object : adapterSesiT.OnItemClickCallback {
+            //            Log.d("toast", "dependee")
+            override fun onItemClicked(data: SesiT) {
+//                Toast.makeText(this@fClass, data.name, Toast.LENGTH_LONG). show()
+            }
+
+            override fun delData(pos: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun bookSesi(data: SesiT) {
+                Log.d("iii", "sesiTrainer.userTrainerId : ${data.userTrainerId}")
+                db.collection("UserTrainer").document(data.userTrainerId).get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        var sisaSesi = documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
+                        Log.d("iii", "sisaSesi : $sisaSesi")
+                        if (sisaSesi > 0) {
+                            // Update GymSesi untuk kuota dan userId
+                            val updateData = mapOf(
+                                "userTrainerId" to data.userTrainerId
+                            )
+                            db.collection("JadwalTrainer").document(data.idJadwal)
+                                .update(updateData)
+                                .addOnSuccessListener {
+                                    Log.d(
+                                        "BookingSesi",
+                                        "berhasil update usertrainerId di jadwaltrainer"
+                                    )
+                                    val documentRef =
+                                        db.collection("UserTrainer")
+                                            .document(data.userTrainerId)
+                                    documentRef.get()
+                                        .addOnSuccessListener { documentSnapshot ->
+                                            Log.d("BookingSesi", "berhasil update kuota sesi")
+
+                                            var sisaSesi =
+                                                documentSnapshot.getLong("sisaSesi")?.toInt() ?: 0
+                                            val updatedSisaSesi = sisaSesi - 1
+
+                                            val updateData = mapOf(
+                                                "sisaSesi" to updatedSisaSesi
+                                            )
+                                            db.collection("UserTrainer")
+                                                .document(data.userTrainerId)
+                                                .update(updateData)
+                                                .addOnSuccessListener {
+                                                    Log.d("BookingGym", "berhasil update")
+                                                    showAlert(
+                                                        this@sesiTrainer,
+                                                        "Booking Berhasil",
+                                                        "Booking sesi dengan personal trainer anda pada tanggal ${data.tanggal} " +
+                                                                " jam ${data.sesi} telah berhasil, Salam sehat! "
+                                                    )
+                                                    TampilkanData2()
+                                                    TampilkanData1()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.d("BookingGym", "gagal update")
+                                                }
+                                        }
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.d(
+                                        "BookingGym",
+                                        "gagal update"
+                                    )
+                                }
+                        } else {
+                            showAlert(
+                                this@sesiTrainer,
+                                "Booking Gagal",
+                                "Sesi anda sudah habis, silahkan diperpanjang. "
+                            )
+                        }
+
+                    }
+            }
+
+        })
 
         val ivNext = findViewById<ImageView>(R.id.iv_next)
         val ivPrevious = findViewById<ImageView>(R.id.iv_previous)
@@ -395,6 +476,17 @@ class sesiTrainer : AppCompatActivity() {
         }.addOnFailureListener { e ->
             Log.e("haes", "Error fetching data from Firebase", e)
         }
+    }
+
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     fun cekDate(timestamp: Date?, btnDate: Date): Boolean {
