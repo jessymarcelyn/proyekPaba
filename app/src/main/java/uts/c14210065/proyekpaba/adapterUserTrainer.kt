@@ -85,7 +85,7 @@ class adapterUserTrainer(
         }
 
 
-        holder._tvSesi.text = userTrain.sisaSesi.toString() + " / " + userTrain.totalSesi.toString()
+        holder._tvSesi.text = userTrain.sisaSesi.toString() + " / " + userTrain.totalSesi.toString() + " Sesi"
         holder._tvTanggalExpired.text = userTrain.tanggalBerakhir
         holder._tvTanggalMulai.text = userTrain.tanggalMulai
 

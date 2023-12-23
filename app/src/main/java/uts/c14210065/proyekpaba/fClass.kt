@@ -181,7 +181,7 @@ class fClass : Fragment() {
         db.collection("Class").get().addOnSuccessListener { result ->
             arClass.clear()
             for (document in result) {
-                val selectedDate = (document["waktu"] as? Timestamp)?.toDate()?.time ?: 0
+                val selectedDate = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
                 Log.d("sDate",selectedDate.toString())
                 if(cekDate(selectedDate, date)) {
                     val id = document.id
@@ -195,9 +195,9 @@ class fClass : Fragment() {
 
 //                    val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
 //                    timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-//                    val waktu = timeFormat.format(Time(selectedDate))
-//                    Log.d("wkatu", waktu)
-//                    val waktu = selectedDate.toDate()?.time?.div(1000) ?: 0
+//                    val tanggal = timeFormat.format(Time(selectedDate))
+//                    Log.d("wkatu", tanggal)
+//                    val tanggal = selectedDate.toDate()?.time?.div(1000) ?: 0
 //                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
 //                    val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
 //                    val sesi = document.getString("sesi") ?: ""
@@ -208,7 +208,7 @@ class fClass : Fragment() {
 //                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
 //                    val formattedDate = dateFormat.format(Date(selectedDate))
 
-                    val timestamp = document.getTimestamp("waktu")
+                    val timestamp = document.getTimestamp("tanggal")
                     arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level, arrUser))
                     Log.d("haes", "Document data: ${document.data}")
 //                    Log.d("haes", formattedDate)

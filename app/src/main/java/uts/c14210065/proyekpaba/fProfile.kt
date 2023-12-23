@@ -68,7 +68,7 @@ class fProfile : Fragment() {
 
 
         _btnLogout.setOnClickListener{
-            val intent = Intent(activity, utama::class.java)
+            val intent = Intent(activity, MainActivity::class.java)
             intent.putExtra(utama.login, false)
             intent.putExtra(utama.userId, "0")
             startActivity(intent)

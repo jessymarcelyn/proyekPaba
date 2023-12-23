@@ -770,7 +770,7 @@ class activityOngoing : AppCompatActivity() {
                 val userId =
                     (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
                 if (idLogin in userId) {
-                    val selectedDate = (document["waktu"] as? Timestamp)?.toDate()?.time ?: 0
+                    val selectedDate = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
                     Log.d("sDate", selectedDate.toString())
                     if (cekDateLong(selectedDate, date)) {
                         val id = document.id
@@ -782,9 +782,9 @@ class activityOngoing : AppCompatActivity() {
                         val level = document.getString("level") ?: ""
                         val arrUser = document.get("userId") as? List<String> ?: emptyList()
 
-                        val timestamp = document.getTimestamp("waktu")
+                        val timestamp = document.getTimestamp("tanggal")
 
-                        val timestampJes = (document["waktu"] as? Timestamp)?.toDate()
+                        val timestampJes = (document["tanggal"] as? Timestamp)?.toDate()
 
                         val calendar = Calendar.getInstance()
                         calendar.time = timestampJes

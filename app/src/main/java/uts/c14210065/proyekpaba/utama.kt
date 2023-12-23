@@ -40,8 +40,7 @@ class utama : AppCompatActivity() {
             val navigateToFragment = intent.getStringExtra("navigateToFragment")
 
             var loginid = intent.getStringExtra("userId")
-
-            idLogin = loginid!!
+            idLogin = loginid ?: "0"
 
             Log.d("utama", "navigateToFragment: $navigateToFragment")
             Log.d("utama", "loginId: $loginid")
