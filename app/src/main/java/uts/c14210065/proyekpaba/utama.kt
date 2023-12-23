@@ -93,9 +93,6 @@ class utama : AppCompatActivity() {
         }
 
         _ivJoin.setOnClickListener{
-//            val intent = Intent(this, Membership::class.java)
-//            intent.putExtra("userId", idLogin)
-//            startActivity(intent)
             goToPage(fJoin())
         }
 
@@ -113,7 +110,7 @@ class utama : AppCompatActivity() {
 
         val mBundle = Bundle()
         mBundle.putString("userId", idLogin)
-        mfSatu.arguments = mBundle  // Set the bundle as arguments for hlm2
+        mfSatu.arguments = mBundle
 
         mFragmentManager.findFragmentByTag(fragment::class.java.simpleName)
         mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fragment::class.java.simpleName).commit()

@@ -48,7 +48,17 @@
             android:textColor="#fff"
             android:text="TextView" />
 
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#bd0000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel Trainer"
+            android:visibility="gone"/>
+
         <TextView
+            android:id="@+id/tvPilihPaket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pilih Paket"
@@ -56,11 +66,14 @@
             android:textStyle="bold"
             android:textColor="#fff"
             android:textSize="20sp"
+
             />
         
         <LinearLayout
+            android:id="@+id/pilihanPaket"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="vertical">
             
             <LinearLayout
@@ -345,7 +358,7 @@
             
             
         </LinearLayout>
-        
+
     </LinearLayout>
 
     <ImageView

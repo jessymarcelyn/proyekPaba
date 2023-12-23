@@ -51,6 +51,13 @@ class Pembayaran : AppCompatActivity() {
         tvRincian = findViewById(R.id.tvRincian)
         tvJenisMember = findViewById(R.id.tvJenisRincian)
 
+        loginId = intent.getStringExtra("userId") ?: "0"
+        jenisMember = intent.getStringExtra("jenisMember") ?: ""
+        paket = intent.getIntExtra("paket", 0)
+        trainerId = intent.getStringExtra("trainerId")?: ""
+
+        Log.d("pembayaran", "paket: $paket")
+
         btnBack.setOnClickListener {
             val intent = Intent(this, utama::class.java)
             intent.putExtra("navigateToFragment", "fJoin")
@@ -58,12 +65,6 @@ class Pembayaran : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
-        loginId = intent.getStringExtra("userId") ?: "0"
-        jenisMember = intent.getStringExtra("jenisMember") ?: ""
-        paket = intent.getIntExtra("paket", 0)
-        trainerId = intent.getStringExtra("documentId")?: ""
 
         if (loginId != "0") {
             totalHarga = findViewById(R.id.tvTotalPembayaran)
@@ -73,11 +74,6 @@ class Pembayaran : AppCompatActivity() {
             ovo = findViewById(R.id.ovo)
             gopay = findViewById(R.id.gopay)
             btnBayar = findViewById(R.id.btnBayar)
-
-            totalHarga.text = formatRupiah
-
-            Log.d("pembayaran", formatRupiah)
-            Log.d("pembayaran", loginId)
 
             bca.setOnClickListener {
                 pembayaran = "bca"
@@ -95,22 +91,23 @@ class Pembayaran : AppCompatActivity() {
                 pembayaran = "gopay"
             }
 
-            if (jenisMember != "") {
+            if (jenisMember == "bronze" || jenisMember == "silver" || jenisMember == "gold" || jenisMember == "diamond") {
                 pembayaranMember = intent.getIntExtra("pembayaranMember", 0)
                 formatRupiah =
                     NumberFormat.getCurrencyInstance(Locale("id", "ID")).format(pembayaranMember)
 
+                totalHarga.text = formatRupiah
+
                 tvRincian.text = "Jenis Member: "
                 tvJenisMember.text = jenisMember.capitalize()
-
 
                 Log.d("pembayaran", "loginId: $loginId")
 
                 btnBayar.setOnClickListener {
                     db.collection("users").document(loginId).get()
-                        .addOnSuccessListener { documentSnapshot ->
-                            if (documentSnapshot.exists()) {
-                                val isMember = documentSnapshot.getBoolean("member")
+                        .addOnSuccessListener { result ->
+                            if (result.exists()) {
+                                val isMember = result.getBoolean("member")
                                 if (isMember == true) {
                                     Toast.makeText(
                                         this,
@@ -123,31 +120,42 @@ class Pembayaran : AppCompatActivity() {
                             }
                         }
                 }
+            }
 
-            if (paket != 0) {
+            if (paket == 1 || paket == 2 || paket == 3 || paket == 4 || paket == 5 || paket == 6) {
                 tvRincian.text = "Pilihan Paket: "
-                tvJenisMember.text = paket.toString()
+                
 
-                db.collection("users").document(loginId).get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        if (documentSnapshot.exists()) {
-                            val isMember = documentSnapshot.getBoolean("member")
-                            if (isMember == true) {
-                                PembelianPaket()
-                            } else {
-                                Toast.makeText(
-                                    this,
-                                    "Daftar menjadi member dahulu",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                db.collection("PilihanPaket").document(paket.toString()).get().addOnSuccessListener { result ->
+                    if (result.exists()) {
+                        val harga = result.getLong("harga")?.toInt()
+                        val totalSesi = result.getLong("totalSesi")?.toInt()
+                        tvJenisMember.text = "$totalSesi Sesi"
+                        formatRupiah =
+                            NumberFormat.getCurrencyInstance(Locale("id", "ID")).format(harga)
+                        totalHarga.text = formatRupiah
+                    }
+                }
+
+                btnBayar.setOnClickListener {
+                    db.collection("users").document(loginId).get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            if (documentSnapshot.exists()) {
+                                val isMember = documentSnapshot.getBoolean("member")
+                                if (isMember == true) {
+                                    PembelianPaket()
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        "Daftar menjadi member dahulu",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
-                    }
+                }
+
             }
-        }
-
-
-
         }
         else {
             Toast.makeText(this, "Register/Login terlebih dahulu", Toast.LENGTH_SHORT).show()
@@ -178,7 +186,7 @@ class Pembayaran : AppCompatActivity() {
             .addOnSuccessListener {
                 Toast.makeText(this, "Anda Telah menjadi member", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, utama::class.java)
-                intent.putExtra("navigateToFragment", "fTrainer")
+                intent.putExtra("navigateToFragment", "fJoin")
                 startActivity(intent)
                 finish()
             }
@@ -188,47 +196,37 @@ class Pembayaran : AppCompatActivity() {
     }
 
     fun PembelianPaket() {
+        db.collection("PilihanPaket").document(paket.toString()).get()
+            .addOnSuccessListener { doc ->
+                var harga = doc.getLong("harga")?.toInt()
+                var totalSesi = doc.getLong("totalSesi")?.toInt()
+                var durasi = doc.getLong("durasi")?.toInt()
 
-            db.collection("users").document(loginId).get().addOnSuccessListener { result ->
-                var member = result.getBoolean("member")
-                if (member == true) {
-                    db.collection("PilihanPaket").document(paket.toString()).get()
-                        .addOnSuccessListener { doc ->
-                            var harga = doc.getLong("harga")?.toInt()
-                            var totalSesi = doc.getLong("totalSesi")?.toInt()
+                val userTrainerCollection = db.collection("UserTrainer")
+                val newDocument = userTrainerCollection.document()
 
-                            val userTrainerCollection = db.collection("UserTrainer")
-                            val newDocument = userTrainerCollection.document()
+                val newData = hashMapOf(
+                    "idUser" to loginId,
+                    "idTrainer" to trainerId,
+                    "totalSesi" to totalSesi,
+                    "durasi" to durasi,
+                    "harga" to harga
+                )
 
-                            val newData = hashMapOf(
-                                "idUser" to loginId,
-                                "idTrainer" to trainerId,
-                                "totalSesi" to totalSesi,
-                                "harga" to harga
-                            )
+                UpdateClient(loginId)
 
-                            UpdateClient(loginId)
-
-                            newDocument.set(newData)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "Data inserted successfully!", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(this, utama::class.java)
-                                    intent.putExtra("navigateToFragment", "fTrainer")
-                                    startActivity(intent)
-                                    finish()
-                                }
-                                .addOnFailureListener { er ->
-                                    Log.d("paketTrainer", "Data not inserted. Error: $er")
-                                }
-                        }
-                } else {
-                    Toast.makeText(
-                        this,
-                        "Silakan menjadi member terlebih dahulu",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d("paketTrainer", "Not member")
-                }
+                newDocument.set(newData)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Data inserted successfully!", Toast.LENGTH_SHORT)
+                            .show()
+                        val intent = Intent(this, utama::class.java)
+                        intent.putExtra("navigateToFragment", "fTrainer")
+                        startActivity(intent)
+                        finish()
+                    }
+                    .addOnFailureListener { er ->
+                        Log.d("paketTrainer", "Data not inserted. Error: $er")
+                    }
             }
     }
 

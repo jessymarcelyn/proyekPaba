@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,10 +8,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import uts.c14210065.proyekpaba.model.TrainerModel
 import kotlin.math.log
@@ -29,12 +32,17 @@ class activityPaketTrainer : AppCompatActivity() {
     lateinit var btn4: Button
     lateinit var btn5: Button
     lateinit var btn6: Button
+    lateinit var btnCancel: Button
+
+    lateinit var tvPilihPaket: TextView
+    lateinit var pilihanPaket: LinearLayout
 
     lateinit var trainerId: String
     lateinit var loginId: String
 
     val db = Firebase.firestore
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paket_trainer)
@@ -49,6 +57,7 @@ class activityPaketTrainer : AppCompatActivity() {
         tvClient = findViewById(R.id.tvDetClientTrainer)
         tvSkill = findViewById(R.id.tvDetSkillTrainer)
         btnBack = findViewById(R.id.btnDetTrainerBack)
+        btnCancel = findViewById(R.id.btnCancel)
 
         btn1 = findViewById(R.id.btnPaket1)
         btn2 = findViewById(R.id.btnPaket2)
@@ -57,6 +66,9 @@ class activityPaketTrainer : AppCompatActivity() {
         btn5 = findViewById(R.id.btnPaket5)
         btn6 = findViewById(R.id.btnPaket6)
 
+        pilihanPaket = findViewById(R.id.pilihanPaket)
+        tvPilihPaket = findViewById(R.id.tvPilihPaket)
+
         btnBack.setOnClickListener {
             val intent = Intent(this, utama::class.java)
             intent.putExtra("navigateToFragment", "fTrainer")
@@ -64,7 +76,37 @@ class activityPaketTrainer : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
         TampilkanData()
+
+        db.collection("UserTrainer").get().addOnSuccessListener { result ->
+            var docId: String? = null
+            for (document in result) {
+
+                var idUser = document.getString("idUser")
+                var idTrainer = document.getString("idTrainer")
+
+                if (idUser == loginId && idTrainer == trainerId) {
+                    docId = document.id
+                    break
+                }
+            }
+            if (docId != null) {
+                btnCancel.visibility = View.VISIBLE
+                pilihanPaket.visibility = View.GONE
+                tvPilihPaket.visibility = View.GONE
+
+                btnCancel.setOnClickListener {
+                    CancelTrainer(docId)
+                }
+
+            }
+            else {
+                btnCancel.visibility = View.GONE
+                pilihanPaket.visibility = View.VISIBLE
+                tvPilihPaket.visibility = View.VISIBLE
+            }
+        }
 
         btn1.setOnClickListener {
             PilihPaket(1)
@@ -85,15 +127,6 @@ class activityPaketTrainer : AppCompatActivity() {
             PilihPaket(6)
         }
 
-    }
-
-    override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     fun TampilkanData() {
@@ -121,17 +154,32 @@ class activityPaketTrainer : AppCompatActivity() {
     }
 
     fun PilihPaket(paket: Int) {
-        if (loginId != "0"){
             val intent = Intent(this, Pembayaran::class.java)
             intent.putExtra("userId", loginId)
             intent.putExtra("paket", paket)
             intent.putExtra("trainerId", trainerId)
             startActivity(intent)
-        }
-        else {
-            Toast.makeText(this, "Register/Login terlebih dahulu", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, Register::class.java)
-            startActivity(intent)
-        }
+    }
+
+    private fun CancelTrainer(documentId: String) {
+        db.collection("UserTrainer").document(documentId)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Cancel Trainer berhasil", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Log.d("paket", "Error: $e")
+            }
+
+        db.collection("Trainer").document(trainerId)
+            .update("clientId", FieldValue.arrayRemove(loginId))
+            .addOnSuccessListener {
+                Log.d("paket", "Client ID removed")
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Log.d("paket", "Error: $e")
+            }
     }
 }
