@@ -276,6 +276,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvUserTrainer"
         app:layout_constraintEnd_toStartOf="@+id/rvUserTrainer"
         app:layout_constraintTop_toTopOf="@+id/rvUserTrainer"
-        app:srcCompat="@drawable/previous" />
+        app:srcCompat="@drawable/baseline_navigate_before_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

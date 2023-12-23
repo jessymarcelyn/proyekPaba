@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import kotlin.math.log
 
 class utama : AppCompatActivity() {
     companion object{
@@ -14,6 +15,7 @@ class utama : AppCompatActivity() {
     }
 
     lateinit var idLogin : String
+//    lateinit var loginId : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_utama)
@@ -30,8 +32,46 @@ class utama : AppCompatActivity() {
         val dataLogin = intent.getBooleanExtra(login, false)
         idLogin = intent.getStringExtra(userId).toString()
 
+
         Log.d("idLogin", idLogin.toString())
         Log.d("dataLogin", dataLogin.toString())
+
+        if (dataLogin.toString() == "false") {
+            val navigateToFragment = intent.getStringExtra("navigateToFragment")
+
+            var loginid = intent.getStringExtra("userId")
+
+            idLogin = loginid!!
+
+            Log.d("utama", "navigateToFragment: $navigateToFragment")
+            Log.d("utama", "loginId: $loginid")
+            Log.d("utama", "idLogin: $idLogin")
+
+            if (navigateToFragment == "fTrainer") {
+                val mFragmentManager = supportFragmentManager
+                val mfSatu = fTrainer()
+
+                val mBundle = Bundle()
+                mBundle.putString("userId", loginid)
+                mfSatu.arguments = mBundle
+
+                mFragmentManager.findFragmentByTag(fTrainer()::class.java.simpleName)
+                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fTrainer()::class.java.simpleName).commit()
+            }
+            if (navigateToFragment == "fJoin") {
+                val mFragmentManager = supportFragmentManager
+                val mfSatu = fJoin()
+
+                val mBundle = Bundle()
+                mBundle.putString("userId", loginid)
+                mfSatu.arguments = mBundle
+
+                mFragmentManager.findFragmentByTag(fJoin()::class.java.simpleName)
+                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fJoin()::class.java.simpleName).commit()
+            }
+        }
+
+
         _ivProfile.setOnClickListener {
             if (!dataLogin) {
                 val intentWithData = Intent(this@utama, MainActivity::class.java).apply {
@@ -53,8 +93,10 @@ class utama : AppCompatActivity() {
         }
 
         _ivJoin.setOnClickListener{
-            val intent = Intent(this, Membership::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, Membership::class.java)
+//            intent.putExtra("userId", idLogin)
+//            startActivity(intent)
+            goToPage(fJoin())
         }
 
         _ivClass.setOnClickListener{
@@ -64,8 +106,8 @@ class utama : AppCompatActivity() {
             goToPage(fTrainer())
         }
     }
-   fun goToPage(fragment: Fragment) {
 
+   fun goToPage(fragment: Fragment) {
         val mFragmentManager = supportFragmentManager
         val mfSatu = fragment
 
@@ -77,13 +119,26 @@ class utama : AppCompatActivity() {
         mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fragment::class.java.simpleName).commit()
     }
 
-    override fun onResume() {
-        super.onResume()
+//    override fun onResume() {
+//        super.onResume()
+//        val navigateToFragment = intent.getStringExtra("navigateToFragment")
+//
+//        var loginid = intent.getStringExtra("userId")
+//
+//        Log.d("utama", "navigateToFragment: $navigateToFragment")
+//        Log.d("utama", "loginId: $loginid")
+//
+//        if (navigateToFragment == "fTrainer") {
+//            val mFragmentManager = supportFragmentManager
+//            val mfSatu = fTrainer()
+//
+//            val mBundle = Bundle()
+//            mBundle.putString("userId", loginid)
+//            mfSatu.arguments = mBundle
+//
+//            mFragmentManager.findFragmentByTag(fTrainer()::class.java.simpleName)
+//            mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fTrainer()::class.java.simpleName).commit()
+//        }
+//    }
 
-//        supaya bisa back dari activity setelah fragment kembali ke fragment
-        val navigateToFragment = intent.getStringExtra("navigateToFragment")
-        if (navigateToFragment == "fTrainer") {
-            goToPage(fTrainer())
-        }
-    }
 }

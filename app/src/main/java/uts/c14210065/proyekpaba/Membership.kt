@@ -37,7 +37,10 @@ class Membership : AppCompatActivity() {
 
         btnBack.setOnClickListener {
             val intent = Intent(this, utama::class.java)
+            intent.putExtra("navigateToFragment", "fJoin")
+            intent.putExtra("userId", loginId)
             startActivity(intent)
+            finish()
         }
 
         btnBronze.setOnClickListener {
@@ -52,16 +55,13 @@ class Membership : AppCompatActivity() {
         btnDiamond.setOnClickListener {
             goToPembayaran(5976000, "diamond")
         }
-
-
-
     }
 
     fun goToPembayaran(value: Int, jenis: String) {
         val intent = Intent(this, Pembayaran::class.java)
         intent.putExtra("pembayaranMember", value)
         intent.putExtra("jenisMember", jenis)
-        intent.putExtra("loginId", loginId)
+        intent.putExtra("userId", loginId)
         startActivity(intent)
     }
 }

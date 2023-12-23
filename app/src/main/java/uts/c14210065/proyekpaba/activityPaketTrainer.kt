@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import uts.c14210065.proyekpaba.model.TrainerModel
@@ -59,6 +60,7 @@ class activityPaketTrainer : AppCompatActivity() {
         btnBack.setOnClickListener {
             val intent = Intent(this, utama::class.java)
             intent.putExtra("navigateToFragment", "fTrainer")
+            intent.putExtra("userId", loginId)
             startActivity(intent)
             finish()
         }
@@ -120,74 +122,16 @@ class activityPaketTrainer : AppCompatActivity() {
 
     fun PilihPaket(paket: Int) {
         if (loginId != "0"){
-            db.collection("users").document(loginId).get().addOnSuccessListener { result ->
-                var member = result.getBoolean("member")
-                if (member == true) {
-                    db.collection("PilihanPaket").document(paket.toString()).get()
-                        .addOnSuccessListener { doc ->
-                            var harga = doc.getLong("harga")?.toInt()
-                            var totalSesi = doc.getLong("totalSesi")?.toInt()
-
-                            val userTrainerCollection = db.collection("UserTrainer")
-                            val newDocument = userTrainerCollection.document()
-
-                            val newData = hashMapOf(
-                                "idUser" to loginId,
-                                "idTrainer" to trainerId,
-                                "totalSesi" to totalSesi,
-                                "harga" to harga
-                            )
-
-                            UpdateClient(loginId)
-                            
-                            newDocument.set(newData)
-                                .addOnSuccessListener {
-                                    Toast.makeText(this, "Data inserted successfully!", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(this, utama::class.java)
-                                    intent.putExtra("navigateToFragment", "fTrainer")
-                                    startActivity(intent)
-                                    finish()
-                                }
-                                .addOnFailureListener { er ->
-                                    Log.d("paketTrainer", "Data not inserted. Error: $er")
-                                }
-                        }
-                } else {
-                    Toast.makeText(
-                        this,
-                        "Silakan menjadi member terlebih dahulu",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d("paketTrainer", "Not member")
-                }
-            }
+            val intent = Intent(this, Pembayaran::class.java)
+            intent.putExtra("userId", loginId)
+            intent.putExtra("paket", paket)
+            intent.putExtra("trainerId", trainerId)
+            startActivity(intent)
         }
         else {
             Toast.makeText(this, "Register/Login terlebih dahulu", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
-        }
-    }
-
-    fun UpdateClient(userId: String) {
-        val documentReference = db.collection("Trainer").document(trainerId)
-        documentReference.get().addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot.exists()) {
-                val currentArray = documentSnapshot.get("clientId") as? List<String> ?: emptyList()
-
-                val newArray = currentArray.toMutableList()
-                newArray.add(userId)
-
-                documentReference.update("clientId", newArray)
-                    .addOnSuccessListener {
-                        Log.d("paketTrainer", "Array updated successfully")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e("paketTrainer", "Error updating array", e)
-                    }
-            } else {
-                Log.d("paketTrainer", "Document does not exist")
-            }
         }
     }
 }
