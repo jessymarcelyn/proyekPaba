@@ -10,6 +10,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,8 @@ class sesiTrainer : AppCompatActivity() {
     lateinit var _rvSesiT: RecyclerView
     lateinit var _rvUserTrainer: RecyclerView
     lateinit var userTrainerId: String
+    private var currentVisiblePosition = 0
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -64,6 +67,67 @@ class sesiTrainer : AppCompatActivity() {
         TampilkanData1()
         _rvSesiT = findViewById<RecyclerView>(R.id.rvSesiT)
         _rvUserTrainer = findViewById<RecyclerView>(R.id.rvUserTrainer)
+
+        _rvUserTrainer.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val adapterW = adapterUserTrainer(arCard, idLogin)
+        _rvUserTrainer.adapter = adapterW
+
+        _rvSesiT.layoutManager = LinearLayoutManager(this)
+        val adapterP = adapterSesiT(arSesiT, idLogin)
+        _rvSesiT.adapter = adapterP
+
+        val ivNext = findViewById<ImageView>(R.id.iv_next)
+        val ivPrevious = findViewById<ImageView>(R.id.iv_previous)
+        ivPrevious.visibility = View.GONE
+
+        ivNext.setOnClickListener {
+            // Kalau nggak last item
+            if (currentVisiblePosition < arCard.size - 1) {
+                currentVisiblePosition++
+
+                // Update recycleview dengan posisi terbaru
+                _rvUserTrainer.scrollToPosition(currentVisiblePosition)
+                adapterW.notifyDataSetChanged()
+
+                // Enable karena tidak sedang di posisi pertama
+                ivPrevious.visibility = View.VISIBLE
+                ivPrevious.isEnabled = true
+
+                TampilkanData2()
+            }
+
+            //Kalau last item
+            if (currentVisiblePosition == arCard.size - 1) {
+                ivNext.isEnabled = false
+                ivNext.visibility = View.GONE
+            }
+        }
+
+        ivPrevious.setOnClickListener {
+            // Kalau nggak first item
+            if (currentVisiblePosition > 0) {
+
+                currentVisiblePosition--
+
+                // Update recycleview dengan posisi terbaru
+                _rvUserTrainer.scrollToPosition(currentVisiblePosition)
+                adapterW.notifyDataSetChanged()
+
+                // Enable karena tidak sedang di posisi terakhir
+                ivNext.visibility = View.VISIBLE
+                ivNext.isEnabled = true
+
+                TampilkanData2()
+            }
+
+            //Kalau first item
+            if (currentVisiblePosition == 0) {
+                ivPrevious.isEnabled = false
+                ivPrevious.visibility = View.GONE
+            }
+        }
+
 
         val _btnd1 = findViewById<Button>(R.id.btnd1)
         val _btnd2 = findViewById<Button>(R.id.btnd2)
@@ -103,20 +167,11 @@ class sesiTrainer : AppCompatActivity() {
                 calendar.time = currentDate
                 calendar.add(Calendar.DATE, i)
                 dayDate = calendar.time
-                TampilkanData2(dayDate)
+//                TampilkanData2(dayDate)
+                TampilkanData2()
             }
         }
 
-
-
-        _rvUserTrainer.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val adapterW = adapterUserTrainer(arCard, idLogin)
-        _rvUserTrainer.adapter = adapterW
-
-        _rvSesiT.layoutManager = LinearLayoutManager(this)
-        val adapterP = adapterSesiT(arSesiT, idLogin)
-        _rvSesiT.adapter = adapterP
     }
 
     fun dayTextSet(button: Button, text: String, size1: Int, size2: Int) {
@@ -151,7 +206,7 @@ class sesiTrainer : AppCompatActivity() {
 
     private fun TampilkanData1() {
         db.collection("UserTrainer").get().addOnSuccessListener { result ->
-
+            arCard.clear()
             if (result.isEmpty) {
                 // kalau sudah expired hapus id client di Trainer
                 Log.d("HHH", "MASUK")
@@ -260,18 +315,20 @@ class sesiTrainer : AppCompatActivity() {
     }
 
     //Menampilkan data yang bawah untuk jadwal trainer.
-    private fun TampilkanData2(btnDate: Date) {
+    private fun TampilkanData2() {
         db.collection("JadwalTrainer").get().addOnSuccessListener { result ->
             arSesiT.clear()
+            val currentUserTrainer = arCard[currentVisiblePosition]
+
             for (document in result) {
                 var jadwalTrainerId = document.id
                 val trainerId = document.getString("trainerId") ?: ""
-                if (trainerId == idTrainer) {
+                if (trainerId == currentUserTrainer.trainerId) {
                     Log.d("tralala", "masuk")
                     val userTrainerIdd = document.getString("userTrainerId") ?: ""
                     val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
 
-                    if (cekDate(tanggal, btnDate)) {
+                    if (cekDate(tanggal, dayDate)) {
                         val calendar = Calendar.getInstance()
                         calendar.time = tanggal
 
@@ -303,7 +360,7 @@ class sesiTrainer : AppCompatActivity() {
                                         formattedDate,
                                         trainerId,
                                         sesi,
-                                        userTrainerIdd, userTrainerId
+                                        userTrainerIdd, currentUserTrainer.idUserTrainer
                                     )
                                 )
                             } else if (jam == currentHour) {
@@ -314,7 +371,7 @@ class sesiTrainer : AppCompatActivity() {
                                             formattedDate,
                                             trainerId,
                                             sesi,
-                                            userTrainerIdd, userTrainerId
+                                            userTrainerIdd, currentUserTrainer.idUserTrainer
                                         )
                                     )
                                 }
@@ -326,7 +383,7 @@ class sesiTrainer : AppCompatActivity() {
                                     formattedDate,
                                     trainerId,
                                     sesi,
-                                    userTrainerIdd, userTrainerId
+                                    userTrainerIdd, currentUserTrainer.idUserTrainer
                                 )
                             )
                         }
