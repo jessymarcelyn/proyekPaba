@@ -5,6 +5,5 @@ import java.sql.Timestamp
 data class History(
     var id : String,
     var nama : String,
-    var timestamp:
-    com.google.firebase.Timestamp?
+    var timestamp: String
 )
