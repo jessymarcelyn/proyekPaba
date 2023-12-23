@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#212122"
     tools:context=".activityHistory">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/flTop"
         android:layout_width="match_parent"
@@ -35,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView8"
-            />
+        />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -96,4 +98,5 @@
         app:layout_constraintHorizontal_bias="0.416"
         app:layout_constraintStart_toStartOf="@+id/btnOGym"
         app:layout_constraintTop_toBottomOf="@+id/btnOClass" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

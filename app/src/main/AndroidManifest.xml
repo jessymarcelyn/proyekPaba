@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ProyekPaba"
         tools:targetApi="31">
         <activity
+            android:name=".activityHistory"
+            android:exported="false" />
+        <activity
             android:name=".Pembayaran"
             android:exported="false" />
         <activity
