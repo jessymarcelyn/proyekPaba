@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class adapterHistory  (
-    private val listClass: ArrayList<GymClass>
+    private val listClass: ArrayList<History>
 ): RecyclerView.Adapter<adapterHistory.ListViewHolder>(){
     private lateinit var  onItemClickCallback: OnItemClickCallback
 
@@ -25,15 +25,11 @@ class adapterHistory  (
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var _nama: TextView = itemView.findViewById(R.id.tvNamaH)
         var _tanggal = itemView.findViewById<TextView>(R.id.tvTanggal)
-//        var _level : TextView = itemView.findViewById(R.id.tvLevel)
-//        var _btn : Button = itemView.findViewById(R.id.btnJoinClass)
-//        var _pelatih : TextView = itemView.findViewById(R.id.tvCoach)
-//        var _waktu : TextView =  itemView.findViewById(R.id.tvTime)
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.itemhistory,parent,false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.itemhistory, parent,false)
         return ListViewHolder(view)
     }
 
@@ -44,7 +40,7 @@ class adapterHistory  (
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var gymClass = listClass[position]
 
-        holder._nama.text = gymClass.name
+        holder._nama.text = gymClass.nama
 
 
 //        val selectedDate = gymClass.waktu?.toDate()?.time ?: 0
