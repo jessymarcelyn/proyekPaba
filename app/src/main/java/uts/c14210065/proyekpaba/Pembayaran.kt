@@ -162,6 +162,11 @@ class Pembayaran : AppCompatActivity() {
                                             "Daftar menjadi member dahulu",
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        val intent = Intent(this, Membership::class.java)
+                                        intent.putExtra("userId", loginId)
+                                        startActivity(intent)
+                                        finish()
+
                                     }
                                 }
                             }
@@ -183,17 +188,13 @@ class Pembayaran : AppCompatActivity() {
         val newData = hashMapOf(
             "userId" to loginId,
             "jenisMember" to jenisMember,
-            "jenisPembayaran" to pembayaran
+            "jenisPembayaran" to pembayaran,
+            "tanggalMulai" to FieldValue.serverTimestamp()
         )
 
         db.collection("Member").document().set(newData)
             .addOnSuccessListener {
                 Toast.makeText(this, "Anda Telah menjadi member", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, Membership::class.java)
-                intent.putExtra("navigateToFragment", "fJoin")
-                intent.putExtra("userId", loginId)
-                startActivity(intent)
-                finish()
             }
             .addOnFailureListener { er ->
                 Log.d("pembayaran", "Data not inserted. Error: $er")
@@ -262,7 +263,8 @@ class Pembayaran : AppCompatActivity() {
                             "idTrainer" to trainerId,
                             "totalSesi" to totalSesi,
                             "durasi" to durasi,
-                            "harga" to harga
+                            "harga" to harga,
+                            "tanggalMulai" to FieldValue.serverTimestamp()
                         )
 
                         UpdateClient(loginId)
@@ -274,11 +276,6 @@ class Pembayaran : AppCompatActivity() {
                                     "Selamat! Booking berhasil",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                val intent = Intent(this, Membership::class.java)
-                                intent.putExtra("navigateToFragment", "fJoin")
-                                intent.putExtra("userId", loginId)
-                                startActivity(intent)
-                                finish()
                             }
                             .addOnFailureListener { er ->
                                 Log.d("paketTrainer", "Error: $er")
@@ -331,9 +328,8 @@ class Pembayaran : AppCompatActivity() {
                     db.collection("Transaksi").document().set(newData)
                         .addOnSuccessListener {
                             Log.d("pembayaran", "transaksi berhasil")
-                            val intent = Intent(this, utama::class.java)
-                            intent.putExtra("navigateToFragment", "fTrainer")
-                            intent.putExtra(utama.userId, loginId)
+                            val intent = Intent(this, Membership::class.java)
+                            intent.putExtra("userId", loginId)
                             Log.d("pembayaran", "login id tambah transaksi: $loginId")
                             startActivity(intent)
                             finish()
@@ -360,10 +356,8 @@ class Pembayaran : AppCompatActivity() {
                     db.collection("Transaksi").document().set(newData)
                         .addOnSuccessListener {
                             Log.d("pembayaran", "transaksi berhasil")
-                            val intent = Intent(this, utama::class.java)
-                            intent.putExtra("navigateToFragment", "fJoin")
-                            intent.putExtra(utama.userId, loginId)
-                            Log.d("pembayaran", "login id tambah transaksi: $loginId")
+                            val intent = Intent(this, Membership::class.java)
+                            intent.putExtra("userId", loginId)
                             startActivity(intent)
                             finish()
                         }

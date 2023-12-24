@@ -47,7 +47,7 @@ class activityPaketTrainer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paket_trainer)
 
-        loginId = intent.getStringExtra("userId")?: ""
+        loginId = intent.getStringExtra("userId")?: "0"
         trainerId = intent.getStringExtra("documentId")?: ""
         Log.d("paketTrainer", "loginId: $loginId")
         Log.d("paketTrainer", "trainerId: $trainerId")
@@ -136,6 +136,28 @@ class activityPaketTrainer : AppCompatActivity() {
 
                     ivDet.setImageResource(imageResId)
                 }
+            }
+        }
+
+        db.collection("UserTrainer").get().addOnSuccessListener { result ->
+            var docId: String? = null
+            for (document in result) {
+
+                var idUser = document.getString("idUser")
+                var idTrainer = document.getString("idTrainer")
+
+                if (idUser == loginId && idTrainer == trainerId) {
+                    docId = document.id
+                    break
+                }
+            }
+            if (docId != null) {
+                btnCancel.visibility = View.VISIBLE
+                btnCancel.setOnClickListener {
+                    CancelTrainer(docId)
+                }
+            } else {
+                btnCancel.visibility = View.GONE
             }
         }
     }

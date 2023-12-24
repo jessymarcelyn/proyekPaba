@@ -13,7 +13,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="75dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         android:orientation="vertical">
 
 
@@ -48,15 +48,6 @@
             android:textColor="#fff"
             android:text="TextView" />
 
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#bd0000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cancel Trainer"
-            android:visibility="gone"/>
-
         <TextView
             android:id="@+id/tvPilihPaket"
             android:layout_width="match_parent"
@@ -68,296 +59,309 @@
             android:textSize="20sp"
 
             />
-        
-        <LinearLayout
-            android:id="@+id/pilihanPaket"
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:orientation="vertical">
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                
-                <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:backgroundTint="#313133"
-                    android:layout_weight="1"
-                    app:cardElevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="8dp">
-                    
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="26dp"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="4 Sesi" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="Rp. 1.100.000" />
-
-                        <Button
-                            android:id="@+id/btnPaket1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#C9F24D"
-                            android:textColor="@color/black"
-                            android:text="Pilih" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:backgroundTint="#313133"
-                    android:layout_weight="1"
-                    app:cardElevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="26dp"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="8 Sesi" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="Rp. 2.000.000" />
-
-                        <Button
-                            android:id="@+id/btnPaket2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#C9F24D"
-                            android:textColor="@color/black"
-                            android:text="Pilih" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:backgroundTint="#313133"
-                    android:layout_weight="1"
-                    app:cardElevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="26dp"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="16 Sesi" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="Rp. 3.600.000" />
-
-                        <Button
-                            android:id="@+id/btnPaket3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#C9F24D"
-                            android:textColor="@color/black"
-                            android:text="Pilih" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-                
-                
-                
-            </LinearLayout>
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/pilihanPaket"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:backgroundTint="#313133"
-                    android:layout_weight="1"
-                    app:cardElevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="8dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:orientation="vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:backgroundTint="#313133"
+                        android:layout_weight="1"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        android:layout_margin="8dp">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="26dp"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="24 Sesi" />
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:orientation="vertical">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="26dp"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="4 Sesi" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="Rp. 1.100.000" />
+
+                            <Button
+                                android:id="@+id/btnPaket1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#C9F24D"
+                                android:textColor="@color/black"
+                                android:text="Pilih" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:backgroundTint="#313133"
+                        android:layout_weight="1"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        android:layout_margin="8dp">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="Rp. 5.000.000" />
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/btnPaket4"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="26dp"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="8 Sesi" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="Rp. 2.000.000" />
+
+                            <Button
+                                android:id="@+id/btnPaket2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#C9F24D"
+                                android:textColor="@color/black"
+                                android:text="Pilih" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:backgroundTint="#313133"
+                        android:layout_weight="1"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        android:layout_margin="8dp">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#C9F24D"
-                            android:textColor="@color/black"
-                            android:text="Pilih" />
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:orientation="vertical">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="26dp"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="16 Sesi" />
 
-                </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="Rp. 3.600.000" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:backgroundTint="#313133"
-                    android:layout_weight="1"
-                    app:cardElevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="8dp">
+                            <Button
+                                android:id="@+id/btnPaket3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#C9F24D"
+                                android:textColor="@color/black"
+                                android:text="Pilih" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:orientation="vertical">
+                        </LinearLayout>
 
-                        <TextView
+                    </androidx.cardview.widget.CardView>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:backgroundTint="#313133"
+                        android:layout_weight="1"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        android:layout_margin="8dp">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="26dp"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="36 Sesi" />
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:orientation="vertical">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="26dp"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="24 Sesi" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="Rp. 5.000.000" />
+
+                            <Button
+                                android:id="@+id/btnPaket4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#C9F24D"
+                                android:textColor="@color/black"
+                                android:text="Pilih" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:backgroundTint="#313133"
+                        android:layout_weight="1"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        android:layout_margin="8dp">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="Rp. 6.800.000" />
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/btnPaket5"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="26dp"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="36 Sesi" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="Rp. 6.800.000" />
+
+                            <Button
+                                android:id="@+id/btnPaket5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#C9F24D"
+                                android:textColor="@color/black"
+                                android:text="Pilih" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="150dp"
+                        android:backgroundTint="#313133"
+                        android:layout_weight="1"
+                        app:cardElevation="8dp"
+                        app:cardCornerRadius="8dp"
+                        android:layout_margin="8dp">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#C9F24D"
-                            android:textColor="@color/black"
-                            android:text="Pilih" />
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:orientation="vertical">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="26dp"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="48 Sesi" />
 
-                </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:layout_weight="1"
+                                android:textColor="#fff"
+                                android:text="Rp. 8.300.000" />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="100dp"
-                    android:layout_height="150dp"
-                    android:backgroundTint="#313133"
-                    android:layout_weight="1"
-                    app:cardElevation="8dp"
-                    app:cardCornerRadius="8dp"
-                    android:layout_margin="8dp">
+                            <Button
+                                android:id="@+id/btnPaket6"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="#C9F24D"
+                                android:textColor="@color/black"
+                                android:text="Pilih" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="10dp"
-                        android:orientation="vertical">
+                        </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="26dp"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="48 Sesi" />
+                    </androidx.cardview.widget.CardView>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:layout_weight="1"
-                            android:textColor="#fff"
-                            android:text="Rp. 8.300.000" />
+                </LinearLayout>
 
-                        <Button
-                            android:id="@+id/btnPaket6"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="#C9F24D"
-                            android:textColor="@color/black"
-                            android:text="Pilih" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#bd0000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel Trainer"
+                    android:visibility="gone"/>
             </LinearLayout>
-            
-            
-        </LinearLayout>
+
+        </ScrollView>
+
 
     </LinearLayout>
 
