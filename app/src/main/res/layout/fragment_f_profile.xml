@@ -26,7 +26,7 @@
         android:backgroundTint="@android:color/transparent"
         android:drawableLeft="@drawable/outline_payment_24"
         android:padding="0sp"
-        android:text="Payment"
+        android:text="Payment History"
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         app:cornerRadius="20sp"

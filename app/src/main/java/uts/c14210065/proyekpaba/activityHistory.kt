@@ -1,6 +1,5 @@
 package uts.c14210065.proyekpaba
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -29,7 +28,7 @@ class activityHistory : AppCompatActivity() {
         setContentView(R.layout.activity_history)
 
         idLogin = intent.getStringExtra(utama.userId).toString()
-        _rvHistory = findViewById(R.id.rvHistory)
+        _rvHistory = findViewById(R.id.rvHistoryP)
 
         var currentDate = Calendar.getInstance().time
         dayDate = currentDate

@@ -37,44 +37,10 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView8"
-        />
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/btnOGym"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#FFFFFF"
-        android:text="Gym"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/btnOClass"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:backgroundTint="#FFFFFF"
-        android:text="Class"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/btnOTrainer"
-        app:layout_constraintStart_toEndOf="@+id/btnOGym"
-        app:layout_constraintTop_toTopOf="@+id/btnOGym" />
-
-    <Button
-        android:id="@+id/btnOTrainer"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
-        android:layout_marginEnd="40dp"
-        android:backgroundTint="#FFFFFF"
-        android:text="Trainer"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnOClass" />
 
     <TextView
         android:id="@+id/textView"
@@ -82,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Pilih Kategori"
+        android:text="History Pembayaran"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -91,12 +57,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistoryP"
-        android:layout_width="319dp"
-        android:layout_height="417dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/btnOTrainer"
-        app:layout_constraintHorizontal_bias="0.416"
-        app:layout_constraintStart_toStartOf="@+id/btnOGym"
-        app:layout_constraintTop_toBottomOf="@+id/btnOClass" />
+        android:layout_width="322dp"
+        android:layout_height="541dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

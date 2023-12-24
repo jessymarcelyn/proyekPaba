@@ -1,14 +1,10 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
@@ -37,11 +33,11 @@ class adapterUserTrainer(
 //        var _tvStartSesiTrainer: TextView = itemView.findViewById(R.id.tvSessionOT)
 //        var _btnBookSesi: Button = itemView.findViewById(R.id.btnCancelGym)
 
-        var _tvNamaT : TextView = itemView.findViewById(R.id.tvNamaT)
-        var _tvTanggalMulai : TextView = itemView.findViewById(R.id.tvTanggalMulai)
+        var _tvNamaT : TextView = itemView.findViewById(R.id.tvTanggalT)
+        var _tvTanggalMulai : TextView = itemView.findViewById(R.id.tvPilihanPaket)
         var _tvDurasi : TextView = itemView.findViewById(R.id.tvDurasi)
         var _tvTanggalExpired : TextView = itemView.findViewById(R.id.tvTanggalExpired)
-        var _tvSesi : TextView = itemView.findViewById(R.id.tvSesi)
+        var _tvSesi : TextView = itemView.findViewById(R.id.tvNoPembayaran)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
