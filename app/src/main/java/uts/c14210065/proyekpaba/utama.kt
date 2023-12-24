@@ -15,6 +15,7 @@ class utama : AppCompatActivity() {
     }
 
     lateinit var idLogin : String
+    lateinit var loginid: String
     var dataLogin : Boolean = false
 
     //    lateinit var loginId : String
@@ -37,7 +38,7 @@ class utama : AppCompatActivity() {
         Log.d("ddd", "idLogin utama: $idLogin")
         Log.d("ddd", "datalogin utama: $dataLogin")
 
-        Log.d("idLogin", idLogin.toString())
+        Log.d("idLogin", idLogin)
         Log.d("dataLogin", dataLogin.toString())
 
         if (dataLogin.toString() == "false") {
@@ -66,7 +67,8 @@ class utama : AppCompatActivity() {
                 val mfSatu = fJoin()
 
                 val mBundle = Bundle()
-                mBundle.putString("userId", loginid)
+//                mBundle.putString("userId", loginid)
+                mBundle.putString(utama.userId, loginid)
                 mfSatu.arguments = mBundle
 
                 mFragmentManager.findFragmentByTag(fJoin()::class.java.simpleName)
