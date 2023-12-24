@@ -66,17 +66,18 @@ class adapterGymClass (
             holder._btnBook.text = "BOOKED"
             holder._btnBook.isActivated = false
             holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.BLACK)
+            holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
 
         }
         else{
-            holder._btnBook.text = gymClass.capacity.toString() + " More left"
+            holder._btnBook.text = gymClass.capacity.toString() + " More Left"
             holder._btnBook.setOnClickListener{
                 onItemClickCallback.bookClass(listClass[position])
             }
             holder._btnBook.isActivated = true
-            holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.BLUE)
+            val backgroundColor = Color.parseColor("#C9F24D")
+            holder._btnBook.setBackgroundColor(backgroundColor)
         }
 
         holder._level.text = gymClass.level
@@ -88,12 +89,6 @@ class adapterGymClass (
         timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
         val waktu = timeFormat.format(Time(selectedDate))
         holder._jam.text = waktu
-
-//        holder._waktu.text = gymClass.waktu
-//        holder.itemView.setOnClickListener{
-//            onItemClickCallback.onItemClicked(listClass[position])
-//
-//        }
 
 
     }

@@ -87,27 +87,6 @@ class fClass : Fragment() {
         var currentDate = Calendar.getInstance().time
         dayDate = currentDate
 
-        // Generate text for the next 7 days
-//        for (i in 0 until 7) {
-//            val day = Calendar.getInstance()
-//            day.time = currentDate
-//            day.add(Calendar.DATE, i)
-//
-//            val formattedDate = SimpleDateFormat("EEE\ndd MMM", Locale.getDefault()).format(day.time)
-//
-//            when (i) {
-//                0 -> dayTextSet(_btnd1, formattedDate, size1, size2)
-//                1 -> dayTextSet(_btnd2, formattedDate, size1, size2)
-//                2 -> dayTextSet(_btnd3, formattedDate, size1, size2)
-//                3 -> dayTextSet(_btnd4, formattedDate, size1, size2)
-//                4 -> dayTextSet(_btnd5, formattedDate, size1, size2)
-//                5 -> dayTextSet(_btnd6, formattedDate, size1, size2)
-//                6 -> dayTextSet(_btnd7, formattedDate, size1, size2)
-//            }
-//        }
-
-
-
         val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
         ReadData(dayDate)
         buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
@@ -199,11 +178,13 @@ class fClass : Fragment() {
 
 
                     val timestamp = document.getTimestamp("tanggal")
-                    val wak = (document["tanggal"] as? Timestamp)?.toDate()
 
-//                    buat pengecek jamnya
-                    if (wak?.time!! > date.time){
-                        arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level, arrUser))
+                    val schedule = document.getTimestamp("tanggal")?.toDate()?.time // Assuming it's in milliseconds
+                    val currentTimestamp = System.currentTimeMillis()
+
+                    // Check if the timestamp is in the future
+                    if (schedule != null && schedule > currentTimestamp) {
+                        arClass.add(GymClass(id, nama, kapasitas, durasi, pelatih, timestamp, level, arrUser))
                     }
 
                     Log.d("haes", "Document data: ${document.data}")
@@ -250,6 +231,13 @@ class fClass : Fragment() {
                                         "kapasitas" to kapasitas,
                                         "userId" to FieldValue.arrayUnion(idLogin)
                                     )
+
+                                    showAlert(
+                                        requireContext(),
+                                        "Booking Berhasil",
+                                        "Booking Class anda telah berhasil, Salam sehat! "
+                                    )
+
                                     db.collection("Class").document(documentId)
                                         .update(bookedClass)
                                         .addOnSuccessListener {
@@ -271,8 +259,7 @@ class fClass : Fragment() {
                             }
                     } else {
                         Log.d("Booking Class", "userId sudah terdaftar di sesi tersebut")
-//                        showAlert(context, "Booking Gagal", "Anda sudah terdaftar pada gym tanggal ${gym.tanggal} " +
-//                                " jam ${gym.sesi}.")
+                        showAlert(requireContext(), "Booking Gagal", "Anda sudah terdaftar pada class tersebut")
                     }
 
                 }

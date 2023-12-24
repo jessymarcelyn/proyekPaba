@@ -5,98 +5,105 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#212122"
     tools:context=".fEditProfile">
 
     <EditText
         android:id="@+id/edNama"
-        android:layout_width="338dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="100dp"
-        android:background="#C9F24D"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="48dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
-        android:padding="5sp"
-
+        android:padding="10sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edTinggi"
-        android:layout_width="338dp"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#C9F24D"
         android:ems="10"
         android:hint="Tinggi"
-
         android:inputType="text"
-        android:padding="5sp"
+        android:padding="10sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/edNama"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edNama"
-        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/edEmail"
+        tools:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edBerat"
-        android:layout_width="338dp"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#C9F24D"
         android:ems="10"
         android:hint="Badan"
-        android:inputType="text"
-
-        android:padding="5sp"
+        android:inputType="number"
+        android:padding="10sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/edNama"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edNama"
-        app:layout_constraintTop_toBottomOf="@+id/edTinggi" />
+        app:layout_constraintTop_toBottomOf="@+id/edTinggi"
+        tools:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edEmail"
-        android:layout_width="338dp"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="#C9F24D"
         android:ems="10"
         android:hint="Email"
-        android:inputType="text"
-
-        android:padding="5sp"
+        android:inputType="textEmailAddress"
+        android:padding="10sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/edNama"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/edNama"
-        app:layout_constraintTop_toBottomOf="@+id/edNama" />
+        app:layout_constraintTop_toBottomOf="@+id/edNama"
+        tools:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edPassword"
-        android:layout_width="338dp"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="#C9F24D"
         android:ems="10"
         android:hint="Change Password"
-
-        android:inputType="text"
-        android:padding="5sp"
+        android:inputType="textPassword"
+        android:padding="10sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/edNama"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edNama"
-        app:layout_constraintTop_toBottomOf="@+id/edBerat" />
+        app:layout_constraintTop_toBottomOf="@+id/edBerat"
+        tools:background="@drawable/rounded_background_white" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="120dp"
         android:backgroundTint="#C9F24D"
         android:text="Save"
         android:textColor="@color/black"
+        app:cornerRadius="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/edNama"
-        app:layout_constraintStart_toStartOf="@+id/edNama" />
+        app:layout_constraintStart_toStartOf="@+id/edNama"
+        tools:cornerRadius="10sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
