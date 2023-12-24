@@ -46,8 +46,7 @@ class activityHistory : AppCompatActivity() {
         }
 
         _btnOTrainer.setOnClickListener {
-//            ReadData(dayDate, "Trainer")
-            TampilkanDataTrainer(dayDate)
+            ReadDataTrainer(dayDate)
         }
 
 
@@ -59,10 +58,7 @@ class activityHistory : AppCompatActivity() {
 
     }
 
-    fun ReadData(date: Date, kategori: String){
-        if(kategori == "UserTrainer"){
-
-        }
+    private fun ReadData(date: Date, kategori: String){
         db.collection(kategori)
             .whereLessThanOrEqualTo("tanggal", date)
             .get()
@@ -139,7 +135,8 @@ class activityHistory : AppCompatActivity() {
         return formattedDate == date
     }
     private lateinit var idTrainer: String
-    private fun TampilkanDataTrainer(btnDate: Date) {
+
+    private fun ReadDataTrainer(btnDate: Date) {
         arHistory.clear()
         db.collection("UserTrainer").get().addOnSuccessListener { userTrainerResult ->
             for (userTrainerDocument in userTrainerResult) {
@@ -152,100 +149,77 @@ class activityHistory : AppCompatActivity() {
                     (userTrainerDocument["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
 
                 val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
-//                val currentDate = Calendar.getInstance().time
 
                 idTrainer = userTrainerDocument.getString("idTrainer") ?: ""
 
                 if (idUser == idLogin && tanggalBerakhir < btnDate) {
                     Log.d("sesiTrainerr", "masuk")
                     userTrainerId = userTrainerDocument.id
-                    fetchJadwalTrainer(userTrainerId, btnDate, idTrainer)
+
+                    fetchJadwalTrainer(userTrainerId, idTrainer)
+
                 } else {
                     Log.d("sesiTrainerr", "tidak masuk: idUser=$idUser, idLogin=$idLogin, tanggalBerakhir=$tanggalBerakhir, currentDate=$dayDate")
                 }
             }
+
         }
     }
 
-    private fun fetchJadwalTrainer(userTrainerId: String, btnDate: Date, idTrainer:String) {
-        db.collection("JadwalTrainer").whereEqualTo("userTrainerId", userTrainerId)
-            .get().addOnSuccessListener { jadwalTrainerResult ->
-                for (jadwalTrainerDocument in jadwalTrainerResult) {
-                    var jadwalTrainerId = jadwalTrainerDocument.id
+    private fun fetchJadwalTrainer(userTrainerId: String, idTrainer:String) {
+        db.collection("JadwalTrainer")
+            .get().addOnSuccessListener { document ->
+                for (jadwalTrainer in document) {
+                    val resultUserTrainerId = jadwalTrainer.get("userTrainerId").toString()
+                    if (resultUserTrainerId == userTrainerId){
+                        var jadwalTrainerId = jadwalTrainer.id
 
-                    val trainerId = jadwalTrainerDocument.getString("trainerId") ?: ""
-                    val userTrainerIdd = jadwalTrainerDocument.getString("userTrainerId") ?: ""
+                        val trainerId = jadwalTrainer.getString("trainerId") ?: ""
+                        val userTrainerIdd = jadwalTrainer.getString("userTrainerId") ?: ""
 
-                    if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
-                        Log.d("bbb", "masuk")
+                        if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
+                            Log.d("bbb", "masuk")
+                            val selectedDate = jadwalTrainer.getTimestamp("tanggal")?.toDate()
+                            Log.d("MyApp", "Selected Date: $selectedDate")
 
-                        val tanggal = (jadwalTrainerDocument["tanggal"] as? Timestamp)?.toDate()
+                            // Format time
+                            val timeFormat = android.icu.text.SimpleDateFormat("HH:mm", Locale("id", "ID"))
+                            timeFormat.timeZone = android.icu.util.TimeZone.getTimeZone("Asia/Jakarta")
+                            val formattedTime = timeFormat.format(selectedDate)
+                            Log.d("MyApp", "Formatted Time: $formattedTime")
 
-                        if (cekDate(tanggal, btnDate)) {
-                            val calendar = Calendar.getInstance()
-                            calendar.time = tanggal
-
-                            // ambil jam dan menit dari timestamp tanggal di database
-                            val jam = calendar.get(Calendar.HOUR_OF_DAY)
-                            val menit = calendar.get(Calendar.MINUTE)
-
-                            //agar jadi 08.00 atau 17.00
-                            val formatJam = String.format("%02d", jam)
-                            val formatMenit = String.format("%02d", menit)
-
-                            val sesi = "$formatJam:$formatMenit"
-
-                            val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+//                        // Format date
+                            val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
                             dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-                            val formattedDate = dateFormat.format(tanggal)
-                            val currentDate = dateFormat.format(Date())
+                            val formattedDate = dateFormat.format(selectedDate)
 
-                            //jam sekarang
-                            val currentTime = Calendar.getInstance()
-                            val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
-                            val currentMinute = currentTime.get(Calendar.MINUTE)
+                            // Combine date and time
+                            val formattedDateTime = "$formattedDate $formattedTime"
+                            getTrainer(idTrainer, jadwalTrainerId, formattedDateTime)
 
-                            if (formattedDate == currentDate) {
-                                if (jam > currentHour) {
-                                    Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
-                                    arHistory.add(
-                                        History(
-                                            jadwalTrainerId,
-                                            trainerId,
-                                            formattedDate
-                                        )
-                                    )
-                                } else if (jam == currentHour) {
-                                    if (menit > currentMinute) {
-                                        Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
-                                        arHistory.add(
-                                            History(
-                                                jadwalTrainerId,
-                                                trainerId,
-                                                formattedDate
-                                            )
-                                        )
-                                    }
-                                }
-                            } else {
-                                Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
-                                arHistory.add(
-                                    History(
-                                        jadwalTrainerId,
-                                        trainerId,
-                                        formattedDate
-                                    )
-                                )
-                            }
-                        } else {
-                            Log.d("bbb", "tidak masuk cekDate: tanggal=$tanggal, btnDate=$btnDate")
                         }
                     }
+
                 }
-                arHistory.sortBy { it.timestamp }
-                _rvHistory.adapter?.notifyDataSetChanged()
             }.addOnFailureListener { e ->
                 Log.e("haes", "Error fetching data from Firebase", e)
+            }
+    }
+
+    private fun getTrainer(idTrainer:String,jadwalTrainerId:String, tanggal:String){
+        db.collection("Trainer").document(idTrainer).get()
+            .addOnSuccessListener { result ->
+                val nama = result.getString("nama").toString()
+                arHistory.add(
+                    History(
+                        jadwalTrainerId,
+                        nama,
+                        tanggal
+                    )
+                )
+                arHistory.sortBy { it.timestamp }
+                _rvHistory.adapter?.notifyDataSetChanged()
+                Log.d("arHis", arHistory.toString())
             }
     }
 }

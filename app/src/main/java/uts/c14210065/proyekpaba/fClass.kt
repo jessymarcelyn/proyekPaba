@@ -196,12 +196,12 @@ class fClass : Fragment() {
                     val durasi = document.getLong("kapasitas")?.toInt() ?: 0
                     val level = document.getString("level") ?:""
                     val arrUser = document.get("userId") as? List<String> ?: emptyList()
-                    
+
 
                     val timestamp = document.getTimestamp("tanggal")
                     val wak = (document["tanggal"] as? Timestamp)?.toDate()
 
-//                    buat pengecekan jamnya
+//                    buat pengecek jamnya
                     if (wak?.time!! > date.time){
                         arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level, arrUser))
                     }
