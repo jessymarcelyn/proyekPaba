@@ -15,6 +15,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="120dp"
         android:layout_marginEnd="48dp"
+        android:background="@drawable/rounded_background_white"
         android:ems="10"
         android:hint="Name"
         android:inputType="text"
@@ -23,8 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:background="@drawable/rounded_background_white" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edTinggi"
@@ -40,7 +40,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edNama"
         app:layout_constraintTop_toBottomOf="@+id/edEmail"
-        tools:background="@drawable/rounded_background_white" />
+        android:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edBerat"
@@ -56,14 +56,13 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edNama"
         app:layout_constraintTop_toBottomOf="@+id/edTinggi"
-        tools:background="@drawable/rounded_background_white" />
+        android:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#C9F24D"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -73,14 +72,13 @@
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/edNama"
         app:layout_constraintTop_toBottomOf="@+id/edNama"
-        tools:background="@drawable/rounded_background_white" />
+        android:background="@drawable/rounded_background_white" />
 
     <EditText
         android:id="@+id/edPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="#C9F24D"
         android:ems="10"
         android:hint="Change Password"
         android:inputType="textPassword"
@@ -90,7 +88,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/edNama"
         app:layout_constraintTop_toBottomOf="@+id/edBerat"
-        tools:background="@drawable/rounded_background_white" />
+        android:background="@drawable/rounded_background_white" />
 
     <Button
         android:id="@+id/btnSave"
