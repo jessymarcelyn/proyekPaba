@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore.Audio.Radio
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.NumberFormat
 import java.util.Locale
@@ -186,70 +188,169 @@ class Pembayaran : AppCompatActivity() {
         newDocument.set(newData)
             .addOnSuccessListener {
                 Toast.makeText(this, "Anda Telah menjadi member", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, utama::class.java)
+                val intent = Intent(this, Membership::class.java)
                 intent.putExtra("navigateToFragment", "fJoin")
+                intent.putExtra("userId", loginId)
                 startActivity(intent)
                 finish()
             }
             .addOnFailureListener { er ->
                 Log.d("pembayaran", "Data not inserted. Error: $er")
             }
+        TambahTransaksi("member")
     }
 
     fun PembelianPaket() {
+        // ambil data dari db PilihanPaket, berdasarkan dokumen
         db.collection("PilihanPaket").document(paket.toString()).get()
             .addOnSuccessListener { doc ->
                 var harga = doc.getLong("harga")?.toInt()
                 var totalSesi = doc.getLong("totalSesi")?.toInt()
                 var durasi = doc.getLong("durasi")?.toInt()
 
-                val userTrainerCollection = db.collection("UserTrainer")
-                val newDocument = userTrainerCollection.document()
+                // pengecekan user pernah atau tidak melakukan booking
+                db.collection("UserTrainer").get().addOnSuccessListener { result ->
+                    var docId: String? = null
+                    for (document in result) {
 
-                val newData = hashMapOf(
-                    "idUser" to loginId,
-                    "idTrainer" to trainerId,
-                    "totalSesi" to totalSesi,
-                    "durasi" to durasi,
-                    "harga" to harga
-                )
+                        var idUser = document.getString("idUser")
+                        var idTrainer = document.getString("idTrainer")
 
-                UpdateClient(loginId)
-
-                newDocument.set(newData)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Data inserted successfully!", Toast.LENGTH_SHORT)
-                            .show()
-                        val intent = Intent(this, utama::class.java)
-                        intent.putExtra("navigateToFragment", "fTrainer")
-                        startActivity(intent)
-                        finish()
+                        if (idUser == loginId && idTrainer == trainerId) {
+                            docId = document.id
+                            break
+                        }
                     }
-                    .addOnFailureListener { er ->
-                        Log.d("paketTrainer", "Data not inserted. Error: $er")
+                    // akan update durasi, harga, dan totalSesi jika user pernah melakukan booking trainer
+                    if (docId != null) {
+                        val updateData = hashMapOf<String, Any>(
+                            "totalSesi" to FieldValue.increment(totalSesi?.toLong() ?: 0),
+                            "durasi" to FieldValue.increment(durasi?.toLong() ?: 0),
+                            "harga" to FieldValue.increment(harga?.toLong() ?: 0)
+                        )
+
+                        db.collection("UserTrainer").document(docId).update(updateData)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Booking telah terupdate",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(this, utama::class.java)
+                                intent.putExtra("navigateToFragment", "fTrainer")
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener { er ->
+                                Log.d("paketTrainer", "Error: $er")
+                            }
+                    } else {
+                        // jika tidak pernah booking, maka dibuat document baru
+                        val newData = hashMapOf(
+                            "idUser" to loginId,
+                            "idTrainer" to trainerId,
+                            "totalSesi" to totalSesi,
+                            "durasi" to durasi,
+                            "harga" to harga
+                        )
+
+                        UpdateClient(loginId)
+
+                        db.collection("UserTrainer").document().set(newData)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Selamat! Booking berhasil",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(this, Membership::class.java)
+                                intent.putExtra("navigateToFragment", "fJoin")
+                                intent.putExtra("userId", loginId)
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener { er ->
+                                Log.d("paketTrainer", "Error: $er")
+                            }
                     }
+                }
             }
+        TambahTransaksi("trainer")
     }
 
     fun UpdateClient(userId: String) {
-        val documentReference = db.collection("Trainer").document(trainerId)
-        documentReference.get().addOnSuccessListener { documentSnapshot ->
+        db.collection("Trainer").document(trainerId).get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
                 val currentArray = documentSnapshot.get("clientId") as? List<String> ?: emptyList()
 
                 val newArray = currentArray.toMutableList()
                 newArray.add(userId)
 
-                documentReference.update("clientId", newArray)
+                db.collection("Trainer").document(trainerId).update("clientId", newArray)
                     .addOnSuccessListener {
-                        Log.d("paketTrainer", "Array updated successfully")
+                        Log.d("paketTrainer", "updateClient berhasil")
                     }
                     .addOnFailureListener { e ->
-                        Log.e("paketTrainer", "Error updating array", e)
+                        Log.e("paketTambahTransaksi(\"trainer\")Trainer", "Error:", e)
                     }
             } else {
-                Log.d("paketTrainer", "Document does not exist")
+                Log.d("pembayaran", "no document")
             }
         }
+    }
+
+    fun TambahTransaksi(pilihan: String) {
+        db.collection("PilihanPaket").document(paket.toString()).get()
+            .addOnSuccessListener { doc ->
+                var harga = doc.getLong("harga")?.toInt()
+                var totalSesi = doc.getLong("totalSesi")?.toInt()
+                var durasi = doc.getLong("durasi")?.toInt()
+
+                if (pilihan == "trainer") {
+                    val newData = hashMapOf(
+                        "idUser" to loginId,
+                        "idTrainer" to trainerId,
+                        "totalSesi" to totalSesi,
+                        "durasi" to durasi,
+                        "harga" to harga,
+                        "jenisPembayaran" to pembayaran,
+                        "pilihan" to pilihan
+                    )
+
+                    db.collection("Transaksi").document().set(newData)
+                        .addOnSuccessListener {
+                            Log.d("pembayaran", "transaksi berhasil")
+                            val intent = Intent(this, utama::class.java)
+                            intent.putExtra("navigateToFragment", "fTrainer")
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { er ->
+                            Log.d("pembayaran", "Error: $er")
+                        }
+                }
+                else if (pilihan == "member") {
+                    val newData = hashMapOf(
+                        "idUser" to loginId,
+                        "jenisMember" to jenisMember,
+                        "durasi" to durasi,
+                        "harga" to harga,
+                        "jenisPembayaran" to pembayaran,
+                        "pilihan" to pilihan
+                    )
+
+                    db.collection("Transaksi").document().set(newData)
+                        .addOnSuccessListener {
+                            Log.d("pembayaran", "transaksi berhasil")
+                            val intent = Intent(this, utama::class.java)
+                            intent.putExtra("navigateToFragment", "fTrainer")
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { er ->
+                            Log.d("pembayaran", "Error: $er")
+                        }
+                }
+            }
     }
 }

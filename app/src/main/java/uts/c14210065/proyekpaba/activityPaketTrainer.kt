@@ -92,35 +92,6 @@ class activityPaketTrainer : AppCompatActivity() {
 
         TampilkanData()
 
-        db.collection("UserTrainer").get().addOnSuccessListener { result ->
-            var docId: String? = null
-            for (document in result) {
-
-                var idUser = document.getString("idUser")
-                var idTrainer = document.getString("idTrainer")
-
-                if (idUser == loginId && idTrainer == trainerId) {
-                    docId = document.id
-                    break
-                }
-            }
-            if (docId != null) {
-                btnCancel.visibility = View.VISIBLE
-                pilihanPaket.visibility = View.GONE
-                tvPilihPaket.visibility = View.GONE
-
-                btnCancel.setOnClickListener {
-                    CancelTrainer(docId)
-                }
-
-            }
-            else {
-                btnCancel.visibility = View.GONE
-                pilihanPaket.visibility = View.VISIBLE
-                tvPilihPaket.visibility = View.VISIBLE
-            }
-        }
-
         btn1.setOnClickListener {
             PilihPaket(1)
         }
@@ -140,6 +111,15 @@ class activityPaketTrainer : AppCompatActivity() {
             PilihPaket(6)
         }
 
+    }
+
+    override fun onBackPressed() {
+        val fragmentManager = supportFragmentManager
+        if (fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     fun TampilkanData() {
