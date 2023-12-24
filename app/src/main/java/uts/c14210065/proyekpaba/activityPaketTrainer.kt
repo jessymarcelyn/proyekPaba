@@ -20,7 +20,7 @@ import kotlin.math.log
 
 class activityPaketTrainer : AppCompatActivity() {
 
-    lateinit var btnBack: ImageView
+//    lateinit var btnBack: ImageView
     lateinit var ivDet: ImageView
     lateinit var tvNama: TextView
     lateinit var tvClient: TextView
@@ -56,7 +56,7 @@ class activityPaketTrainer : AppCompatActivity() {
         tvNama = findViewById(R.id.tvDetNamaTrainer)
         tvClient = findViewById(R.id.tvDetClientTrainer)
         tvSkill = findViewById(R.id.tvDetSkillTrainer)
-        btnBack = findViewById(R.id.btnDetTrainerBack)
+//        btnBack = findViewById(R.id.btnDetTrainerBack)
         btnCancel = findViewById(R.id.btnCancel)
 
         btn1 = findViewById(R.id.btnPaket1)
@@ -69,26 +69,20 @@ class activityPaketTrainer : AppCompatActivity() {
         pilihanPaket = findViewById(R.id.pilihanPaket)
         tvPilihPaket = findViewById(R.id.tvPilihPaket)
 
-        btnBack.setOnClickListener {
-            val intentWithData = Intent(this@activityPaketTrainer, utama::class.java).apply {
-                putExtra("navigateToFragment", "fTrainer")
-                putExtra(utama.userId, loginId)
-                if(loginId != "0"){
-                    Log.d("ddd", "Masuk1")
-                    putExtra(utama.login, true)
-                }else{
-                    Log.d("ddd", "Masuk2")
-                    putExtra(utama.login, false)
-                }
-            }
-            startActivity(intentWithData)
+//        btnBack.setOnClickListener {
+//            val intentWithData = Intent(this@activityPaketTrainer, utama::class.java).apply {
+//                putExtra("navigateToFragment", "fTrainer")
+//                putExtra(utama.userId, loginId)
+//                if(loginId != "0"){
+//                    Log.d("ddd", "Masuk1")
+//                    putExtra(utama.login, true)
+//                }else{
+//                    Log.d("ddd", "Masuk2")
+//                    putExtra(utama.login, false)
+//                }
+//            }
 //            startActivity(intentWithData)
-//            val intent = Intent(this, utama::class.java)
-//            intent.putExtra("navigateToFragment", "fTrainer")
-//            intent.putExtra("userId", loginId)
-//            startActivity(intent)
-//            finish()
-        }
+//        }
 
         TampilkanData()
 
@@ -113,14 +107,14 @@ class activityPaketTrainer : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
-        }
-    }
+//    override fun onBackPressed() {
+//        val fragmentManager = supportFragmentManager
+//        if (fragmentManager.backStackEntryCount > 0) {
+//            fragmentManager.popBackStack()
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
 
     fun TampilkanData() {
         db.collection("Trainer").get().addOnSuccessListener { result ->
