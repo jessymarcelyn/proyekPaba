@@ -1,13 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fHome">
+    tools:context=".fHome"
+    android:background="#212122">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="home" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="75dp"
+            android:layout_marginBottom="100dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selamat Datang"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="28sp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_location_on_24" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Skyfit"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_call_24" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="031 7439211"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Personal Trainer Kami"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHomeClass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/list_home_trainer"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Class yang Kami Sediakan"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHomeTrainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:listitem="@layout/list_home_class"
+                />
+
+        </LinearLayout>
+
+
+
+
+
+    </ScrollView>
 </FrameLayout>

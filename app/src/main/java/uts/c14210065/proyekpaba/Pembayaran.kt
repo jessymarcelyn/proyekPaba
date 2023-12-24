@@ -325,6 +325,8 @@ class Pembayaran : AppCompatActivity() {
                         "tanggalBeli" to FieldValue.serverTimestamp()
                     )
 
+                    Log.d("pembayaran", "new data: ${newData}")
+
                     db.collection("Transaksi").document().set(newData)
                         .addOnSuccessListener {
                             Log.d("pembayaran", "transaksi berhasil")
@@ -350,7 +352,8 @@ class Pembayaran : AppCompatActivity() {
                         "durasi" to durasi,
                         "harga" to harga,
                         "jenisPembayaran" to pembayaran,
-                        "pilihan" to pilihan
+                        "pilihan" to pilihan,
+                        "tanggalBeli" to FieldValue.serverTimestamp()
                     )
 
                     db.collection("Transaksi").document().set(newData)

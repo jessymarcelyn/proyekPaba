@@ -88,6 +88,18 @@ class utama : AppCompatActivity() {
             }
         }
 
+        if (savedInstanceState == null) {
+            val mFragmentManager = supportFragmentManager
+            val mfHome = fHome()
+
+            val mBundle = Bundle()
+            mBundle.putString("userId", idLogin)
+            mfHome.arguments = mBundle
+
+            mFragmentManager.findFragmentByTag(fHome()::class.java.simpleName)
+            mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfHome, fHome()::class.java.simpleName).commit()
+        }
+
         _ivHome.setOnClickListener{
             goToPage(fHome())
         }
