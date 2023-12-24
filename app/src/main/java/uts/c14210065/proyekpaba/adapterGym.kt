@@ -61,7 +61,7 @@ class adapterGym(
         val db = Firebase.firestore
 
         if (gym.kuotaSisa == 0) {
-            holder._btnBookGym.text = "FULLY BOOKED"
+            holder._btnBookGym.text = "FULL BOOKED"
             holder._btnBookGym.isActivated = false
             holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
             holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
@@ -70,7 +70,7 @@ class adapterGym(
             holder._btnBookGym.text = "BOOKED"
             holder._btnBookGym.isActivated = false
             holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
         } else {
             holder._btnBookGym.text = "BOOK SEKARANG"
             holder._btnBookGym.setOnClickListener {

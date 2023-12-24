@@ -72,10 +72,10 @@ class adapterSesiT(
                         holder._btnBookSesi.isActivated = false
                         holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
                         holder._btnBookSesi.backgroundTintList =
-                            ColorStateList.valueOf(Color.WHITE)
+                            ColorStateList.valueOf(Color.GRAY)
                     } else {
                         Log.d("qqqq", "masuk fully booked")
-                        holder._btnBookSesi.text = "FULLY BOOKED"
+                        holder._btnBookSesi.text = "FULL BOOKED"
                         holder._btnBookSesi.isActivated = false
                         holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
                         holder._btnBookSesi.backgroundTintList =

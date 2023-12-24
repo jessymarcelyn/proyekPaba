@@ -68,7 +68,6 @@ class adapterGymClass (
             holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
             holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
-
         }
         else{
             holder._btnBook.text = gymClass.capacity.toString() + " More Left"
