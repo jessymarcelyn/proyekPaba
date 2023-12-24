@@ -53,8 +53,10 @@ class fJoin : Fragment() {
         btnBeliMember.setOnClickListener {
             val intent = Intent(requireContext(), Membership::class.java)
             intent.putExtra("userId", idLogin)
+
             startActivity(intent)
         }
+
 
     }
 

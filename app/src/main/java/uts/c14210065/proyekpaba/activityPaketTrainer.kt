@@ -70,11 +70,24 @@ class activityPaketTrainer : AppCompatActivity() {
         tvPilihPaket = findViewById(R.id.tvPilihPaket)
 
         btnBack.setOnClickListener {
-            val intent = Intent(this, utama::class.java)
-            intent.putExtra("navigateToFragment", "fTrainer")
-            intent.putExtra("userId", loginId)
-            startActivity(intent)
-            finish()
+            val intentWithData = Intent(this@activityPaketTrainer, utama::class.java).apply {
+                putExtra("navigateToFragment", "fTrainer")
+                putExtra(utama.userId, loginId)
+                if(loginId != "0"){
+                    Log.d("ddd", "Masuk1")
+                    putExtra(utama.login, true)
+                }else{
+                    Log.d("ddd", "Masuk2")
+                    putExtra(utama.login, false)
+                }
+            }
+            startActivity(intentWithData)
+//            startActivity(intentWithData)
+//            val intent = Intent(this, utama::class.java)
+//            intent.putExtra("navigateToFragment", "fTrainer")
+//            intent.putExtra("userId", loginId)
+//            startActivity(intent)
+//            finish()
         }
 
         TampilkanData()

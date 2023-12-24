@@ -15,7 +15,9 @@ class utama : AppCompatActivity() {
     }
 
     lateinit var idLogin : String
-//    lateinit var loginId : String
+    var dataLogin : Boolean = false
+
+    //    lateinit var loginId : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_utama)
@@ -29,9 +31,11 @@ class utama : AppCompatActivity() {
 
         _ivProfile.setImageResource(R.drawable.profile)
 
-        val dataLogin = intent.getBooleanExtra(login, false)
+        dataLogin = intent.getBooleanExtra(login, false)
         idLogin = intent.getStringExtra(userId).toString()
 
+        Log.d("ddd", "idLogin utama: $idLogin")
+        Log.d("ddd", "datalogin utama: $dataLogin")
 
         Log.d("idLogin", idLogin.toString())
         Log.d("dataLogin", dataLogin.toString())
@@ -69,7 +73,6 @@ class utama : AppCompatActivity() {
                 mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fJoin()::class.java.simpleName).commit()
             }
         }
-
 
         _ivProfile.setOnClickListener {
             if (!dataLogin) {

@@ -35,12 +35,30 @@ class Membership : AppCompatActivity() {
         btnDiamond = findViewById(R.id.diamond)
         btnBack = findViewById(R.id.btnMemberBack)
 
+        Log.d("ddd", "idLogin membership : $loginId")
         btnBack.setOnClickListener {
-            val intent = Intent(this, utama::class.java)
-            intent.putExtra("navigateToFragment", "fJoin")
-            intent.putExtra("userId", loginId)
-            startActivity(intent)
-            finish()
+            val intentWithData = Intent(this@Membership, utama::class.java).apply {
+                putExtra("navigateToFragment", "fJoin")
+                putExtra(utama.userId, loginId)
+                if(loginId != "0"){
+                    Log.d("ddd", "Masuk1")
+                    putExtra(utama.login, true)
+                }else{
+                    Log.d("ddd", "Masuk2")
+                    putExtra(utama.login, false)
+                }
+            }
+            startActivity(intentWithData)
+//            val intent = Intent(this, utama::class.java)
+//            intent.putExtra("navigateToFragment", "fJoin")
+//            intent.putExtra("userId", loginId)
+//            if(loginId != "0"){
+//                intent.putExtra("dataLogin", true)
+//            }else{
+//                intent.putExtra("dataLogin", false)
+//            }
+//            startActivity(intent)
+//            finish()
         }
 
         btnBronze.setOnClickListener {

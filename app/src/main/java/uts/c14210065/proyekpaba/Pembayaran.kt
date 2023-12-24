@@ -58,8 +58,9 @@ class Pembayaran : AppCompatActivity() {
 
         Log.d("pembayaran", "paket: $paket")
 
+
         btnBack.setOnClickListener {
-            val intent = Intent(this, utama::class.java)
+            val intent = Intent(this, Membership::class.java)
             intent.putExtra("navigateToFragment", "fJoin")
             intent.putExtra("userId", loginId)
             startActivity(intent)
