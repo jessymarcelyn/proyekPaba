@@ -106,9 +106,13 @@ class fClass : Fragment() {
 //            }
 //        }
 
-        ReadData(dayDate)
+
 
         val buttons = arrayOf(_btnd1, _btnd2, _btnd3, _btnd4, _btnd5, _btnd6, _btnd7)
+        ReadData(dayDate)
+        buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
+        lastClickedButton = buttons[0]
+
         for (i in buttons.indices) {
             val day = Calendar.getInstance()
             day.time = currentDate
@@ -192,26 +196,17 @@ class fClass : Fragment() {
                     val durasi = document.getLong("kapasitas")?.toInt() ?: 0
                     val level = document.getString("level") ?:""
                     val arrUser = document.get("userId") as? List<String> ?: emptyList()
-
-//                    val timeFormat = SimpleDateFormat("HH:mm ", Locale("id", "ID"))
-//                    timeFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-//                    val tanggal = timeFormat.format(Time(selectedDate))
-//                    Log.d("wkatu", tanggal)
-//                    val tanggal = selectedDate.toDate()?.time?.div(1000) ?: 0
-//                    val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
-//                    val kuotaSisa = document.getLong("kuotaSisa")?.toInt() ?: 0
-//                    val sesi = document.getString("sesi") ?: ""
-
-//                    val userId =
-//                        (document["userId"] as? List<*>)?.map { it.toString() } ?: emptyList()
-//                    val dateFormat = SimpleDateFormat("dd MMM", Locale.ENGLISH)
-//                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
-//                    val formattedDate = dateFormat.format(Date(selectedDate))
+                    
 
                     val timestamp = document.getTimestamp("tanggal")
-                    arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level, arrUser))
+                    val wak = (document["tanggal"] as? Timestamp)?.toDate()
+
+//                    buat pengecekan jamnya
+                    if (wak?.time!! > date.time){
+                        arClass.add(GymClass(id,nama,kapasitas,durasi, pelatih, timestamp, level, arrUser))
+                    }
+
                     Log.d("haes", "Document data: ${document.data}")
-//                    Log.d("haes", formattedDate)
                 }
             }
             arClass.sortBy { it.timestamp}
