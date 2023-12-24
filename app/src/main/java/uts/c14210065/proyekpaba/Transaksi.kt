@@ -1,11 +1,20 @@
 package uts.c14210065.proyekpaba
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Transaksi(
     var idTransaksi: String,
-    var tanggal: String,
-    var metode:String,
-    var idPaket:String,
     var durasi: Int,
-    var totalSesi: Int,
-    var idUserTrainer: String
-)
+    var harga: Int,
+    var idPaket: String,
+    var idTrainer:String,
+    var idUser:String,
+    var jenisPembayaran: String,
+    var jenisMember: String,
+    var pilihan: String,
+    var tanggalBeli: String,
+    var tanggalBerakhir: String,
+    var totalSesi:Int
+) : Parcelable

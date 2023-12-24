@@ -57,8 +57,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistoryP"
-        android:layout_width="322dp"
-        android:layout_height="541dp"
+        android:layout_width="340dp"
+        android:layout_height="597dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"

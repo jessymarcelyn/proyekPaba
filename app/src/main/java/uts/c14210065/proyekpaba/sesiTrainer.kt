@@ -234,13 +234,10 @@ class sesiTrainer : AppCompatActivity() {
             dayTextSet(buttons[i], formattedDate, fGym.size1, fGym.size2)
             buttons[i].visibility = View.GONE
             buttons[i].setOnClickListener {
-                // Reset the background color of the last clicked button to white
                 lastClickedButton?.setBackgroundColor(Color.WHITE)
 
-                // Set the background color of the current clicked button to purple
                 buttons[i].setBackgroundColor(Color.parseColor("#C9F24D"))
 
-                // Update the last clicked button
                 lastClickedButton = buttons[i]
 
                 // tanggal di button
@@ -281,10 +278,6 @@ class sesiTrainer : AppCompatActivity() {
     val db = Firebase.firestore
 
     // untuk menampilkan informasi yang atas
-    private fun fetchNamaTrainer(idTrainer: String) {
-
-    }
-
     private fun TampilkanData1() {
         db.collection("UserTrainer").get().addOnSuccessListener { result ->
             arCard.clear()
@@ -333,7 +326,7 @@ class sesiTrainer : AppCompatActivity() {
                     var harga = document.getLong("harga")?.toInt() ?: 0
                     var totalSesi = document.getLong("totalSesi")?.toInt() ?: 0
 
-                    val tanggalMulaiConvert = convertTimestampToDate(tanggalMulai)
+                    val tanggalMulaiConvert = convertTimestampToString(tanggalMulai)
                     val tanggalBerakhirConvert = formatDateToString(tanggalBerakhir)
 
 
@@ -381,7 +374,7 @@ class sesiTrainer : AppCompatActivity() {
     }
 
     //timestamp ke string
-    fun convertTimestampToDate(timestamp: Long): String {
+    fun convertTimestampToString(timestamp: Long): String {
         val date = Date(timestamp)
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
         return dateFormat.format(date)
