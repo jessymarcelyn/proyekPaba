@@ -218,7 +218,7 @@ class activityHistory : AppCompatActivity() {
                         tanggal
                     )
                 )
-                arHistory.sortBy { it.timestamp }
+                arHistory.sortByDescending { it.timestamp }
                 _rvHistory.adapter?.notifyDataSetChanged()
                 Log.d("arHis", arHistory.toString())
             }
