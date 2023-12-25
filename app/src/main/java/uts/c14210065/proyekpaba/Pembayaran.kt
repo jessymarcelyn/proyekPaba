@@ -274,6 +274,7 @@ class Pembayaran : AppCompatActivity() {
                     if (docId != null) {
                         val updateData = hashMapOf<String, Any>(
                             "totalSesi" to FieldValue.increment(totalSesi?.toLong() ?: 0),
+                            "sisaSesi" to FieldValue.increment(totalSesi?.toLong() ?: 0),
                             "durasi" to FieldValue.increment(durasi?.toLong() ?: 0),
                             "harga" to FieldValue.increment(harga?.toLong() ?: 0)
                         )
@@ -285,11 +286,6 @@ class Pembayaran : AppCompatActivity() {
                                     "Booking telah terupdate",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                val intent = Intent(this, Membership::class.java)
-                                intent.putExtra("navigateToFragment", "fJoin")
-                                intent.putExtra("userId", loginId)
-                                startActivity(intent)
-                                finish()
                             }
                             .addOnFailureListener { er ->
                                 Log.d("paketTrainer", "Error: $er")
@@ -301,6 +297,7 @@ class Pembayaran : AppCompatActivity() {
                             "idTrainer" to trainerId,
                             "idPaket" to paket,
                             "totalSesi" to totalSesi,
+                            "sisaSesi" to totalSesi,
                             "durasi" to durasi,
                             "harga" to harga,
                             "tanggalMulai" to FieldValue.serverTimestamp()
@@ -356,6 +353,7 @@ class Pembayaran : AppCompatActivity() {
                     val newData = hashMapOf(
                         "idUser" to loginId,
                         "idTrainer" to trainerId,
+                        "idPaket" to paket,
                         "totalSesi" to totalSesi,
                         "durasi" to durasi,
                         "harga" to harga,
@@ -369,9 +367,9 @@ class Pembayaran : AppCompatActivity() {
                     db.collection("Transaksi").document().set(newData)
                         .addOnSuccessListener {
                             Log.d("pembayaran", "transaksi berhasil")
-                            val intent = Intent(this, Membership::class.java)
+                            val intent = Intent(this, activityPaketTrainer::class.java)
                             intent.putExtra("userId", loginId)
-                            Log.d("pembayaran", "login id tambah transaksi: $loginId")
+                            intent.putExtra("documentId", trainerId)
                             startActivity(intent)
                             finish()
                         }
