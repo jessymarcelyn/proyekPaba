@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -34,8 +35,9 @@ class activityDetailMembership : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun ReadData(userid : String){
-        db.collection("Member").whereEqualTo("userId", userid)
+        db.collection("UserMember").whereEqualTo("idUser", userid)
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
@@ -45,16 +47,7 @@ class activityDetailMembership : AppCompatActivity() {
                         Log.d("jenis", jenis)
 
                     val tanggalMulai = (document["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
-                    var durasi : Int
-                    if (jenis == "bronze"){
-                        durasi = 6
-                    }else  if (jenis == "silver"){
-                        durasi = 12
-                    } else  if (jenis == "gold"){
-                        durasi = 18
-                    }else{
-                        durasi = 24
-                    }
+                    var durasi = document.get("durasi").toString().toInt()
                     val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
 
                     // Format time
