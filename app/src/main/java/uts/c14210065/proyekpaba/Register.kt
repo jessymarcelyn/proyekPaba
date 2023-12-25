@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -44,8 +45,6 @@ class Register : AppCompatActivity() {
             // Get the text of the selected radio button
             selectedGender = selectedRadioButton?.text.toString()
 
-            // Handle the selected gender (e.g., display in a Toast)
-//            Toast.makeText(this, "Selected Gender: $selectedGender", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -60,14 +59,14 @@ class Register : AppCompatActivity() {
                 Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
             }else{
                 Log.d("masuk", "iya")
-                checkNumber(_etNomor.text.toString().toInt()){registered ->
+                checkNumber(_etNomor.text.toString()){registered ->
                     Log.d("registerd", registered.toString())
                     if(registered){
                         Toast.makeText(this@Register, "Nomor telah terdaftar", Toast.LENGTH_SHORT).show()
                     }else {
                         CreateData(
                             _etNama.text.toString(),
-                            _etNomor.text.toString().toInt(),
+                            _etNomor.text.toString(),
                             hashedPassword,
                             selectedGender,
                             _etEmail.text.toString()
@@ -86,7 +85,7 @@ class Register : AppCompatActivity() {
 
     }
 
-    fun checkNumber(number:Int, callback: (Boolean) -> Unit) {
+    fun checkNumber(number:String, callback: (Boolean) -> Unit) {
 
         db.collection("users")
             .whereEqualTo("nomor", number)
@@ -104,7 +103,7 @@ class Register : AppCompatActivity() {
         return BCrypt.hashpw(password, BCrypt.gensalt())
     }
 
-    fun CreateData(nama: String, nomor: Int, password: String, gender: String, email: String){
+    fun CreateData(nama: String, nomor: String, password: String, gender: String, email: String){
         val userCollection = db.collection("users")
 
         // Membuat data yang akan disimpan di Firestore
@@ -121,11 +120,9 @@ class Register : AppCompatActivity() {
 
         // Menambahkan data ke Firestore
         userCollection.document(nomor.toString()).set(userData)
-            .addOnSuccessListener { documentReference ->
-                // Handle ketika data berhasil ditambahkan
-                // documentReference.id berisi ID unik dari data yang baru ditambahkan
-
-
+            .addOnSuccessListener {
+                val intent = Intent(this@Register, MainActivity::class.java)
+                startActivity(intent)
             }
             .addOnFailureListener { e ->
                 // Handle ketika terjadi kesalahan

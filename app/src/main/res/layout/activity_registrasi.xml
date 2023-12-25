@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:buttonTint="#C9F24D"
-            android:checked="true"
+            android:checked="false"
             android:text="Male"
             android:textColor="@color/white" />
 

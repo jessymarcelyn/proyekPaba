@@ -271,7 +271,7 @@ class fClass : Fragment() {
                     showAlert(
                         it!!,
                         "Booking Gagal",
-                        "Untuk melakukan booking, silahkan login terlebih dahulu."
+                        "Silahkan login terlebih dahulu."
                     )
                 }
             }
