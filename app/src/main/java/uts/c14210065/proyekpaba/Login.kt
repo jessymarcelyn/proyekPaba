@@ -2,6 +2,8 @@ package uts.c14210065.proyekpaba
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -47,12 +49,26 @@ class Login : AppCompatActivity() {
 //        _btnLogin2.isEnabled = !(_etNomor?.text.isNullOrEmpty() || _etPassword?.text.isNullOrEmpty())
 
         _etNomor?.addTextChangedListener {
-            _btnLogin2.isEnabled = !(_etNomor?.text.isNullOrEmpty() || _etPassword?.text.isNullOrEmpty())
+            val isNotEmpty = !_etNomor?.text.isNullOrEmpty() && !_etPassword?.text.isNullOrEmpty()
+            _btnLogin2.isEnabled = isNotEmpty
+            if (isNotEmpty) {
+                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+            } else {
+                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
+            }
         }
 
         _etPassword?.addTextChangedListener {
-            _btnLogin2.isEnabled = !(_etNomor?.text.isNullOrEmpty() || _etPassword?.text.isNullOrEmpty())
+            val isNotEmpty = !_etNomor?.text.isNullOrEmpty() && !_etPassword?.text.isNullOrEmpty()
+            _btnLogin2.isEnabled = isNotEmpty
+            if (isNotEmpty) {
+                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+            } else {
+                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
+            }
         }
+
+
 
         _btnLogin2.setOnClickListener {
             ReadData()
