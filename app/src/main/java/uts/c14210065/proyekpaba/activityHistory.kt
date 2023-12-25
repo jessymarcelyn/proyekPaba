@@ -134,50 +134,37 @@ class activityHistory : AppCompatActivity() {
 
         return formattedDate == date
     }
-    private lateinit var idTrainer: String
 
-    private fun ReadDataTrainer(btnDate: Date) {
+    private fun ReadDataTrainer(date: Date) {
         arHistory.clear()
         db.collection("UserTrainer").get().addOnSuccessListener { userTrainerResult ->
             for (userTrainerDocument in userTrainerResult) {
                 var userTrainerId = userTrainerDocument.id
                 Log.d("rrr", "UserTrainerId : $userTrainerId")
                 var idUser = userTrainerDocument.getString("idUser") ?: ""
-                var durasi = userTrainerDocument.getLong("durasiPaket")?.toInt() ?: 0
 
-                val tanggalMulai =
-                    (userTrainerDocument["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
+                val idTrainer = userTrainerDocument.getString("idTrainer") ?: ""
 
-                val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
-
-                idTrainer = userTrainerDocument.getString("idTrainer") ?: ""
-
-                if (idUser == idLogin && tanggalBerakhir < btnDate) {
+                if (idUser == idLogin) {
                     Log.d("sesiTrainerr", "masuk")
                     userTrainerId = userTrainerDocument.id
 
-                    fetchJadwalTrainer(userTrainerId, idTrainer)
+                    fetchJadwalTrainer(userTrainerId, idTrainer, date)
 
                 } else {
-                    Log.d("sesiTrainerr", "tidak masuk: idUser=$idUser, idLogin=$idLogin, tanggalBerakhir=$tanggalBerakhir, currentDate=$dayDate")
+                    Log.d("sesiTrainerr", "tidak masuk: idUser=$idUser, idLogin=$idLogin, currentDate=$dayDate")
                 }
             }
 
         }
     }
 
-    private fun fetchJadwalTrainer(userTrainerId: String, idTrainer:String) {
-        db.collection("JadwalTrainer")
+    private fun fetchJadwalTrainer(userTrainerId: String, idTrainer: String, date:Date) {
+        db.collection("JadwalTrainer").whereLessThanOrEqualTo("tanggal", date)
             .get().addOnSuccessListener { document ->
                 for (jadwalTrainer in document) {
                     val resultUserTrainerId = jadwalTrainer.get("userTrainerId").toString()
                     if (resultUserTrainerId == userTrainerId){
-                        var jadwalTrainerId = jadwalTrainer.id
-
-                        val trainerId = jadwalTrainer.getString("trainerId") ?: ""
-                        val userTrainerIdd = jadwalTrainer.getString("userTrainerId") ?: ""
-
-                        if (trainerId == idTrainer && userTrainerId == userTrainerIdd) {
                             Log.d("bbb", "masuk")
                             val selectedDate = jadwalTrainer.getTimestamp("tanggal")?.toDate()
                             Log.d("MyApp", "Selected Date: $selectedDate")
@@ -188,18 +175,16 @@ class activityHistory : AppCompatActivity() {
                             val formattedTime = timeFormat.format(selectedDate)
                             Log.d("MyApp", "Formatted Time: $formattedTime")
 
-//                        // Format date
+                            // Format date
                             val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
                             dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                             val formattedDate = dateFormat.format(selectedDate)
 
                             // Combine date and time
                             val formattedDateTime = "$formattedDate $formattedTime"
-                            getTrainer(idTrainer, jadwalTrainerId, formattedDateTime)
+                            getTrainer(idTrainer, jadwalTrainer.id, formattedDateTime)
 
                         }
-                    }
-
                 }
             }.addOnFailureListener { e ->
                 Log.e("haes", "Error fetching data from Firebase", e)
