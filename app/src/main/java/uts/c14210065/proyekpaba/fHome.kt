@@ -37,10 +37,10 @@ class fHome : Fragment() {
     lateinit var rvClass: RecyclerView
     lateinit var arClass: ArrayList<GymClass>
 
-    lateinit var tvWelcome: TextView
+    lateinit var tvDetClass: TextView
+    lateinit var tvDetTrainer: TextView
 
-//    lateinit var rvGym: RecyclerView
-//    lateinit var arGym: ArrayList<Gym>
+    lateinit var idLogin: String
 
     val db = Firebase.firestore
 
@@ -66,6 +66,36 @@ class fHome : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        idLogin = arguments?.getString("userId", "")?: ""
+        Log.d("fHome", "idLogin: $idLogin")
+
+        tvDetClass = view.findViewById(R.id.detailClass)
+        tvDetTrainer = view.findViewById(R.id.detailPt)
+
+        tvDetClass.setOnClickListener {
+            val classFrag = fClass()
+            val bundle = Bundle()
+            bundle.putString("userId", idLogin)
+            classFrag.arguments = bundle
+
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frameLayout, classFrag)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        tvDetTrainer.setOnClickListener {
+            val trainerFrag = fTrainer()
+            val bundle = Bundle()
+            bundle.putString("userId", idLogin)
+            trainerFrag.arguments = bundle
+
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frameLayout, trainerFrag)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
         // Trainer
         rvTrainer = view.findViewById(R.id.rvHomeTrainer)

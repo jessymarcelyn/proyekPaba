@@ -53,7 +53,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
                 android:orientation="horizontal">
                 <ImageView
                     android:layout_width="20dp"
@@ -69,15 +68,34 @@
                     />
             </LinearLayout>
 
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Class yang Kami Sediakan"
-                android:textStyle="bold"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="#fff"
-                android:textSize="20sp"
-                />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Class yang Kami Sediakan"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    />
+
+                <TextView
+                    android:id="@+id/detailClass"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:text="Lihat detail \>"
+                    android:layout_weight="1"
+                    android:textStyle="italic"
+                    android:textColor="#fff"
+                    android:textAlignment="textEnd"
+                    />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHomeClass"
@@ -87,15 +105,33 @@
                 tools:listitem="@layout/list_home_trainer"
                 />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Personal Trainer Kami"
-                android:textStyle="bold"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="#fff"
-                android:textSize="20sp"
-                />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Personal Trainer Kami"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="#fff"
+                    android:textSize="20sp"
+                    />
+
+                <TextView
+                    android:id="@+id/detailPt"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:text="Lihat detail \>"
+                    android:layout_weight="1"
+                    android:textStyle="italic"
+                    android:textColor="#fff"
+                    android:textAlignment="textEnd"
+                    />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvHomeTrainer"
