@@ -275,7 +275,7 @@ class Pembayaran : AppCompatActivity() {
                         val updateData = hashMapOf<String, Any>(
                             "totalSesi" to FieldValue.increment(totalSesi?.toLong() ?: 0),
                             "sisaSesi" to FieldValue.increment(totalSesi?.toLong() ?: 0),
-                            "durasi" to FieldValue.increment(durasi?.toLong() ?: 0),
+                            "durasiPaket" to FieldValue.increment(durasi?.toLong() ?: 0),
                             "harga" to FieldValue.increment(harga?.toLong() ?: 0)
                         )
 
@@ -295,10 +295,10 @@ class Pembayaran : AppCompatActivity() {
                         val newData = hashMapOf(
                             "idUser" to loginId,
                             "idTrainer" to trainerId,
-                            "idPaket" to paket,
+                            "idPaket" to paket.toString(),
                             "totalSesi" to totalSesi,
                             "sisaSesi" to totalSesi,
-                            "durasi" to durasi,
+                            "durasiPaket" to durasi,
                             "harga" to harga,
                             "tanggalMulai" to FieldValue.serverTimestamp()
                         )
@@ -353,7 +353,7 @@ class Pembayaran : AppCompatActivity() {
                     val newData = hashMapOf(
                         "idUser" to loginId,
                         "idTrainer" to trainerId,
-                        "idPaket" to paket,
+                        "idPaket" to paket.toString(),
                         "totalSesi" to totalSesi,
                         "durasi" to durasi,
                         "harga" to harga,

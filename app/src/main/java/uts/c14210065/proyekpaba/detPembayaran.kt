@@ -30,6 +30,9 @@ class detPembayaran : AppCompatActivity() {
         var _TVTotalSesi = findViewById<TextView>(R.id.TVTotalSesi)
         var _tvNamaTrainerTransaksi = findViewById<TextView>(R.id.tvNamaTrainerTransaksi)
 
+        var _tvMulaii = findViewById<TextView>(R.id.tvMulaii)
+        var _tvBerakhirr = findViewById<TextView>(R.id.tvBerakhirr)
+
         var _TVTotalSesii = findViewById<TextView>(R.id.TVTotalSesii)
         var _tvNamaTrainerTransaksii = findViewById<TextView>(R.id.tvNamaTrainerTransaksii)
         _TVTotalSesii.visibility = View.GONE
@@ -40,23 +43,26 @@ class detPembayaran : AppCompatActivity() {
         _tvidTransaksii.setText(dataIntent!!.idTransaksi)
         _tvTglTransaksi.setText(":   " + dataIntent!!.tanggalBeli)
         _tvMetodeTransaksi.setText(":   " + dataIntent!!.jenisPembayaran)
+
         //beri Rp dan seperator koma
         val formattedHarga = NumberFormat.getNumberInstance(Locale("id", "ID")).format(dataIntent!!.harga)
         _tvTotalTransaksi.setText(":   " + "Rp $formattedHarga")
         if(dataIntent!!.jenisMember == "") {
             //trainer
+            _tvMulaii.setText("Total Sesi ")
+            _tvBerakhirr.setText("Nama Trainer ")
             _tvPaket.setText(":   " + dataIntent!!.pilihan + "\n   (paket ${dataIntent!!.idPaket})")
-            _TVTotalSesii.visibility = View.VISIBLE
-            _tvNamaTrainerTransaksii.visibility = View.VISIBLE
-            _TVTotalSesi.visibility = View.VISIBLE
-            _tvNamaTrainerTransaksi.visibility = View.VISIBLE
-            _TVTotalSesi.setText(":   " + dataIntent!!.totalSesi.toString())
+//            _TVTotalSesii.visibility = View.VISIBLE
+//            _tvNamaTrainerTransaksii.visibility = View.VISIBLE
+//            _TVTotalSesi.visibility = View.VISIBLE
+//            _tvNamaTrainerTransaksi.visibility = View.VISIBLE
+            _tvTglMulaiT.setText(":   " + dataIntent!!.totalSesi.toString())
             val db = Firebase.firestore
             db.collection("Trainer").get().addOnSuccessListener { result ->
                 for (document in result) {
                     if (document.id == dataIntent.idTrainer) {
                         val namaTrainer = document.getString("nama") ?: ""
-                        _tvNamaTrainerTransaksi.setText(":   " + namaTrainer)
+                        _tvTglBerakhirT.setText(":   " + namaTrainer)
                     }
                 }
             }
@@ -64,6 +70,8 @@ class detPembayaran : AppCompatActivity() {
         }else{
             //member
             _tvPaket.setText(":   " + dataIntent!!.pilihan + "\n   (paket ${dataIntent!!.jenisMember})")
+            _tvTglMulaiT.setText(":   "  + dataIntent!!.tanggalMulai)
+            _tvTglBerakhirT.setText(":   " + dataIntent!!.tanggalBerakhir)
         }
         if (dataIntent!!.durasi >= 12) {
             if (dataIntent!!.durasi % 12 == 0) {
@@ -78,7 +86,5 @@ class detPembayaran : AppCompatActivity() {
             _tvDurasiTransaksi.setText(":   ${dataIntent!!.durasi} bulan")
         }
 
-        _tvTglMulaiT.setText(":   "  + dataIntent!!.tanggalMulai)
-        _tvTglBerakhirT.setText(":   " + dataIntent!!.tanggalBerakhir)
     }
 }

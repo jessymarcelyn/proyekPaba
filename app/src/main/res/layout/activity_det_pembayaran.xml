@@ -130,7 +130,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/tvMulaii"
         android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
@@ -142,7 +142,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/tvBerakhirr"
         android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
@@ -150,8 +150,8 @@
         android:textColor="#F6F2F2"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+        app:layout_constraintStart_toStartOf="@+id/tvMulaii"
+        app:layout_constraintTop_toBottomOf="@+id/tvMulaii" />
 
     <TextView
         android:id="@+id/TVTotalSesii"
@@ -162,8 +162,8 @@
         android:textColor="#F6F2F2"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView21"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintStart_toStartOf="@+id/tvBerakhirr"
+        app:layout_constraintTop_toBottomOf="@+id/tvBerakhirr" />
 
     <TextView
         android:id="@+id/tvNamaTrainerTransaksii"
@@ -240,8 +240,8 @@
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/textView20"
-        app:layout_constraintTop_toTopOf="@+id/textView20" />
+        app:layout_constraintStart_toEndOf="@+id/tvMulaii"
+        app:layout_constraintTop_toTopOf="@+id/tvMulaii" />
 
     <TextView
         android:id="@+id/tvTglBerakhirT"
@@ -251,8 +251,8 @@
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/textView21"
-        app:layout_constraintTop_toTopOf="@+id/textView21" />
+        app:layout_constraintStart_toEndOf="@+id/tvBerakhirr"
+        app:layout_constraintTop_toTopOf="@+id/tvBerakhirr" />
 
     <TextView
         android:id="@+id/TVTotalSesi"

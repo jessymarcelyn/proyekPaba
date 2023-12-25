@@ -115,21 +115,21 @@ class activityHistoryPembayaran : AppCompatActivity() {
                                 totalSesi
                             ))
                     }else{
-                        //Member Trainer
-                        //apabila tanggal berakhir sebelumnya tanggal hari ini/ trainer sebelumnya sudah habis
-                        if(tanggalBerakhirTrainerConvert == "" || tanggalBerakhirTrainer.before(currentDate) ) {
-                            Log.d("mmmm", "halo1")
-                            tanggalMulai = tanggalBeliConvert
-                            tanggalBerakhirTrainer = addMonthsToTimestamp(tanggalBeli, durasi)
-                        }else{
-                            //masih ada sesi trainer sebelumnya
-                            Log.d("mmmm", "halo2")
-                            Log.d("mmmm", "tanggalBerakhirTrainer.time : ${tanggalBerakhirTrainer.time}")
-                            Log.d("mmmm", "durasi: ${durasi}")
-                            tanggalMulai = tanggalBerakhirTrainerConvert
-                            tanggalBerakhirTrainer = addMonthsToTimestamp(tanggalBerakhirTrainer.time, durasi)
-                        }
-                        tanggalBerakhirTrainerConvert = formatDateToString(tanggalBerakhirTrainer)
+//                        //Member Trainer
+//                        //apabila tanggal berakhir sebelumnya tanggal hari ini/ trainer sebelumnya sudah habis
+//                        if(tanggalBerakhirTrainerConvert == "" || tanggalBerakhirTrainer.before(currentDate) ) {
+//                            Log.d("mmmm", "halo1")
+//                            tanggalMulai = tanggalBeliConvert
+//                            tanggalBerakhirTrainer = addMonthsToTimestamp(tanggalBeli, durasi)
+//                        }else{
+//                            //masih ada sesi trainer sebelumnya
+//                            Log.d("mmmm", "halo2")
+//                            Log.d("mmmm", "tanggalBerakhirTrainer.time : ${tanggalBerakhirTrainer.time}")
+//                            Log.d("mmmm", "durasi: ${durasi}")
+//                            tanggalMulai = tanggalBerakhirTrainerConvert
+//                            tanggalBerakhirTrainer = addMonthsToTimestamp(tanggalBerakhirTrainer.time, durasi)
+//                        }
+//                        tanggalBerakhirTrainerConvert = formatDateToString(tanggalBerakhirTrainer)
                         Log.d("mmmm", "tanggalBerakhirTrainerConvert: ${tanggalBerakhirTrainerConvert}")
                         arHistoryP.add(
                             Transaksi(
@@ -143,8 +143,7 @@ class activityHistoryPembayaran : AppCompatActivity() {
                                 jenisPembayaran,
                                 jenisMember,
                                 pilihan,
-                                tanggalBeliConvert,tanggalMulai,
-                                tanggalBerakhirTrainerConvert,
+                                tanggalBeliConvert,"-", "-",
                                 totalSesi
                             ))
                     }

@@ -71,7 +71,7 @@ class adapterOngoingT(
             if (isMoreThan24HoursBefore(timestamp)) {
                 onItemClickCallback.delData(position)
             } else {
-                showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi pt tidak bisa dibatalkan karena sudah lebih dari 24 jam.")
+                showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi pt tidak bisa dibatalkan karena kurang dari 24 jam.")
             }
 
         }
