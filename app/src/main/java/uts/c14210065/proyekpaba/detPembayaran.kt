@@ -43,7 +43,7 @@ class detPembayaran : AppCompatActivity() {
         //beri Rp dan seperator koma
         val formattedHarga = NumberFormat.getNumberInstance(Locale("id", "ID")).format(dataIntent!!.harga)
         _tvTotalTransaksi.setText(":   " + "Rp $formattedHarga")
-        if(dataIntent!!.idPaket != "") {
+        if(dataIntent!!.jenisMember == "") {
             //trainer
             _tvPaket.setText(":   " + dataIntent!!.pilihan + "\n   (paket ${dataIntent!!.idPaket})")
             _TVTotalSesii.visibility = View.VISIBLE
@@ -56,7 +56,7 @@ class detPembayaran : AppCompatActivity() {
                 for (document in result) {
                     if (document.id == dataIntent.idTrainer) {
                         val namaTrainer = document.getString("nama") ?: ""
-                        _tvNamaTrainerTransaksi.setText(": " + namaTrainer)
+                        _tvNamaTrainerTransaksi.setText(":   " + namaTrainer)
                     }
                 }
             }
