@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#212122"
     tools:context=".Login">
 
     <TextView
@@ -13,6 +14,7 @@
         android:layout_marginTop="180dp"
         android:text="SKYFIT GYM"
         android:textSize="34sp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,6 +27,8 @@
         android:ems="10"
         android:hint="Nomor Telepon"
         android:inputType="phone"
+        android:textColor="@color/white"
+        android:textColorHint="#77FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/textView7"
         app:layout_constraintStart_toStartOf="@+id/textView7"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -37,6 +41,8 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="@color/white"
+        android:textColorHint="#77FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/etNomor"
         app:layout_constraintStart_toStartOf="@+id/etNomor"
         app:layout_constraintTop_toBottomOf="@+id/etNomor" />
@@ -48,6 +54,9 @@
         android:layout_marginTop="32dp"
         android:enabled="false"
         android:text="Login"
+        android:backgroundTint="#C9F24D"
+        android:textColor="@color/black"
+        app:cornerRadius="20sp"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
         app:layout_constraintHorizontal_bias="0.543"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
