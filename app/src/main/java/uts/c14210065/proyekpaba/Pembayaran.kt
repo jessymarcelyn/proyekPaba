@@ -34,6 +34,7 @@ class Pembayaran : AppCompatActivity() {
     lateinit var tvJenisMember: TextView
 
     var pembayaranMember: Int = 0
+    var durasiMember: Int = 0
     var formatRupiah: String = ""
     lateinit var loginId: String
     lateinit var jenisMember: String
@@ -55,6 +56,7 @@ class Pembayaran : AppCompatActivity() {
 
         loginId = intent.getStringExtra("userId") ?: "0"
         jenisMember = intent.getStringExtra("jenisMember") ?: ""
+        durasiMember = intent.getIntExtra("durasiMember", 0)
         paket = intent.getIntExtra("paket", 0)
         trainerId = intent.getStringExtra("trainerId")?: ""
 
@@ -111,21 +113,7 @@ class Pembayaran : AppCompatActivity() {
                         Toast.makeText(this, "Harap memilih metode pembayaran", Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        db.collection("users").document(loginId).get()
-                            .addOnSuccessListener { result ->
-                                if (result.exists()) {
-                                    val isMember = result.getBoolean("member")
-                                    if (isMember == true) {
-                                        Toast.makeText(
-                                            this,
-                                            "Anda telah terdaftar sebagai member",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    } else {
-                                        PembelianMember()
-                                    }
-                                }
-                            }
+                        PembelianMember()
                     }
 
                 }
@@ -184,32 +172,82 @@ class Pembayaran : AppCompatActivity() {
     }
 
     fun PembelianMember() {
+        // ambil data dari db PilihanMember, berdasarkan dokumen
+        db.collection("PilihanMember").document(jenisMember).get()
+            .addOnSuccessListener { doc ->
+                var harga = doc.getLong("harga")?.toInt()
+                var jenis = doc.getString("jenis").toString()
+                var durasi = doc.getLong("durasi")?.toInt()
 
-        val newData = hashMapOf(
-            "userId" to loginId,
-            "jenisMember" to jenisMember,
-            "jenisPembayaran" to pembayaran,
-            "tanggalMulai" to FieldValue.serverTimestamp()
-        )
+                Log.d("pembayarn", "durasi member: $durasi")
 
-        db.collection("Member").document().set(newData)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Anda Telah menjadi member", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { er ->
-                Log.d("pembayaran", "Data not inserted. Error: $er")
-            }
+                // pengecekan user sudah member atau belum
+                db.collection("UserMember").get().addOnSuccessListener { result ->
+                    var docId: String? = null
+                    for (document in result) {
+                        var idUser = document.getString("idUser")
 
-        db.collection("users").document(loginId).update("member", true)
-            .addOnSuccessListener {
-                Log.d("pembayaran", "User data updated!")
-            }
-            .addOnFailureListener { er ->
-                Log.e("pembayaran", "Error updating user data", er)
-            }
+                        if (idUser == loginId) {
+                            docId = document.id
+                            break
+                        }
+                    }
+                    // akan update
+                    if (docId != null) {
+                        val updateData = hashMapOf<String, Any>(
+                            "durasi" to FieldValue.increment(durasi?.toLong() ?: 0),
+                            "harga" to FieldValue.increment(harga?.toLong() ?: 0)
+                        )
 
+                        db.collection("UserMember").document(docId).update(updateData)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Member telah diperpanjang",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .addOnFailureListener { er ->
+                                Log.d("pembayaran member", "Error: $er")
+                            }
+                    } else {
+                        // jika tidak pernah booking, maka dibuat document baru
+                        val newData = hashMapOf(
+                            "idUser" to loginId,
+                            "jenisMember" to jenis,
+                            "jenisPembayaran" to pembayaran,
+                            "durasi" to durasi,
+                            "harga" to harga,
+                            "tanggalMulai" to FieldValue.serverTimestamp()
+                        )
+
+                        db.collection("UserMember").document().set(newData)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "Selamat! Anda menjadi Member",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .addOnFailureListener { er ->
+                                Log.d("pembayaran member", "Error: $er")
+                            }
+
+                        // update user jadi member
+                        db.collection("users").document(loginId)
+                            .update("member", true)
+                            .addOnSuccessListener {
+                                Log.d("pembayaran member", "member di user updated")
+                            }
+                            .addOnFailureListener { er ->
+                                Log.d("pembayaran member", "Error: $er")
+                            }
+                    }
+                }
+            }
         TambahTransaksi("member")
     }
+
 
     fun PembelianPaket() {
         // ambil data dari db PilihanPaket, berdasarkan dokumen
@@ -261,6 +299,7 @@ class Pembayaran : AppCompatActivity() {
                         val newData = hashMapOf(
                             "idUser" to loginId,
                             "idTrainer" to trainerId,
+                            "idPaket" to paket,
                             "totalSesi" to totalSesi,
                             "durasi" to durasi,
                             "harga" to harga,

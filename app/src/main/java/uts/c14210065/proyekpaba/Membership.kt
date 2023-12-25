@@ -140,23 +140,24 @@ class Membership : AppCompatActivity() {
 //        }
 
         btnBronze.setOnClickListener {
-            goToPembayaran(1950000, "bronze")
+            goToPembayaran(1950000, "bronze", 6)
         }
         btnSilver.setOnClickListener {
-            goToPembayaran(3300000, "silver")
+            goToPembayaran(3300000, "silver", 12)
         }
         btnGold.setOnClickListener {
-            goToPembayaran(4662000, "gold")
+            goToPembayaran(4662000, "gold", 18)
         }
         btnDiamond.setOnClickListener {
-            goToPembayaran(5976000, "diamond")
+            goToPembayaran(5976000, "diamond", 24)
         }
     }
 
-    fun goToPembayaran(value: Int, jenis: String) {
+    fun goToPembayaran(value: Int, jenis: String, durasi: Int) {
         val intent = Intent(this, Pembayaran::class.java)
         intent.putExtra("pembayaranMember", value)
         intent.putExtra("jenisMember", jenis)
+        intent.putExtra("durasiMember", durasi)
         intent.putExtra("userId", loginId)
         startActivity(intent)
     }

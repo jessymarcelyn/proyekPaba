@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
@@ -36,6 +37,8 @@ class fHome : Fragment() {
     lateinit var rvClass: RecyclerView
     lateinit var arClass: ArrayList<GymClass>
 
+    lateinit var tvWelcome: TextView
+
 //    lateinit var rvGym: RecyclerView
 //    lateinit var arGym: ArrayList<Gym>
 
@@ -63,14 +66,6 @@ class fHome : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Gym
-//        rvGym = view.findViewById(R.id.rvHomeGym)
-//        arGym = ArrayList()
-//
-//        rvGym.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-//        val adapterGym = adapterHomeGym(arGym)
-//        rvGym.adapter = adapterGym
 
         // Trainer
         rvTrainer = view.findViewById(R.id.rvHomeTrainer)
