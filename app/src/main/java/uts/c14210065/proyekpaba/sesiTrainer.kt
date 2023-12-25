@@ -49,6 +49,8 @@ class sesiTrainer : AppCompatActivity() {
     lateinit var _rvUserTrainer: RecyclerView
     lateinit var userTrainerId: String
     private var currentVisiblePosition = 0
+    lateinit var ivNext : ImageView
+    lateinit var ivPrevious : ImageView
 
 
     @SuppressLint("MissingInflatedId")
@@ -158,9 +160,10 @@ class sesiTrainer : AppCompatActivity() {
 
         })
 
-        val ivNext = findViewById<ImageView>(R.id.iv_next)
-        val ivPrevious = findViewById<ImageView>(R.id.iv_previous)
+        ivNext = findViewById<ImageView>(R.id.iv_next)
+        ivPrevious = findViewById<ImageView>(R.id.iv_previous)
         ivPrevious.visibility = View.GONE
+        Log.d("iii", "Card size : ${arCard.size}")
 
         ivNext.setOnClickListener {
             // Kalau nggak last item
@@ -349,6 +352,12 @@ class sesiTrainer : AppCompatActivity() {
                     _rvUserTrainer.adapter?.notifyDataSetChanged()
 
                     //apabila jumlah sisa sesi sudah habis maka tidak bisa melihat button
+
+                    if(arCard.size <= 1){
+                        ivNext.visibility = View.GONE
+                    }else{
+                        ivNext.visibility = View.VISIBLE
+                    }
                     if (sisaSesi > 0) {
                         for (i in buttons.indices) {
                             buttons[i].visibility = View.VISIBLE
