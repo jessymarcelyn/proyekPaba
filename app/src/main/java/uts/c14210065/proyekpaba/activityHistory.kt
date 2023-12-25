@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,8 @@ class activityHistory : AppCompatActivity() {
     lateinit var dayDate: Date
     val db = Firebase.firestore
     private var arHistory= arrayListOf<History>()
+    private var lastClickedButton: Button? = null
+    private var selectedCategoryButton: Button? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
@@ -37,15 +40,21 @@ class activityHistory : AppCompatActivity() {
         val _btnOClass = findViewById<Button>(R.id.btnOClass)
         val _btnOTrainer = findViewById<Button>(R.id.btnOTrainer)
 
+        changeButtonColor(_btnOGym)
+        ReadData(dayDate, "GymSesi")
+
         _btnOGym.setOnClickListener {
+            changeButtonColor(_btnOGym)
             ReadData(dayDate, "GymSesi")
         }
 
         _btnOClass.setOnClickListener {
+            changeButtonColor(_btnOClass)
             ReadData(dayDate, "Class")
         }
 
         _btnOTrainer.setOnClickListener {
+            changeButtonColor(_btnOTrainer)
             ReadDataTrainer(dayDate)
         }
 
@@ -58,6 +67,13 @@ class activityHistory : AppCompatActivity() {
 
     }
 
+     private fun changeButtonColor(clickedButton: Button) {
+        selectedCategoryButton?.setBackgroundColor(Color.WHITE)
+        clickedButton.setBackgroundColor(Color.parseColor("#C9F24D"))
+        selectedCategoryButton = clickedButton
+
+//        changeButtonVisible()
+    }
     private fun ReadData(date: Date, kategori: String){
         db.collection(kategori)
             .whereLessThanOrEqualTo("tanggal", date)
