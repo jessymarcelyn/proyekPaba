@@ -78,7 +78,7 @@ class detPembayaran : AppCompatActivity() {
             _tvDurasiTransaksi.setText(":   ${dataIntent!!.durasi} bulan")
         }
 
-        _tvTglMulaiT.setText(":   "  + dataIntent!!.tanggalBeli)
+        _tvTglMulaiT.setText(":   "  + dataIntent!!.tanggalMulai)
         _tvTglBerakhirT.setText(":   " + dataIntent!!.tanggalBerakhir)
     }
 }
