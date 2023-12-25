@@ -363,8 +363,8 @@ class sesiTrainer : AppCompatActivity() {
                             buttons[i].visibility = View.VISIBLE
                         }
 //                        TampilkanData2(dayDate)
-                        buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
-                        lastClickedButton = buttons[0]
+//                        buttons[0].setBackgroundColor(Color.parseColor("#C9F24D"))
+//                        lastClickedButton = buttons[0]
                     }
 //                    break
 
