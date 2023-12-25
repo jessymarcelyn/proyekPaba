@@ -92,8 +92,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistoryP"
         android:layout_width="319dp"
-        android:layout_height="417dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btnOTrainer"
         app:layout_constraintHorizontal_bias="0.416"
         app:layout_constraintStart_toStartOf="@+id/btnOGym"
