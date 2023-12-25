@@ -96,6 +96,12 @@ class fProfile : Fragment() {
             startActivity(intent)
         }
 
+        _btnMember.setOnClickListener{
+            val intent = Intent(activity, activityDetailMembership::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, idLogin)
+            startActivity(intent)
+        }
         _btnHistory.setOnClickListener{
             val intent = Intent(activity, activityHistory::class.java)
             intent.putExtra(utama.login, true)
