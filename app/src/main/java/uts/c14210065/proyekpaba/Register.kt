@@ -50,9 +50,11 @@ class Register : AppCompatActivity() {
 
 
 
-        val btnRegist = findViewById<Button>(R.id.btnRegist)
+        val btnRegistUser = findViewById<Button>(R.id.btnRegistUser)
+        val btnRegistTrainer = findViewById<Button>(R.id.btnRegistTrainer)
 
-        btnRegist.setOnClickListener{
+
+        btnRegistUser.setOnClickListener{
             val hashedPassword = hashPassword(_etPassword.text.toString())
             if (_etNama.text.toString().isNullOrBlank() || _etNomor.text.toString().isNullOrBlank() || _etPassword.text.toString().isNullOrBlank()||_etEmail.text.toString().isNullOrBlank()) {
                 // Salah satu atau lebih field kosong
@@ -65,6 +67,37 @@ class Register : AppCompatActivity() {
                         Toast.makeText(this@Register, "Nomor telah terdaftar", Toast.LENGTH_SHORT).show()
                     }else {
                         CreateData(
+                            _etNama.text.toString(),
+                            _etNomor.text.toString(),
+                            hashedPassword,
+                            selectedGender,
+                            _etEmail.text.toString()
+                        )
+                        _etNama.text.clear()
+                        _etNomor.text.clear()
+                        _etPassword.text.clear()
+                        _etEmail.text.clear()
+                        genderRadioGroup.clearCheck()
+                    }
+                }
+
+            }
+
+        }
+
+        btnRegistTrainer.setOnClickListener{
+            val hashedPassword = hashPassword(_etPassword.text.toString())
+            if (_etNama.text.toString().isNullOrBlank() || _etNomor.text.toString().isNullOrBlank() || _etPassword.text.toString().isNullOrBlank()||_etEmail.text.toString().isNullOrBlank()) {
+                // Salah satu atau lebih field kosong
+                Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
+            }else{
+                Log.d("masuk", "iya")
+                checkNumber(_etNomor.text.toString()){registered ->
+                    Log.d("registerd", registered.toString())
+                    if(registered){
+                        Toast.makeText(this@Register, "Nomor telah terdaftar", Toast.LENGTH_SHORT).show()
+                    }else {
+                        CreateDataTrainer(
                             _etNama.text.toString(),
                             _etNomor.text.toString(),
                             hashedPassword,
@@ -103,6 +136,33 @@ class Register : AppCompatActivity() {
         return BCrypt.hashpw(password, BCrypt.gensalt())
     }
 
+    fun CreateDataTrainer(nama: String, nomor: String, password: String, gender: String, email: String){
+        val userCollection = db.collection("Trainer")
+
+        // Membuat data yang akan disimpan di Firestore
+        val userData = hashMapOf(
+            "nama" to nama,
+            "nomor" to nomor,
+            "password" to password,
+            "gender" to gender,
+            "email" to email,
+            "skills" to emptyList<String>(),
+            "clientId" to emptyList<String>(),
+            "foto" to "trainer_betty"
+        )
+
+        // Menambahkan data ke Firestore
+        userCollection.add(userData)
+            .addOnSuccessListener {
+                val intent = Intent(this@Register, MainActivity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { e ->
+                // Handle ketika terjadi kesalahan
+                // Misalnya, tampilkan pesan kesalahan atau log kesalahan
+                Log.d("gagal", "iya")
+            }
+    }
     fun CreateData(nama: String, nomor: String, password: String, gender: String, email: String){
         val userCollection = db.collection("users")
 
