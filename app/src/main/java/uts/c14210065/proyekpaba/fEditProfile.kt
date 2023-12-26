@@ -1,6 +1,8 @@
 package uts.c14210065.proyekpaba
 
+import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -46,15 +48,23 @@ class fEditProfile : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_f_edit_profile, container, false)
     }
+
+    lateinit var _edNama : EditText
+    lateinit var _edBerat : EditText
+    lateinit var _edTinggi : EditText
+    lateinit var _edPassword : EditText
+    lateinit var _edEmail : EditText
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         idLogin = arguments?.getString("userId")!!
 
-        var _edNama = view.findViewById<EditText>(R.id.edNama)
-        var _edBerat = view.findViewById<EditText>(R.id.edBerat)
-        var _edTinggi = view.findViewById<EditText>(R.id.edTinggi)
-        var _edPassword = view.findViewById<EditText>(R.id.edPassword)
-        var _edEmail = view.findViewById<EditText>(R.id.edEmail)
+        _edNama = view.findViewById<EditText>(R.id.edNama)
+        _edBerat = view.findViewById<EditText>(R.id.edBerat)
+        _edTinggi = view.findViewById<EditText>(R.id.edTinggi)
+        _edPassword = view.findViewById<EditText>(R.id.edPassword)
+        _edEmail = view.findViewById<EditText>(R.id.edEmail)
+
+        ReadData(idLogin)
 
         var _btnSave = view.findViewById<Button>(R.id.btnSave)
 
@@ -67,40 +77,40 @@ class fEditProfile : Fragment() {
 
 
             if(updatedNama.isNotBlank()) {
-                UpdateData("nama", updatedNama)
+                UpdateData("nama", updatedNama, idLogin)
                 _edNama.text.clear()
             }
             if(updatedBerat.isNotBlank()){
-                UpdateData("berat", updatedBerat)
+                UpdateData("berat", updatedBerat, idLogin)
                 _edBerat.text.clear()
             }
             if(updatedTinggi.isNotBlank()){
-                UpdateData("tinggi", updatedTinggi)
+                UpdateData("tinggi", updatedTinggi, idLogin)
                 _edTinggi.text.clear()
             }
             if(updatedEmail.isNotBlank()) {
-                UpdateData("email", updatedEmail)
+                UpdateData("email", updatedEmail, idLogin)
                 _edEmail.text.clear()
             }
             if(updatedPassword.isNotBlank()) {
-                UpdateData("password", updatedPassword)
+                UpdateData("password", updatedPassword, idLogin)
                 _edPassword.text.clear()
             }
 
         }
     }
 
-    private fun UpdateData(field:String, data:String) {
+    private fun UpdateData(field:String, data:String, userId: String) {
         if (field == "tinggi" || field == "berat") data.toInt()
         db.collection("users")
-            .document(idLogin)
+            .document(userId)
             .update(field, data)
             .addOnSuccessListener {
                 Log.d(ContentValues.TAG, "DocumentSnapshot successfully updated!")
                 // Tambahan: Tampilkan pesan atau lakukan tindakan lain setelah berhasil update
-//                Toast.makeText(this@fEditProfile, "berhasil update", Toast.LENGTH_SHORT).show)
-//                Toast.makeText(this@fEditProfile, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show()
+                showAlert(requireContext(), "Update Profile Berhasil", "Perubahan data telah berhasil dilakukan")
                 Log.d("updated db", "db berhasil di update")
+                ReadData(userId)
 
             }
             .addOnFailureListener { e ->
@@ -108,6 +118,36 @@ class fEditProfile : Fragment() {
                 // Tambahan: Tampilkan pesan atau lakukan tindakan lain jika update gagal
 //                Toast.makeText(this@fEditProfile, "Gagal memperbarui data", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun ReadData(userId : String) {
+        db.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener {document ->
+                Log.d("read db", "db berhasil di update")
+                _edNama.hint = document.get("nama").toString()
+                _edBerat.hint = document.get("berat").toString()
+                _edTinggi.hint = document.get("tinggi").toString()
+                _edEmail.hint = document.get("email").toString()
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error updating document", e)
+                // Tambahan: Tampilkan pesan atau lakukan tindakan lain jika update gagal
+//                Toast.makeText(this@fEditProfile, "Gagal memperbarui data", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Handle the "OK" button click if needed
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
     companion object {
         /**
