@@ -51,7 +51,11 @@ class detPembayaran : AppCompatActivity() {
             _tvPaket.setText(":   " + dataIntent!!.pilihan + "\n   (paket ${dataIntent!!.idPaket})")
             _tvStatuss.visibility = View.VISIBLE
             _tvStatus.visibility = View.VISIBLE
-            _tvStatus.setText(":   " + dataIntent!!.status.toString())
+            if(dataIntent!!.status == 0) {
+                _tvStatus.setText(":   tidak aktif")
+            }else{
+                _tvStatus.setText(":   aktif")
+            }
             _tvTglMulaiT.setText(":   " + dataIntent!!.totalSesi.toString())
             val db = Firebase.firestore
             db.collection("Trainer").get().addOnSuccessListener { result ->
