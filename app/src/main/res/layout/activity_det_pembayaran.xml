@@ -154,28 +154,16 @@
         app:layout_constraintTop_toBottomOf="@+id/tvMulaii" />
 
     <TextView
-        android:id="@+id/TVTotalSesii"
+        android:id="@+id/tvStatuss"
         android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:text="Total Sesi"
+        android:text="Status"
         android:textColor="#F6F2F2"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvBerakhirr"
         app:layout_constraintTop_toBottomOf="@+id/tvBerakhirr" />
-
-    <TextView
-        android:id="@+id/tvNamaTrainerTransaksii"
-        android:layout_width="136dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:text="Nama Trainer"
-        android:textColor="#F6F2F2"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/TVTotalSesii"
-        app:layout_constraintTop_toBottomOf="@+id/TVTotalSesii" />
 
     <TextView
         android:id="@+id/tvTglTransaksi"
@@ -255,27 +243,15 @@
         app:layout_constraintTop_toTopOf="@+id/tvBerakhirr" />
 
     <TextView
-        android:id="@+id/TVTotalSesi"
+        android:id="@+id/tvStatus"
         android:layout_width="201dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/TVTotalSesii"
-        app:layout_constraintTop_toTopOf="@+id/TVTotalSesii" />
-
-    <TextView
-        android:id="@+id/tvNamaTrainerTransaksi"
-        android:layout_width="201dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/tvNamaTrainerTransaksii"
-        app:layout_constraintTop_toTopOf="@+id/tvNamaTrainerTransaksii" />
-
-
+        app:layout_constraintStart_toEndOf="@+id/tvStatuss"
+        app:layout_constraintTop_toTopOf="@+id/tvStatuss" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

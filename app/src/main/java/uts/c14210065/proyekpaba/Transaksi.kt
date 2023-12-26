@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Transaksi(
     var idTransaksi: String,
     var tanggalBeliTimeStamp: Long,
+    var status: Int,
     var durasi: Int,
     var harga: Int,
     var idPaket: String,

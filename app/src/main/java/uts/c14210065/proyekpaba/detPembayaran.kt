@@ -3,7 +3,6 @@ package uts.c14210065.proyekpaba
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.google.firebase.firestore.ktx.firestore
@@ -27,18 +26,16 @@ class detPembayaran : AppCompatActivity() {
         var _tvDurasiTransaksi = findViewById<TextView>(R.id.tvDurasiTransaksi)
         var _tvTglMulaiT = findViewById<TextView>(R.id.tvTglMulaiT)
         var _tvTglBerakhirT = findViewById<TextView>(R.id.tvTglBerakhirT)
-        var _TVTotalSesi = findViewById<TextView>(R.id.TVTotalSesi)
-        var _tvNamaTrainerTransaksi = findViewById<TextView>(R.id.tvNamaTrainerTransaksi)
+        var _tvStatus = findViewById<TextView>(R.id.tvStatus)
+
 
         var _tvMulaii = findViewById<TextView>(R.id.tvMulaii)
         var _tvBerakhirr = findViewById<TextView>(R.id.tvBerakhirr)
 
-        var _TVTotalSesii = findViewById<TextView>(R.id.TVTotalSesii)
-        var _tvNamaTrainerTransaksii = findViewById<TextView>(R.id.tvNamaTrainerTransaksii)
-        _TVTotalSesii.visibility = View.GONE
-        _tvNamaTrainerTransaksii.visibility = View.GONE
-        _TVTotalSesi.visibility = View.GONE
-        _tvNamaTrainerTransaksi.visibility = View.GONE
+        var _tvStatuss = findViewById<TextView>(R.id.tvStatuss)
+
+        _tvStatuss.visibility = View.GONE
+        _tvStatus.visibility = View.GONE
 
         _tvidTransaksii.setText(dataIntent!!.idTransaksi)
         _tvTglTransaksi.setText(":   " + dataIntent!!.tanggalBeli)
@@ -52,10 +49,9 @@ class detPembayaran : AppCompatActivity() {
             _tvMulaii.setText("Total Sesi ")
             _tvBerakhirr.setText("Nama Trainer ")
             _tvPaket.setText(":   " + dataIntent!!.pilihan + "\n   (paket ${dataIntent!!.idPaket})")
-//            _TVTotalSesii.visibility = View.VISIBLE
-//            _tvNamaTrainerTransaksii.visibility = View.VISIBLE
-//            _TVTotalSesi.visibility = View.VISIBLE
-//            _tvNamaTrainerTransaksi.visibility = View.VISIBLE
+            _tvStatuss.visibility = View.VISIBLE
+            _tvStatus.visibility = View.VISIBLE
+            _tvStatus.setText(":   " + dataIntent!!.status.toString())
             _tvTglMulaiT.setText(":   " + dataIntent!!.totalSesi.toString())
             val db = Firebase.firestore
             db.collection("Trainer").get().addOnSuccessListener { result ->

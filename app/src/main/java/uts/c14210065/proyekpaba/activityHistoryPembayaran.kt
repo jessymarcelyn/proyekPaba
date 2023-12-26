@@ -67,6 +67,7 @@ class activityHistoryPembayaran : AppCompatActivity() {
 
                 if(idUser == idLogin) {
                     val durasi = document.getLong("durasi")?.toInt() ?: 0
+                    val status = document.getLong("status")?.toInt() ?: 0
                     val harga = document.getLong("harga")?.toInt() ?: 0
                     val idPaket = document.getString("idPaket") ?: ""
                     val idTrainer = document.getString("idTrainer") ?: ""
@@ -102,6 +103,7 @@ class activityHistoryPembayaran : AppCompatActivity() {
                             Transaksi(
                                 idTransaksi,
                                 tanggalBeli,
+                                status,
                                 durasi,
                                 harga,
                                 idPaket,
@@ -135,6 +137,7 @@ class activityHistoryPembayaran : AppCompatActivity() {
                             Transaksi(
                                 idTransaksi,
                                 tanggalBeli,
+                                status,
                                 durasi,
                                 harga,
                                 idPaket,
