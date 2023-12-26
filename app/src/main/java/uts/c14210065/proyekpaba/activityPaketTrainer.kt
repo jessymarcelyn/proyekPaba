@@ -205,5 +205,32 @@ class activityPaketTrainer : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Log.d("paket", "Error: $e")
             }
+
+        db.collection("Transaksi").get().addOnSuccessListener { result ->
+            var docId: String? = null
+            for (document in result) {
+                var idUser = document.getString("idUser")
+                var idTrainer = document.getString("idTrainer")
+
+                if (idUser == loginId && idTrainer == trainerId) {
+                    docId = document.id
+                    break
+                }
+            }
+            Log.d("transaksi", "docid: $docId")
+            if (docId != null) {
+                db.collection("Transaksi").document(docId)
+                    .update("status", 0)
+                    .addOnSuccessListener {
+                        Log.d("paket", "status updated")
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.d("paket", "Error: $e")
+                    }
+            } else {
+                Log.d("paket", "gagal")
+            }
+        }
     }
 }

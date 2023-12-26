@@ -359,6 +359,7 @@ class Pembayaran : AppCompatActivity() {
                         "harga" to harga,
                         "jenisPembayaran" to pembayaran,
                         "pilihan" to pilihan,
+                        "status" to 1,
                         "tanggalBeli" to FieldValue.serverTimestamp()
                     )
 
