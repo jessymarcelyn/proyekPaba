@@ -3,7 +3,6 @@ package uts.c14210065.proyekpaba
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +13,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -195,6 +193,69 @@ class activityOngoing : AppCompatActivity() {
                                         }
 
 
+
+                                    //tambahkan ke database cancel gym
+                                    db.collection("CancelGym").get()
+                                        .addOnSuccessListener { cancelGymResult ->
+                                            var documentExists = false
+
+                                            for (cancelGymDocument in cancelGymResult) {
+                                                if (cancelGymDocument.id == idLogin) {
+                                                    // Document with the specified ID exists
+                                                    documentExists = true
+                                                    break
+                                                }
+                                            }
+                                            //sudah ada dokumen sebelumnya dengan idLogin
+                                            if (documentExists) {
+                                                //update gabungkan array idGym
+                                                val idGymValue = arOngoingG[pos].idGym
+                                                db.collection("CancelGym").document(idLogin)
+                                                    .update(
+                                                        "idGym",
+                                                        FieldValue.arrayUnion(idGymValue)
+                                                    )
+                                                    .addOnSuccessListener {
+                                                        // Update successful
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.w(
+                                                            "pembayaran member",
+                                                            "Error updating document",
+                                                            e
+                                                        )
+                                                    }
+                                            } else {
+                                                //gabungkan tanggal dan sesi yang merupakan string ke timestamp.
+                                                val dateFormat =
+                                                    SimpleDateFormat("dd MMM yyyy HH:mm")
+                                                val dateTimeString =
+                                                    "${arOngoingG[pos].tanggal} ${arOngoingG[pos].sesi}"
+                                                val date = dateFormat.parse(dateTimeString)
+                                                val timestamp = Timestamp(date)
+
+                                                val newData = hashMapOf(
+                                                    "idGym" to arrayListOf(arOngoingG[pos].idGym)
+                                                )
+
+                                                db.collection("CancelGym").document(idLogin)
+                                                    .set(newData)
+                                                    .addOnSuccessListener {
+                                                        // Document successfully written
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.w("zxzx", "Error writing document", e)
+                                                    }
+
+                                            }
+                                        }.addOnFailureListener { exception ->
+                                        // Handle failures
+                                        Log.w(
+                                            "pembayaran member",
+                                            "Error getting documents.",
+                                            exception
+                                        )
+                                    }
                                 }
                                 .addOnFailureListener {
                                     showAlert(
@@ -556,13 +617,16 @@ class activityOngoing : AppCompatActivity() {
                     userTrainerId = userTrainerDocument.id
                     fetchJadwalTrainer(userTrainerId, btnDate, idTrainer)
                 } else {
-                    Log.d("sesiTrainerr", "tidak masuk: idUser=$idUser, idLogin=$idLogin, tanggalBerakhir=$tanggalBerakhir, currentDate=$currentDate")
+                    Log.d(
+                        "sesiTrainerr",
+                        "tidak masuk: idUser=$idUser, idLogin=$idLogin, tanggalBerakhir=$tanggalBerakhir, currentDate=$currentDate"
+                    )
                 }
             }
         }
     }
 
-    private fun fetchJadwalTrainer(userTrainerId: String, btnDate: Date, idTrainer:String) {
+    private fun fetchJadwalTrainer(userTrainerId: String, btnDate: Date, idTrainer: String) {
         db.collection("JadwalTrainer").whereEqualTo("userTrainerId", userTrainerId)
             .get().addOnSuccessListener { jadwalTrainerResult ->
                 for (jadwalTrainerDocument in jadwalTrainerResult) {
@@ -649,7 +713,6 @@ class activityOngoing : AppCompatActivity() {
                 Log.e("haes", "Error fetching data from Firebase", e)
             }
     }
-
 
 
     //menampilkan data trainer

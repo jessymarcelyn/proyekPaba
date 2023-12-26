@@ -120,7 +120,7 @@ class fGym : Fragment() {
         }
 
         _rvGym.layoutManager = LinearLayoutManager(context)
-        val adapterP = adapterGym(arGym, idLogin, requireContext())
+        val adapterP = adapterGym(arGym, idLogin)
         _rvGym.adapter = adapterP
 
         adapterP.setOnItemClickCallback(object : adapterGym.OnItemClickCallback {

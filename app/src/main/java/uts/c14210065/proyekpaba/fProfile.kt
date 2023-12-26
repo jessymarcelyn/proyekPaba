@@ -82,6 +82,13 @@ class fProfile : Fragment() {
             startActivity(intent)
         }
 
+        _btnCancelH.setOnClickListener{
+            val intent = Intent(activity, activityCancel::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, idLogin)
+            startActivity(intent)
+        }
+
         _btnOnGoing.setOnClickListener{
             val intent = Intent(activity, activityOngoing::class.java)
             intent.putExtra(utama.login, true)

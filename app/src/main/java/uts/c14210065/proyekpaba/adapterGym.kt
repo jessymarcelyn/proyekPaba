@@ -18,8 +18,7 @@ import com.google.firebase.firestore.firestore
 
 class adapterGym(
     private val listGym: ArrayList<Gym>,
-    private val idLogin: String?,
-    private val context: Context
+    private val idLogin: String?
 ) : RecyclerView.Adapter<adapterGym.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
