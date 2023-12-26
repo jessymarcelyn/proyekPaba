@@ -48,17 +48,29 @@
         app:layout_constraintTop_toBottomOf="@+id/etNomor" />
 
     <Button
-        android:id="@+id/btnLogin2"
+        android:id="@+id/btnLoginTrainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginEnd="10dp"
         android:backgroundTint="#8E8F8A"
         android:enabled="false"
-        android:text="Login"
+        android:text="Login Trainer"
         android:textColor="@color/black"
         app:cornerRadius="20sp"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
-        app:layout_constraintHorizontal_bias="0.543"
+        app:layout_constraintTop_toTopOf="@+id/btnLoginUser" />
+
+    <Button
+        android:id="@+id/btnLoginUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#8E8F8A"
+        android:enabled="false"
+        android:text="Login User"
+        android:textColor="@color/black"
+        app:cornerRadius="20sp"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 

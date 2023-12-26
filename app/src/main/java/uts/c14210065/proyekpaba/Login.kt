@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -33,6 +34,7 @@ class Login : AppCompatActivity() {
     lateinit var _etPassword: EditText
     lateinit var _tvGagal: TextView
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -44,34 +46,44 @@ class Login : AppCompatActivity() {
 
         _tvGagal = findViewById<TextView>(R.id.tvGagal)
 
-        val _btnLogin2 = findViewById<Button>(R.id.btnLogin2)
+        val _btnLoginUser = findViewById<Button>(R.id.btnLoginUser)
+        val _btnLoginTrainer = findViewById<Button>(R.id.btnLoginTrainer)
 
 //        _btnLogin2.isEnabled = !(_etNomor?.text.isNullOrEmpty() || _etPassword?.text.isNullOrEmpty())
 
         _etNomor?.addTextChangedListener {
             val isNotEmpty = !_etNomor?.text.isNullOrEmpty() && !_etPassword?.text.isNullOrEmpty()
-            _btnLogin2.isEnabled = isNotEmpty
+            _btnLoginUser.isEnabled = isNotEmpty
+            _btnLoginTrainer.isEnabled = isNotEmpty
             if (isNotEmpty) {
-                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+                _btnLoginUser.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+                _btnLoginTrainer.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
             } else {
-                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
+                _btnLoginUser.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
+                _btnLoginTrainer.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
             }
         }
 
         _etPassword?.addTextChangedListener {
             val isNotEmpty = !_etNomor?.text.isNullOrEmpty() && !_etPassword?.text.isNullOrEmpty()
-            _btnLogin2.isEnabled = isNotEmpty
+            _btnLoginUser.isEnabled = isNotEmpty
+            _btnLoginTrainer.isEnabled = isNotEmpty
             if (isNotEmpty) {
-                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+                _btnLoginUser.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+                _btnLoginTrainer.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
             } else {
-                _btnLogin2.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
+                _btnLoginUser.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
+                _btnLoginTrainer.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#8E8F8A"))
             }
         }
 
 
+        _btnLoginUser.setOnClickListener {
+            ReadData("users")
+        }
 
-        _btnLogin2.setOnClickListener {
-            ReadData()
+        _btnLoginTrainer.setOnClickListener {
+            ReadData("Trainer")
         }
     }
     fun hashPassword(password: String): String {
@@ -82,11 +94,11 @@ class Login : AppCompatActivity() {
     fun checkPassword(candidate: String, hashed: String): Boolean {
         return BCrypt.checkpw(candidate, hashed)
     }
-    fun ReadData() {
+    fun ReadData(kategori:String) {
         val enteredNoTelp = _etNomor.text.toString()
         val enteredPassword = _etPassword.text.toString()
-
-        db.collection("users").get().addOnSuccessListener { result ->
+        Log.d("kategori", kategori)
+        db.collection(kategori).get().addOnSuccessListener { result ->
 
             for (document in result) {
                 var id = document.id
@@ -109,7 +121,6 @@ class Login : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
             }
-
             _tvGagal.visibility = View.VISIBLE
         }
     }
