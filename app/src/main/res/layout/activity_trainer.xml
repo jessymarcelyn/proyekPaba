@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212122"
+    tools:context=".activityTrainer">
+
+    <TextView
+        android:id="@+id/tvNama2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="100dp"
+        android:text="Dummy Yummy"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#C9F24D"
+        android:drawableLeft="@drawable/baseline_card_membership_24"
+        android:padding="10sp"
+        android:text="Input Jadwal"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:cornerRadius="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/iconEdit2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/tvSkilll" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#C9F24D"
+        android:drawableLeft="@drawable/baseline_logout_24"
+        android:padding="10sp"
+        android:text="Logout"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:cornerRadius="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/iconEdit2"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/btnInput" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Skills"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/tvEmail3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="siti@gmail.com"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/tvSkilll"
+        android:layout_width="228dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="8dp"
+        android:text="-"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/tvNomor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+628123456789"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/tvEmail3"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/iconEdit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/rounded_background3"
+        android:padding="10sp"
+        android:src="@drawable/baseline_edit_24"
+        app:cornerRadius="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNama2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvNama2" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/baseline_call_24"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/baseline_email_24"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/tvNama2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
