@@ -127,8 +127,8 @@ class fEditProfile : Fragment() {
             .addOnSuccessListener {document ->
                 Log.d("read db", "db berhasil di update")
                 _edNama.hint = document.get("nama").toString()
-                _edBerat.hint = document.get("berat").toString()
-                _edTinggi.hint = document.get("tinggi").toString()
+                _edBerat.hint = document.get("berat").toString() + "kg"
+                _edTinggi.hint = document.get("tinggi").toString() + "cm"
                 _edEmail.hint = document.get("email").toString()
             }
             .addOnFailureListener { e ->
