@@ -58,6 +58,7 @@ class fProfile : Fragment() {
         val _btnPayment = view.findViewById<Button>(R.id.btnPayment)
         val _btnMember = view.findViewById<Button>(R.id.btnMember)
         val _btnOnGoing = view.findViewById<Button>(R.id.btnOnGoing)
+        val _btnCancelH =  view.findViewById<Button>(R.id.btnCancelHistory)
         val  _iconedit = view.findViewById<ImageView>(R.id.iconEdit)
 
         tvNama = view.findViewById<TextView>(R.id.tvNama2)

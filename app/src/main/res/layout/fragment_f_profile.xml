@@ -83,8 +83,9 @@
         android:textColor="@color/black"
         app:cornerRadius="10sp"
         app:layout_constraintEnd_toEndOf="@+id/iconEdit"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvNama2"
-        app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
+        app:layout_constraintTop_toBottomOf="@+id/btnCancelHistory" />
 
     <Button
         android:id="@+id/btnOnGoing"
@@ -101,6 +102,22 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvNama2"
         app:layout_constraintTop_toBottomOf="@+id/btnTrainer" />
+
+    <Button
+        android:id="@+id/btnCancelHistory"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#C9F24D"
+        android:drawableLeft="@drawable/outline_free_cancellation_24"
+        android:padding="10sp"
+        android:text="Cancel History"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:cornerRadius="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/iconEdit"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/btnPayment" />
 
     <Button
         android:id="@+id/btnHistory3"
