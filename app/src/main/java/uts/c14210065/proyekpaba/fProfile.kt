@@ -37,7 +37,8 @@ class fProfile : Fragment() {
     lateinit var tvNama : TextView
     lateinit var tvNomor : TextView
     lateinit var tvEmail : TextView
-
+    lateinit var tvBerat : TextView
+    lateinit var tvTinggi : TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -62,7 +63,8 @@ class fProfile : Fragment() {
         tvNama = view.findViewById<TextView>(R.id.tvNama2)
         tvEmail = view.findViewById<TextView>(R.id.tvEmail3)
         tvNomor = view.findViewById<TextView>(R.id.tvNomor)
-
+        tvBerat = view.findViewById(R.id.tvBerat)
+        tvTinggi = view.findViewById(R.id.tvTinggi)
 
         _btnLogout.setOnClickListener{
             val intent = Intent(activity, MainActivity::class.java)
@@ -118,6 +120,8 @@ class fProfile : Fragment() {
                 tvNama.text = result.get("nama").toString()
                 tvNomor.text = result.get("nomor").toString()
                 tvEmail.text = result.get("email").toString()
+                tvBerat.text = result.get("berat").toString() + " kg"
+                tvTinggi.text = result.get("tinggi").toString() + " cm"
             }
     }
     override fun onCreateView(

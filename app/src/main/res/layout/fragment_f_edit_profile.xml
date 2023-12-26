@@ -32,7 +32,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Tinggi"
-        android:inputType="text"
+        android:inputType="number"
         android:padding="10sp"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/edNama"

@@ -110,7 +110,8 @@ class fEditProfile : Fragment() {
                 // Tambahan: Tampilkan pesan atau lakukan tindakan lain setelah berhasil update
                 showAlert(requireContext(), "Update Profile Berhasil", "Perubahan data telah berhasil dilakukan")
                 Log.d("updated db", "db berhasil di update")
-                ReadData(userId)
+//                ReadData(userId)
+                (activity as utama).goToPage(fProfile())
 
             }
             .addOnFailureListener { e ->
