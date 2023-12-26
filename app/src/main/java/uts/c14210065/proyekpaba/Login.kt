@@ -112,13 +112,23 @@ class Login : AppCompatActivity() {
                 if (enteredNoTelp == noTelp && passwordMatches) {
 //                if (enteredNoTelp == noTelp && enteredPassword==password) {
 
-                    val intentWithData = Intent(this@Login, utama::class.java).apply {
-                        putExtra(utama.login, true)
-                        putExtra(utama.userId, id.toString())
-                        Log.d("Dataid", id.toString())
+                    if(kategori == "users") {
+                        val intentWithData = Intent(this@Login, utama::class.java).apply {
+                            putExtra(utama.login, true)
+                            putExtra(utama.userId, id.toString())
+                            Log.d("Dataid", id.toString())
+                        }
+                        startActivity(intentWithData)
+                        return@addOnSuccessListener
+                    }else{
+                        val intentWithData = Intent(this@Login, activityTrainer::class.java).apply {
+                            putExtra(activityTrainer.login, true)
+                            putExtra(activityTrainer.userId, id.toString())
+                            Log.d("Dataid", id.toString())
+                        }
+                        startActivity(intentWithData)
+                        return@addOnSuccessListener
                     }
-                    startActivity(intentWithData)
-                    return@addOnSuccessListener
                 }
             }
             _tvGagal.visibility = View.VISIBLE
