@@ -255,6 +255,12 @@ class fClass : Fragment() {
                                                 "gagal update"
                                             )
                                         }
+                                } else {
+                                    showAlert(
+                                        requireContext(),
+                                        "Booking Gagal",
+                                        "Anda belum berlangganan membership gym"
+                                    )
                                 }
                             }
                     } else {
