@@ -111,7 +111,7 @@ class fEditProfile : Fragment() {
                 showAlert(requireContext(), "Update Profile Berhasil", "Perubahan data telah berhasil dilakukan")
                 Log.d("updated db", "db berhasil di update")
 //                ReadData(userId)
-                (activity as utama).goToPage(fProfile())
+//                (activity as utama).goToPage(fProfile())
 
             }
             .addOnFailureListener { e ->
