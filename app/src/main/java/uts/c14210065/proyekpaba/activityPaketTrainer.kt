@@ -1,6 +1,8 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +22,7 @@ import kotlin.math.log
 
 class activityPaketTrainer : AppCompatActivity() {
 
-//    lateinit var btnBack: ImageView
+    lateinit var btnBack: ImageView
     lateinit var ivDet: ImageView
     lateinit var tvNama: TextView
     lateinit var tvClient: TextView
@@ -56,7 +58,7 @@ class activityPaketTrainer : AppCompatActivity() {
         tvNama = findViewById(R.id.tvDetNamaTrainer)
         tvClient = findViewById(R.id.tvDetClientTrainer)
         tvSkill = findViewById(R.id.tvDetSkillTrainer)
-//        btnBack = findViewById(R.id.btnDetTrainerBack)
+        btnBack = findViewById(R.id.btnPaketTrainerBack)
         btnCancel = findViewById(R.id.btnCancel)
 
         btn1 = findViewById(R.id.btnPaket1)
@@ -69,20 +71,13 @@ class activityPaketTrainer : AppCompatActivity() {
         pilihanPaket = findViewById(R.id.pilihanPaket)
         tvPilihPaket = findViewById(R.id.tvPilihPaket)
 
-//        btnBack.setOnClickListener {
-//            val intentWithData = Intent(this@activityPaketTrainer, utama::class.java).apply {
-//                putExtra("navigateToFragment", "fTrainer")
-//                putExtra(utama.userId, loginId)
-//                if(loginId != "0"){
-//                    Log.d("ddd", "Masuk1")
-//                    putExtra(utama.login, true)
-//                }else{
-//                    Log.d("ddd", "Masuk2")
-//                    putExtra(utama.login, false)
-//                }
-//            }
-//            startActivity(intentWithData)
-//        }
+        btnBack.setOnClickListener {
+            val intent = Intent(this, utama::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, loginId)
+            startActivity(intent)
+            finish()
+        }
 
         TampilkanData()
 
@@ -104,17 +99,24 @@ class activityPaketTrainer : AppCompatActivity() {
         btn6.setOnClickListener {
             PilihPaket(6)
         }
-
     }
 
-//    override fun onBackPressed() {
-//        val fragmentManager = supportFragmentManager
-//        if (fragmentManager.backStackEntryCount > 0) {
-//            fragmentManager.popBackStack()
-//        } else {
-//            super.onBackPressed()
-//        }
-//    }
+    fun showAlert(
+        context: Context,
+        title: String,
+        message: String,
+        callback: () -> Unit
+    ) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            callback.invoke()
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
 
     fun TampilkanData() {
         db.collection("Trainer").get().addOnSuccessListener { result ->
@@ -163,11 +165,24 @@ class activityPaketTrainer : AppCompatActivity() {
     }
 
     fun PilihPaket(paket: Int) {
+        if (loginId != "0") {
             val intent = Intent(this, Pembayaran::class.java)
             intent.putExtra("userId", loginId)
             intent.putExtra("paket", paket)
             intent.putExtra("trainerId", trainerId)
             startActivity(intent)
+        } else {
+            showAlert(
+                this,
+                "Pembelian gagal",
+                "Silakan Register/Login dahulu",
+                {
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    startActivity(mainIntent)
+                    finish()
+                }
+            )
+        }
     }
 
     private fun CancelTrainer(documentId: String) {

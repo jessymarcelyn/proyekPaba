@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.Firebase
@@ -21,7 +23,7 @@ class Membership : AppCompatActivity() {
     lateinit var btnSilver: CardView
     lateinit var btnGold: CardView
     lateinit var btnDiamond: CardView
-//    lateinit var btnBack: ImageView
+    lateinit var btnBack: ImageView
 
     lateinit var jenisBronze: TextView
     lateinit var jenisSilver: TextView
@@ -128,16 +130,15 @@ class Membership : AppCompatActivity() {
         btnSilver = findViewById(R.id.silver)
         btnGold = findViewById(R.id.gold)
         btnDiamond = findViewById(R.id.diamond)
-//        btnBack = findViewById(R.id.btnMemberBack)
+        btnBack = findViewById(R.id.btnMemberBack)
 
-//        btnBack.setOnClickListener {
-//            val intentWithData = Intent(this@Membership, utama::class.java).apply {
-//                putExtra("navigateToFragment", "fJoin")
-//                putExtra("userId", loginId)
-//                Log.d("cobaMembership", "loginId: $loginId")
-//            }
-//            startActivity(intentWithData)
-//        }
+        btnBack.setOnClickListener {
+            val intent = Intent(this, utama::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, loginId)
+            startActivity(intent)
+            finish()
+        }
 
         btnBronze.setOnClickListener {
             goToPembayaran(1950000, "bronze", 6)
@@ -153,21 +154,43 @@ class Membership : AppCompatActivity() {
         }
     }
 
-    fun goToPembayaran(value: Int, jenis: String, durasi: Int) {
-        val intent = Intent(this, Pembayaran::class.java)
-        intent.putExtra("pembayaranMember", value)
-        intent.putExtra("jenisMember", jenis)
-        intent.putExtra("durasiMember", durasi)
-        intent.putExtra("userId", loginId)
-        startActivity(intent)
+    fun showAlert(
+        context: Context,
+        title: String,
+        message: String,
+        callback: () -> Unit
+    ) {
+        val builder = android.app.AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            callback.invoke()
+            dialog.dismiss()
+        }
+        val dialog: android.app.AlertDialog = builder.create()
+        dialog.show()
     }
 
-    override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
+    fun goToPembayaran(value: Int, jenis: String, durasi: Int) {
+        if (loginId != "0") {
+            val intent = Intent(this, Pembayaran::class.java)
+            intent.putExtra("pembayaranMember", value)
+            intent.putExtra("jenisMember", jenis)
+            intent.putExtra("durasiMember", durasi)
+            intent.putExtra("userId", loginId)
+            startActivity(intent)
+        }
+        else {
+            showAlert(
+                this,
+                "Pembelian gagal",
+                "Silakan Register/Login dahulu",
+                {
+                    val mainIntent = Intent(this, MainActivity::class.java)
+                    startActivity(mainIntent)
+                    finish()
+                }
+            )
         }
     }
 }

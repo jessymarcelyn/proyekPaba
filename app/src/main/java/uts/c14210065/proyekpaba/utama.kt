@@ -41,40 +41,40 @@ class utama : AppCompatActivity() {
         Log.d("idLogin", idLogin)
         Log.d("dataLogin", dataLogin.toString())
 
-        if (dataLogin.toString() == "false") {
-            val navigateToFragment = intent.getStringExtra("navigateToFragment")
-
-            var loginid = intent.getStringExtra("userId")
-            idLogin = loginid ?: "0"
-
-            Log.d("utama", "navigateToFragment: $navigateToFragment")
-            Log.d("utama", "loginId: $loginid")
-            Log.d("utama", "idLogin: $idLogin")
-
-            if (navigateToFragment == "fTrainer") {
-                val mFragmentManager = supportFragmentManager
-                val mfSatu = fTrainer()
-
-                val mBundle = Bundle()
-                mBundle.putString("userId", loginid)
-                mfSatu.arguments = mBundle
-
-                mFragmentManager.findFragmentByTag(fTrainer()::class.java.simpleName)
-                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fTrainer()::class.java.simpleName).commit()
-            }
-            if (navigateToFragment == "fJoin") {
-                val mFragmentManager = supportFragmentManager
-                val mfSatu = fJoin()
-
-                val mBundle = Bundle()
+//        if (dataLogin.toString() == "false") {
+//            val navigateToFragment = intent.getStringExtra("navigateToFragment")
+//
+//            var loginid = intent.getStringExtra("userId")
+//            idLogin = loginid ?: "0"
+//
+//            Log.d("utama", "navigateToFragment: $navigateToFragment")
+//            Log.d("utama", "loginId: $loginid")
+//            Log.d("utama", "idLogin: $idLogin")
+//
+//            if (navigateToFragment == "fTrainer") {
+//                val mFragmentManager = supportFragmentManager
+//                val mfSatu = fTrainer()
+//
+//                val mBundle = Bundle()
 //                mBundle.putString("userId", loginid)
-                mBundle.putString(utama.userId, loginid)
-                mfSatu.arguments = mBundle
-
-                mFragmentManager.findFragmentByTag(fJoin()::class.java.simpleName)
-                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fJoin()::class.java.simpleName).commit()
-            }
-        }
+//                mfSatu.arguments = mBundle
+//
+//                mFragmentManager.findFragmentByTag(fTrainer()::class.java.simpleName)
+//                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fTrainer()::class.java.simpleName).commit()
+//            }
+//            if (navigateToFragment == "fJoin") {
+//                val mFragmentManager = supportFragmentManager
+//                val mfSatu = fJoin()
+//
+//                val mBundle = Bundle()
+////                mBundle.putString("userId", loginid)
+//                mBundle.putString(utama.userId, loginid)
+//                mfSatu.arguments = mBundle
+//
+//                mFragmentManager.findFragmentByTag(fJoin()::class.java.simpleName)
+//                mFragmentManager.beginTransaction().replace(R.id.frameLayout, mfSatu, fJoin()::class.java.simpleName).commit()
+//            }
+//        }
 
         _ivProfile.setOnClickListener {
             if (!dataLogin) {

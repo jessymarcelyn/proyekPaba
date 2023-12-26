@@ -1,6 +1,8 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -28,7 +30,7 @@ class Pembayaran : AppCompatActivity() {
     lateinit var cd: RadioButton
     lateinit var ovo: RadioButton
     lateinit var gopay: RadioButton
-//    lateinit var btnBack: ImageView
+    lateinit var btnBack: ImageView
     lateinit var btnBayar: Button
     lateinit var tvRincian: TextView
     lateinit var tvJenisMember: TextView
@@ -50,7 +52,7 @@ class Pembayaran : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pembayaran)
 
-//        btnBack = findViewById(R.id.btnPembayaranBack)
+        btnBack = findViewById(R.id.btnPembayaranBack)
         tvRincian = findViewById(R.id.tvRincian)
         tvJenisMember = findViewById(R.id.tvJenisRincian)
 
@@ -63,13 +65,13 @@ class Pembayaran : AppCompatActivity() {
         Log.d("pembayaran", "paket: $paket")
 
 
-//        btnBack.setOnClickListener {
-//            val intent = Intent(this, Membership::class.java)
-//            intent.putExtra("navigateToFragment", "fJoin")
-//            intent.putExtra("userId", loginId)
-//            startActivity(intent)
-//            finish()
-//        }
+        btnBack.setOnClickListener {
+            val intent = Intent(this, utama::class.java)
+            intent.putExtra(utama.login, true)
+            intent.putExtra(utama.userId, loginId)
+            startActivity(intent)
+            finish()
+        }
 
         if (loginId != "0") {
             totalHarga = findViewById(R.id.tvTotalPembayaran)
@@ -166,8 +168,6 @@ class Pembayaran : AppCompatActivity() {
         }
         else {
             Toast.makeText(this, "Register/Login terlebih dahulu", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, Register::class.java)
-            startActivity(intent)
         }
     }
 
@@ -367,9 +367,9 @@ class Pembayaran : AppCompatActivity() {
                     db.collection("Transaksi").document().set(newData)
                         .addOnSuccessListener {
                             Log.d("pembayaran", "transaksi berhasil")
-                            val intent = Intent(this, activityPaketTrainer::class.java)
-                            intent.putExtra("userId", loginId)
-                            intent.putExtra("documentId", trainerId)
+                            val intent = Intent(this, utama::class.java)
+                            intent.putExtra(utama.login, true)
+                            intent.putExtra(utama.userId, loginId)
                             startActivity(intent)
                             finish()
                         }
@@ -396,8 +396,9 @@ class Pembayaran : AppCompatActivity() {
                     db.collection("Transaksi").document().set(newData)
                         .addOnSuccessListener {
                             Log.d("pembayaran", "transaksi berhasil")
-                            val intent = Intent(this, Membership::class.java)
-                            intent.putExtra("userId", loginId)
+                            val intent = Intent(this, utama::class.java)
+                            intent.putExtra(utama.login, true)
+                            intent.putExtra(utama.userId, loginId)
                             startActivity(intent)
                             finish()
                         }
