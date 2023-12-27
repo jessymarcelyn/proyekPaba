@@ -9,7 +9,7 @@
     tools:context=".detailTrainer">
 
     <EditText
-        android:id="@+id/edNama"
+        android:id="@+id/edNamaT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
@@ -26,60 +26,66 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edEmail"
+        android:id="@+id/edEmailT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/rounded_background_white"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:padding="10sp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/edNama"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="@+id/edNama"
-        app:layout_constraintTop_toBottomOf="@+id/edNama" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edNamaT" />
 
     <EditText
-        android:id="@+id/edPassword"
+        android:id="@+id/edPasswordT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/rounded_background_white"
         android:ems="10"
         android:hint="Change Password"
         android:inputType="textPassword"
         android:padding="10sp"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/edNama"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/edNama"
-        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edEmailT" />
 
     <Button
         android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="180dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="48dp"
         android:backgroundTint="#C9F24D"
         android:text="Save"
         android:textColor="@color/black"
         app:cornerRadius="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edNama"
-        app:layout_constraintStart_toStartOf="@+id/edNama"
+        app:layout_constraintEnd_toEndOf="@+id/edNamaT"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/edNamaT"
+        app:layout_constraintTop_toBottomOf="@+id/cbShape"
         tools:cornerRadius="10sp" />
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="65dp"
+        android:layout_width="wrap_content"
         android:layout_height="17dp"
         android:layout_marginTop="16dp"
-        android:text="Skill"
+        android:text="Pilih Skill(s):"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/edPassword"
-        app:layout_constraintTop_toBottomOf="@+id/edPassword" />
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="@+id/edPasswordT"
+        app:layout_constraintTop_toBottomOf="@+id/edPasswordT" />
 
     <CheckBox
         android:id="@+id/cbAtheltic"
