@@ -56,6 +56,8 @@ class adapterCancelT(
         return listOTrainer.size
     }
 
+    private lateinit var userTrainerIdd: String
+    private lateinit var idTrainer: String
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var sesiTrainer = listOTrainer[position]
 
@@ -73,7 +75,6 @@ class adapterCancelT(
 
         db.collection("Trainer").get().addOnSuccessListener { result ->
             for (document in result) {
-
                 if (document.id == sesiTrainer.trainerId) {
                     var namaTrainer = document.getString("nama") ?: ""
                     holder._tvCoachNameO.text = namaTrainer.toString()
@@ -81,41 +82,61 @@ class adapterCancelT(
             }
         }
 
-        if(timestamp < currentTimestamp){
+        if (timestamp < currentTimestamp) {
             holder._btnBookSesi.visibility = View.GONE
             holder._cancelTrainer.layoutParams.height = 350
-        }
-        else if (sesiTrainer.userTrainerIdSesi != "") {
-            db.collection("UserTrainer").document(sesiTrainer.userTrainerIdSesi).get()
-                .addOnSuccessListener { documentSnapshot ->
-                    val idUser = documentSnapshot.getString("idUser") ?: ""
-                    Log.d("qqqq", "idUser : ${idUser}")
-                    if (idUser == idLogin) {
-                        Log.d("qqqq", "masuk booked")
-                        holder._btnBookSesi.text = "BOOKED"
-                        holder._btnBookSesi.isActivated = false
-                        holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
-                        holder._btnBookSesi.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-                    } else {
-                        Log.d("qqqq", "masuk fully booked")
-                        holder._btnBookSesi.text = "FULL BOOKED"
-                        holder._btnBookSesi.isActivated = false
-                        holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
-                        holder._btnBookSesi.backgroundTintList =
-                            ColorStateList.valueOf(Color.GRAY)
-                    }
-                }
         } else {
-            holder._btnBookSesi.text = "BOOK SEKARANG"
-            holder._btnBookSesi.setOnClickListener {
-                onItemClickCallback.bookSesi(sesiTrainer)
+            db.collection("UserTrainer")
+                .whereEqualTo("idUser", idLogin)
+                .whereEqualTo("idTrainer", sesiTrainer.trainerId)
+                .get()
+                .addOnSuccessListener { userTrainerSnapshot ->
+                    for (userTrainerDocument in userTrainerSnapshot) {
+                        userTrainerIdd  = userTrainerDocument.id
+                        queryJadwalTrainer(sesiTrainer, holder, userTrainerIdd)
+                    }
 
-            }
-            holder._btnBookSesi.isActivated = true  // Set to true if you want it to be interactive
-            holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBookSesi.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+                }
         }
+    }
+
+
+    private fun queryJadwalTrainer(sesiTrainer: SesiT, holder: ListViewHolder, userTrainerIddd :String) {
+        val db = Firebase.firestore
+        db.collection("JadwalTrainer").document(sesiTrainer.idJadwal).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val idUser = documentSnapshot.getString("idUser") ?: ""
+                val userTrainerId = documentSnapshot.getString("userTrainerId") ?: ""
+                Log.d("qqqq", "idUser : ${idUser}")
+
+                Log.d("fgfg", "userTrainerId : $userTrainerId")
+                Log.d("fgfg", "userTrainerIdd2 : $userTrainerIdd")
+                if (userTrainerId == userTrainerIddd) {
+                    Log.d("qqqq", "masuk booked")
+                    holder._btnBookSesi.text = "BOOKED"
+                    holder._btnBookSesi.isActivated = false
+                    holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                    holder._btnBookSesi.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                } else if (userTrainerId == "") {
+                    holder._btnBookSesi.text = "BOOK SEKARANG"
+                    holder._btnBookSesi.setOnClickListener {
+                        onItemClickCallback.bookSesi(sesiTrainer)
+
+                    }
+                    holder._btnBookSesi.isActivated = true  // Set to true if you want it to be interactive
+                    holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                    holder._btnBookSesi.backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+
+                } else {
+                    Log.d("qqqq", "masuk fully booked")
+                    holder._btnBookSesi.text = "FULL BOOKED"
+                    holder._btnBookSesi.isActivated = false
+                    holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                    holder._btnBookSesi.backgroundTintList =
+                        ColorStateList.valueOf(Color.GRAY)
+                }
+            }
     }
 
 
@@ -167,9 +188,6 @@ class adapterCancelT(
         }
         return false
     }
-
-
-
 
 
 }

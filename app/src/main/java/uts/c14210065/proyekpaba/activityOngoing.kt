@@ -343,7 +343,7 @@ class activityOngoing : AppCompatActivity() {
 
                                             for (cancelClassDocument in cancelClassResult) {
                                                 if (cancelClassDocument.id == idLogin) {
-                                                    idClassList = cancelClassDocument.get("idGym") as? List<String> ?: emptyList()
+                                                    idClassList = cancelClassDocument.get("idClass") as? List<String> ?: emptyList()
                                                     documentExists = true
                                                     break
                                                 }
@@ -466,7 +466,7 @@ class activityOngoing : AppCompatActivity() {
                                                             Log.d("dfdf", "masuk3")
                                                             for (cancelTrainerDocument in cancelTrainerResult) {
                                                                 if (cancelTrainerDocument.id == idLogin) {
-                                                                    idTrainerList = cancelTrainerDocument.get("idGym") as? List<String> ?: emptyList()
+                                                                    idTrainerList = cancelTrainerDocument.get("idJadwal") as? List<String> ?: emptyList()
                                                                     documentExists = true
                                                                     break
                                                                 }
