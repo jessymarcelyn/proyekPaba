@@ -415,6 +415,8 @@ class sesiTrainer : AppCompatActivity() {
                         val calendar = Calendar.getInstance()
                         calendar.time = tanggal
 
+                        val timestamp = document.getTimestamp("tanggal")!!
+
                         // ambil jam dan menit dari timestamp tanggal di database
                         val jam = calendar.get(Calendar.HOUR_OF_DAY)
                         val menit = calendar.get(Calendar.MINUTE)
@@ -442,7 +444,7 @@ class sesiTrainer : AppCompatActivity() {
                                         jadwalTrainerId,
                                         formattedDate,
                                         trainerId,
-                                        sesi,
+                                        sesi, timestamp,
                                         userTrainerIdd, currentUserTrainer.idUserTrainer
                                     )
                                 )
@@ -453,7 +455,7 @@ class sesiTrainer : AppCompatActivity() {
                                             jadwalTrainerId,
                                             formattedDate,
                                             trainerId,
-                                            sesi,
+                                            sesi, timestamp,
                                             userTrainerIdd, currentUserTrainer.idUserTrainer
                                         )
                                     )
@@ -465,7 +467,7 @@ class sesiTrainer : AppCompatActivity() {
                                     jadwalTrainerId,
                                     formattedDate,
                                     trainerId,
-                                    sesi,
+                                    sesi, timestamp,
                                     userTrainerIdd, currentUserTrainer.idUserTrainer
                                 )
                             )

@@ -259,7 +259,7 @@ class fClass : Fragment() {
                                     showAlert(
                                         requireContext(),
                                         "Booking Gagal",
-                                        "Anda belum berlangganan membership gym"
+                                        "Anda belum berlangganan membership class"
                                     )
                                 }
                             }

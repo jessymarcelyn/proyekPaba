@@ -1,6 +1,9 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
@@ -17,16 +21,17 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
-class adapterOngoingT(
+class adapterCancelT(
     private val listOTrainer: ArrayList<SesiT>,
     private val idLogin: String?,
-) : RecyclerView.Adapter<adapterOngoingT.ListViewHolder>() {
+) : RecyclerView.Adapter<adapterCancelT.ListViewHolder>() {
 
     private lateinit var onItemClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
         fun onItemClicked(data: SesiT)
         fun delData(pos: Int)
+        fun bookSesi(data: SesiT)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -36,12 +41,14 @@ class adapterOngoingT(
     inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var _tvSessionOT: TextView = itemView.findViewById(R.id.tvSessionOT)
         var _tvCoachNameO: TextView = itemView.findViewById(R.id.tvCoachNameO)
-        var _btnCancelGym: Button = itemView.findViewById(R.id.btnCancelGym)
+        var _btnBookSesi: Button = itemView.findViewById(R.id.btnCancelGym)
+        var _tanggalTrainer: TextView = itemView.findViewById(R.id.tanggalTrainer)
+        var _cancelTrainer: ConstraintLayout = itemView.findViewById(R.id.cancelTrainer)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_ongoing_trainer, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_cancel_trainer, parent, false)
         return ListViewHolder(view)
     }
 
@@ -50,30 +57,64 @@ class adapterOngoingT(
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        var sesi = listOTrainer[position]
+        var sesiTrainer = listOTrainer[position]
 
-        holder._tvSessionOT.text = sesi.sesi
+        holder._tvSessionOT.text = sesiTrainer.sesi
+        holder._tanggalTrainer.text = sesiTrainer.tanggal
 
         val db = Firebase.firestore
+        val documentId = sesiTrainer.idJadwal
+
+        val timestamp = convertDateTimeToTimestamp(sesiTrainer.tanggal, sesiTrainer.sesi)
+        val currentTimestamp = Timestamp(Calendar.getInstance().time)
+
+        holder._cancelTrainer.layoutParams.height = 470
+        holder._btnBookSesi.visibility = View.VISIBLE
+
         db.collection("Trainer").get().addOnSuccessListener { result ->
             for (document in result) {
 
-                if (document.id == sesi.trainerId) {
+                if (document.id == sesiTrainer.trainerId) {
                     var namaTrainer = document.getString("nama") ?: ""
                     holder._tvCoachNameO.text = namaTrainer.toString()
                 }
             }
         }
 
-        holder._btnCancelGym.setOnClickListener {
-            val timestamp = convertDateTimeToTimestamp(sesi.tanggal, sesi.sesi)
-            Log.d("uuu", "timestamp : ${timestamp} ")
-            if (isMoreThan24HoursBefore(timestamp)) {
-                onItemClickCallback.delData(position)
-            } else {
-                showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi pt tidak bisa dibatalkan karena kurang dari 24 jam.")
-            }
+        if(timestamp < currentTimestamp){
+            holder._btnBookSesi.visibility = View.GONE
+            holder._cancelTrainer.layoutParams.height = 350
+        }
+        else if (sesiTrainer.userTrainerIdSesi != "") {
+            db.collection("UserTrainer").document(sesiTrainer.userTrainerIdSesi).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val idUser = documentSnapshot.getString("idUser") ?: ""
+                    Log.d("qqqq", "idUser : ${idUser}")
+                    if (idUser == idLogin) {
+                        Log.d("qqqq", "masuk booked")
+                        holder._btnBookSesi.text = "BOOKED"
+                        holder._btnBookSesi.isActivated = false
+                        holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                        holder._btnBookSesi.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                    } else {
+                        Log.d("qqqq", "masuk fully booked")
+                        holder._btnBookSesi.text = "FULL BOOKED"
+                        holder._btnBookSesi.isActivated = false
+                        holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+                        holder._btnBookSesi.backgroundTintList =
+                            ColorStateList.valueOf(Color.GRAY)
+                    }
+                }
+        } else {
+            holder._btnBookSesi.text = "BOOK SEKARANG"
+            holder._btnBookSesi.setOnClickListener {
+                onItemClickCallback.bookSesi(sesiTrainer)
 
+            }
+            holder._btnBookSesi.isActivated = true  // Set to true if you want it to be interactive
+            holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBookSesi.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#C9F24D"))
         }
     }
 

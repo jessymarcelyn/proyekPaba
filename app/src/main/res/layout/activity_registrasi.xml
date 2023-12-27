@@ -113,27 +113,27 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/btnRegistTrainer"
+        android:id="@+id/btnRegistUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="#C9F24D"
         android:enabled="true"
-        android:text="Regist Trainer"
+        android:text="Regist User"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/genderRadioGroup"
         app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
 
     <Button
-        android:id="@+id/btnRegistUser"
+        android:id="@+id/btnRegistTrainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#C9F24D"
         android:enabled="true"
-        android:text="Regist User"
+        android:text="Regist Trainer"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
-        app:layout_constraintStart_toEndOf="@+id/btnRegistTrainer"
-        app:layout_constraintTop_toTopOf="@+id/btnRegistTrainer" />
+        app:layout_constraintStart_toEndOf="@+id/btnRegistUser"
+        app:layout_constraintTop_toTopOf="@+id/btnRegistUser" />
 </androidx.constraintlayout.widget.ConstraintLayout>

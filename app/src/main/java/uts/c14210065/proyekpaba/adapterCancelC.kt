@@ -11,18 +11,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import java.sql.Time
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
-class adapterGymClass (
+class adapterCancelC (
     private val listClass: ArrayList<GymClass>,
     private val idLogin: String?
 //    ,
 //    private val context: Context
-): RecyclerView.Adapter<adapterGymClass.ListViewHolder>(){
+): RecyclerView.Adapter<adapterCancelC.ListViewHolder>(){
     private lateinit var  onItemClickCallback: OnItemClickCallback
 
 
@@ -43,11 +45,13 @@ class adapterGymClass (
         var _btnBook : Button = itemView.findViewById(R.id.btnCancelClass)
         var _pelatih : TextView = itemView.findViewById(R.id.tvCoachOC)
         var _jam: TextView =  itemView.findViewById(R.id.tvTimeOC)
+        var _tanggal: TextView =  itemView.findViewById(R.id.tvTanggalCancelC)
+        var _cancelClass: ConstraintLayout = itemView.findViewById(R.id.cancelClass)
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.itemgymclass,parent,false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_cancel_class,parent,false)
         return ListViewHolder(view)
     }
 
@@ -58,17 +62,34 @@ class adapterGymClass (
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var gymClass = listClass[position]
 
-        holder._nama.text = gymClass.name
+        val timestamp: Timestamp? = gymClass.timestamp// Your Timestamp object
 
-        if(gymClass.capacity == 0){
-            holder._btnBook.visibility = View.VISIBLE
+
+        val date: Date = timestamp!!.toDate()
+        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+        dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+        val formattedDate = dateFormat.format(date)
+        val currentTimestamp = Timestamp(Calendar.getInstance().time)
+
+        holder._cancelClass.layoutParams.height = 500
+        holder._btnBook.visibility = View.VISIBLE
+
+        holder._nama.text = gymClass.name
+        holder._tanggal.text = formattedDate
+
+
+        if(gymClass.timestamp!! < currentTimestamp){
+            Log.d("xzxz", "masuk1")
+            holder._btnBook.visibility = View.GONE
+            holder._cancelClass.layoutParams.height = 350
+        }
+        else if(gymClass.capacity == 0){
             holder._btnBook.text = "FULL BOOKED"
             holder._btnBook.isActivated = false
             holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
             holder._btnBook.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
         }else if(gymClass.arrUser.contains(idLogin)){
-            holder._btnBook.visibility = View.VISIBLE
             holder._btnBook.text = "BOOKED"
             holder._btnBook.isActivated = false
             holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
@@ -76,7 +97,6 @@ class adapterGymClass (
 
         }
         else{
-            holder._btnBook.visibility = View.VISIBLE
             holder._btnBook.text = gymClass.capacity.toString() + " More Left"
             holder._btnBook.setOnClickListener{
                 onItemClickCallback.bookClass(listClass[position])

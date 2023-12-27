@@ -42,6 +42,9 @@ class activityOngoing : AppCompatActivity() {
     private lateinit var buttonsCategory: Array<Button>
     private lateinit var idTrainer: String
     lateinit var _rvOngoing: RecyclerView
+    lateinit var idGymList: List<String>
+    lateinit var idClassList: List<String>
+    lateinit var idTrainerList: List<String>
     lateinit var userTrainerId: String
     lateinit var _tvHari: TextView
     var state: Int = 0
@@ -201,6 +204,7 @@ class activityOngoing : AppCompatActivity() {
                                             for (cancelGymDocument in cancelGymResult) {
                                                 if (cancelGymDocument.id == idLogin) {
                                                     // Document with the specified ID exists
+                                                    idGymList = cancelGymDocument.get("idGym") as? List<String> ?: emptyList()
                                                     documentExists = true
                                                     break
                                                 }
@@ -209,21 +213,24 @@ class activityOngoing : AppCompatActivity() {
                                             if (documentExists) {
                                                 //update gabungkan array idGym
                                                 val idGymValue = arOngoingG[pos].idGym
-                                                db.collection("CancelGym").document(idLogin)
-                                                    .update(
-                                                        "idGym",
-                                                        FieldValue.arrayUnion(idGymValue)
-                                                    )
-                                                    .addOnSuccessListener {
-                                                        // Update successful
-                                                    }
-                                                    .addOnFailureListener { e ->
-                                                        Log.w(
-                                                            "pembayaran member",
-                                                            "Error updating document",
-                                                            e
+                                                if (!idGymList.contains(idGymValue)) {
+                                                    db.collection("CancelGym").document(idLogin)
+                                                        .update(
+                                                            "idGym",
+                                                            FieldValue.arrayUnion(idGymValue)
                                                         )
-                                                    }
+                                                        .addOnSuccessListener {
+                                                            // Update successful
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            Log.w(
+                                                                "pembayaran member",
+                                                                "Error updating document",
+                                                                e
+                                                            )
+                                                        }
+                                                }
+
                                             } else {
                                                 //gabungkan tanggal dan sesi yang merupakan string ke timestamp.
 //                                                val dateFormat =
@@ -328,30 +335,33 @@ class activityOngoing : AppCompatActivity() {
                                                 "Cancelclass",
                                                 "gagal update"
                                             )
-                                        }//tambahkan ke database cancel gym
+                                        }
+                                    //tambahkan ke database cancel class
                                     db.collection("CancelClass").get()
                                         .addOnSuccessListener { cancelClassResult ->
                                             var documentExists = false
 
                                             for (cancelClassDocument in cancelClassResult) {
                                                 if (cancelClassDocument.id == idLogin) {
-                                                    // Document with the specified ID exists
+                                                    idClassList = cancelClassDocument.get("idGym") as? List<String> ?: emptyList()
                                                     documentExists = true
                                                     break
                                                 }
                                             }
                                             //sudah ada dokumen sebelumnya dengan idLogin
                                             if (documentExists) {
-                                                //update gabungkan array idGym
-                                                val idGymValue = arOngoingC[pos].idClass
-                                                db.collection("CancelClass").document(idLogin)
-                                                    .update(
-                                                        "idClass",
-                                                        FieldValue.arrayUnion(idGymValue)
-                                                    )
-                                                    .addOnSuccessListener {
-                                                        // Update successful
-                                                    }
+                                                //update gabungkan array idClass
+                                                val idClassValue = arOngoingC[pos].idClass
+                                                if (!idClassList.contains(idClassValue)) {
+                                                    db.collection("CancelClass").document(idLogin)
+                                                        .update(
+                                                            "idClass",
+                                                            FieldValue.arrayUnion(idClassValue)
+                                                        )
+                                                        .addOnSuccessListener {
+                                                            // Update successful
+                                                        }
+                                                }
                                             } else {
                                                 val newData = hashMapOf(
                                                     "idClass" to arrayListOf(arOngoingC[pos].idClass)
@@ -395,7 +405,7 @@ class activityOngoing : AppCompatActivity() {
             _rvOngoing.adapter = adapterP
 
             adapterP.setOnItemClickCallback(object : adapterOngoingT.OnItemClickCallback {
-                override fun onItemClicked(data: Gym) {
+                override fun onItemClicked(data: SesiT) {
                 }
 
                 override fun delData(pos: Int) {
@@ -404,11 +414,13 @@ class activityOngoing : AppCompatActivity() {
                         .setMessage("Apakah anda yakin membatalkan sesi personal trainer pada " + arOngoingT[pos].tanggal + " pukul ${arOngoingT[pos].sesi} ?")
                         .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
                             val documentId = arOngoingT[pos].idJadwal
+                            Log.d("dfdf", "documentid : $documentId")
 
                             db.collection("JadwalTrainer")
                                 .document(documentId)
                                 .update("userTrainerId", "")
                                 .addOnSuccessListener {
+                                    Log.d("dfdf", "masuk1")
                                     showAlert(
                                         this@activityOngoing,
                                         "Pembatalan berhasil",
@@ -422,6 +434,7 @@ class activityOngoing : AppCompatActivity() {
                                         .addOnSuccessListener { result ->
                                             for (document in result) {
                                                 if (document.id == arOngoingT[pos].userTrainerId) {
+                                                    Log.d("dfdf", "masuk2")
                                                     val sisaSesi =
                                                         document.getLong("sisaSesi")?.toInt() ?: 0
 
@@ -446,6 +459,67 @@ class activityOngoing : AppCompatActivity() {
                                                                 "gagal update"
                                                             )
                                                         }
+                                                    //tambahkan ke database cancel trainer
+                                                    db.collection("CancelTrainer").get()
+                                                        .addOnSuccessListener { cancelTrainerResult ->
+                                                            var documentExists = false
+                                                            Log.d("dfdf", "masuk3")
+                                                            for (cancelTrainerDocument in cancelTrainerResult) {
+                                                                if (cancelTrainerDocument.id == idLogin) {
+                                                                    idTrainerList = cancelTrainerDocument.get("idGym") as? List<String> ?: emptyList()
+                                                                    documentExists = true
+                                                                    break
+                                                                }
+                                                            }
+                                                            //sudah ada dokumen sebelumnya dengan idLogin
+                                                            if (documentExists) {
+                                                                Log.d("dfdf", "masuk4")
+                                                                //update gabungkan array idJadwal
+                                                                val idJadwalValue = arOngoingT[pos].idJadwal
+//                                                                val idUserTrainer = arOngoingT[pos].userTrainerIdSesi
+                                                                if (!idTrainerList.contains(idJadwalValue)) {
+                                                                    db.collection("CancelTrainer")
+                                                                        .document(idLogin)
+                                                                        .update(
+                                                                            "idJadwal",
+                                                                            FieldValue.arrayUnion(
+                                                                                idJadwalValue
+                                                                            )
+//                                                                        ,"idUserTrainer", FieldValue.arrayUnion(idUserTrainer)
+                                                                        )
+                                                                        .addOnSuccessListener {
+                                                                            // Update successful
+                                                                        }
+                                                                }
+                                                            } else {
+                                                                Log.d("dfdf", "masuk5")
+                                                                val newData = hashMapOf(
+                                                                    "idJadwal" to arrayListOf(
+                                                                        arOngoingT[pos].idJadwal
+                                                                    )
+//                                                                   , "idUserTrainer" to arrayListOf(arOngoingT[pos].userTrainerIdSesi)
+                                                                )
+
+                                                                db.collection("CancelTrainer")
+                                                                    .document(idLogin)
+                                                                    .set(newData)
+                                                                    .addOnSuccessListener {
+                                                                        // Document successfully written
+                                                                    }
+                                                                    .addOnFailureListener { e ->
+                                                                        Log.w(
+                                                                            "zxzx",
+                                                                            "Error writing document",
+                                                                            e
+                                                                        )
+                                                                    }
+
+                                                            }
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            Log.e("TAG", "Error adding document", e)
+                                                        }
+
                                                 }
                                             }
                                         }
@@ -535,6 +609,7 @@ class activityOngoing : AppCompatActivity() {
 
                     if (idLogin in userId) {
                         val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
+                        val timestamp = document.getTimestamp("tanggal")!!
 
                         val calendar = Calendar.getInstance()
                         calendar.time = tanggal
@@ -565,7 +640,7 @@ class activityOngoing : AppCompatActivity() {
                         calendar.add(Calendar.HOUR_OF_DAY, 2)
                         val jamm = calendar.get(Calendar.HOUR_OF_DAY)
 
-                        // kalau jam hari ini sudah lewat berarti tidak masuk ongoing
+                        // kalau jam hari ini sud ah lewat berarti tidak masuk ongoing
                         if (formattedDate == currentDate) {
                             Log.d("ppp", "masuk1")
                             if (jamm > currentHour) {
@@ -574,7 +649,7 @@ class activityOngoing : AppCompatActivity() {
                                     Gym(
                                         Gymid,
                                         formattedDate,
-                                        sesi,
+                                        sesi, timestamp,
                                         kuotaMax,
                                         kuotaSisa,
                                         ArrayList(userId)
@@ -589,7 +664,7 @@ class activityOngoing : AppCompatActivity() {
                                         Gym(
                                             Gymid,
                                             formattedDate,
-                                            sesi,
+                                            sesi, timestamp,
                                             kuotaMax,
                                             kuotaSisa,
                                             ArrayList(userId)
@@ -604,7 +679,7 @@ class activityOngoing : AppCompatActivity() {
                                 Gym(
                                     Gymid,
                                     formattedDate,
-                                    sesi,
+                                    sesi, timestamp,
                                     kuotaMax,
                                     kuotaSisa,
                                     ArrayList(userId)
@@ -669,6 +744,8 @@ class activityOngoing : AppCompatActivity() {
                         val tanggal = (jadwalTrainerDocument["tanggal"] as? Timestamp)?.toDate()
 
                         if (cekDate(tanggal, btnDate)) {
+                            val timestamp = jadwalTrainerDocument.getTimestamp("tanggal")!!
+
                             val calendar = Calendar.getInstance()
                             calendar.time = tanggal
 
@@ -704,7 +781,7 @@ class activityOngoing : AppCompatActivity() {
                                             jadwalTrainerId,
                                             formattedDate,
                                             trainerId,
-                                            sesi,
+                                            sesi, timestamp,
                                             userTrainerIdd, userTrainerId
                                         )
                                     )
@@ -716,7 +793,7 @@ class activityOngoing : AppCompatActivity() {
                                                 jadwalTrainerId,
                                                 formattedDate,
                                                 trainerId,
-                                                sesi,
+                                                sesi, timestamp,
                                                 userTrainerIdd, userTrainerId
                                             )
                                         )
@@ -729,7 +806,7 @@ class activityOngoing : AppCompatActivity() {
                                         jadwalTrainerId,
                                         formattedDate,
                                         trainerId,
-                                        sesi,
+                                        sesi, timestamp,
                                         userTrainerIdd, userTrainerId
                                     )
                                 )

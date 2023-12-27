@@ -242,6 +242,7 @@ class fGym : Fragment() {
 
                 if (cekDate(tanggal, dayDate)) {
                     val kuotaMax = document.getLong("kuotaMax")?.toInt() ?: 0
+                    val timestamp = document.getTimestamp("tanggal")!!
 
                     val calendar = Calendar.getInstance()
                     calendar.time = tanggal
@@ -293,7 +294,7 @@ class fGym : Fragment() {
                                 Gym(
                                     Gymid,
                                     formattedDate,
-                                    sesi,
+                                    sesi,timestamp,
                                     kuotaMax,
                                     kuotaSisa,
                                     ArrayList(userId)
@@ -307,7 +308,7 @@ class fGym : Fragment() {
                                     Gym(
                                         Gymid,
                                         formattedDate,
-                                        sesi,
+                                        sesi,timestamp,
                                         kuotaMax,
                                         kuotaSisa,
                                         ArrayList(userId)
@@ -320,7 +321,7 @@ class fGym : Fragment() {
                             Gym(
                                 Gymid,
                                 formattedDate,
-                                sesi,
+                                sesi,timestamp,
                                 kuotaMax,
                                 kuotaSisa,
                                 ArrayList(userId)
