@@ -246,7 +246,18 @@ class fClass : Fragment() {
                                                 "berhasil update"
                                                 
                                             )
-                                            ReadData(dayDate)
+
+                                            //Delete in cancel database
+                                            val documentId = idLogin
+                                            val userIdToDelete = data.idClass
+
+                                            db.collection("CancelClass")
+                                                .document(documentId!!)
+                                                .update("idClass", FieldValue.arrayRemove(userIdToDelete))
+                                                .addOnSuccessListener {
+                                                    ReadData(dayDate)
+                                                }
+
 //                                            onBookingSuccessListener.onBookingSuccess()
                                         }
                                         .addOnFailureListener { e ->

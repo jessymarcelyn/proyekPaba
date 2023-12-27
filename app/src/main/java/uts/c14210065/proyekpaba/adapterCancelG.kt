@@ -31,7 +31,8 @@ class adapterCancelG(
         fun onItemClicked(data: Gym)
         fun delData(pos: Int)
 
-        fun bookGym(data : Gym)
+//        fun bookGym(data : Gym)
+        fun delGym(data : Gym)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -87,14 +88,17 @@ class adapterCancelG(
             holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
         } else if (gym.userId.contains(idLogin)) {
-            holder._btnBookGym.text = "BOOKED"
-            holder._btnBookGym.isActivated = false
-            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+//            onItemClickCallback.delGym(listGym[position])
+
+
+//            holder._btnBookGym.text = "BOOKED"
+//            holder._btnBookGym.isActivated = false
+//            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
+//            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
         } else {
             holder._btnBookGym.text = "BOOK SEKARANG"
             holder._btnBookGym.setOnClickListener {
-                onItemClickCallback.bookGym(listGym[position])
+//                onItemClickCallback.bookGym(listGym[position])
 
             }
 

@@ -133,8 +133,17 @@ class sesiTrainer : AppCompatActivity() {
                                                         "Booking sesi dengan personal trainer anda pada tanggal ${data.tanggal} " +
                                                                 " jam ${data.sesi} telah berhasil, Salam sehat! "
                                                     )
-                                                    TampilkanData2()
-                                                    TampilkanData1()
+                                                    //Delete in cancel database
+                                                    val documentId = idLogin
+                                                    val userIdToDelete = data.idJadwal
+
+                                                    db.collection("CancelTrainer")
+                                                        .document(documentId!!)
+                                                        .update("idJadwal", FieldValue.arrayRemove(userIdToDelete))
+                                                        .addOnSuccessListener {
+                                                            TampilkanData2()
+                                                            TampilkanData1()
+                                                        }
                                                 }
                                                 .addOnFailureListener { e ->
                                                     Log.d("BookingGym", "gagal update")

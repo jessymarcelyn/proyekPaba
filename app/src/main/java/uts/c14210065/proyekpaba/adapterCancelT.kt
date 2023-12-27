@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -117,6 +118,7 @@ class adapterCancelT(
                     holder._btnBookSesi.isActivated = false
                     holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN
                     holder._btnBookSesi.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
                 } else if (userTrainerId == "") {
                     holder._btnBookSesi.text = "BOOK SEKARANG"
                     holder._btnBookSesi.setOnClickListener {

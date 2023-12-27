@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -137,6 +138,7 @@ class activityCancel : AppCompatActivity() {
             _rvOngoing.layoutManager = LinearLayoutManager(this)
             val adapterP = adapterCancelG(arCancelG, idLogin)
             _rvOngoing.adapter = adapterP
+
         } else if (state == 2) {
             Log.d("mmm", "masuk")
             _rvOngoing.layoutManager = LinearLayoutManager(this)

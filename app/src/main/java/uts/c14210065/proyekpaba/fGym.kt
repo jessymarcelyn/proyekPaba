@@ -168,7 +168,19 @@ class fGym : Fragment() {
                                             "BookingGym",
                                             "berhasil update"
                                         )
-                                        TampilkanData()
+
+                                        //Delete in cancel database
+                                        val documentId = idLogin
+                                        val userIdToDelete = data.idGym
+
+                                        db.collection("CancelGym")
+                                            .document(documentId!!)
+                                            .update("idGym", FieldValue.arrayRemove(userIdToDelete))
+                                            .addOnSuccessListener {
+                                                TampilkanData()
+                                            }
+
+
                                     }
                                     .addOnFailureListener { e ->
                                         Log.d(
