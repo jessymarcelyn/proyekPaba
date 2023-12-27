@@ -114,7 +114,7 @@ class activityCancel : AppCompatActivity() {
                 if (state == 1) {
                     TampilkanDataGym(dayDate)
                 } else if (state == 2) {
-                    TampilkanDataClass(dayDate)
+                    TampilkanDataClass1(dayDate)
                 } else if (state == 3) {
                     TampilkanDataTrainer(dayDate)
                 }
@@ -132,7 +132,7 @@ class activityCancel : AppCompatActivity() {
         } else if (state == 2) {
             Log.d("mmm", "masuk")
             _rvOngoing.layoutManager = LinearLayoutManager(this)
-            val adapterP = adapterOngoingC(arCancelC, idLogin)
+            val adapterP = adapterGymClass(arCancelC, idLogin)
             _rvOngoing.adapter = adapterP
         } else if (state == 3) {
             Log.d("mmm", "masuk")
@@ -272,7 +272,86 @@ class activityCancel : AppCompatActivity() {
         }
     }
 
+    //menampilkan data gym
+    private fun TampilkanDataClass1(btnDate: Date) {
+        arCancelC.clear()
+        db.collection("CancelClass").get().addOnSuccessListener { result ->
+            val listIdClass = mutableListOf<String>()
+            for (document in result) {
+                val userId = document.id
+                if (userId == idLogin) {
+                    val idClassList =
+                        (document["idClass"] as? List<*>)?.map { it.toString() } ?: emptyList()
 
+                    listIdClass.addAll(idClassList)
+                }
+            }
+
+            Log.d("cvcv", listIdClass.toString())
+
+            var counter = 0
+            for (listid in listIdClass) {
+                db.collection("Class").document(listid).get().addOnSuccessListener { document ->
+                    counter++
+                    if (document.exists()) {
+                        val selectedDate = (document["tanggal"] as? Timestamp)?.toDate()?.time ?: 0
+
+                        if (cekDateLong(selectedDate, btnDate)) {
+                                val id = document.id
+                                val nama = document.getString("nama") ?: ""
+                                val kapasitas = document.getLong("kapasitas")?.toInt() ?: 0
+
+                                val pelatih = document.getString("pelatih") ?: ""
+                                val durasi = document.getLong("kapasitas")?.toInt() ?: 0
+                                val level = document.getString("level") ?: ""
+                                val arrUser = document.get("userId") as? List<String> ?: emptyList()
+
+                                val timestamp = document.getTimestamp("tanggal")
+
+                                val timestampJes = (document["tanggal"] as? Timestamp)?.toDate()
+
+                                val calendar = Calendar.getInstance()
+                                calendar.time = timestampJes
+
+                                // ambil jam dan menit dari timestamp tanggal di database
+                                val jam = calendar.get(Calendar.HOUR_OF_DAY)
+                                val menit = calendar.get(Calendar.MINUTE)
+
+                                //jam sekarang
+                                val currentTime = Calendar.getInstance()
+                                val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
+                                val currentMinute = currentTime.get(Calendar.MINUTE)
+
+                                //tanggal diubah dengan format
+                                val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+                                dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                                val formattedDate = dateFormat.format(timestampJes)
+                                val currentDate = dateFormat.format(Date())
+
+                                arCancelC.add(
+                                    GymClass(
+                                        id,
+                                        nama,
+                                        kapasitas,
+                                        durasi,
+                                        pelatih,
+                                        timestamp,
+                                        level,
+                                        arrUser))
+
+                            Log.d("nmnm", "arCancelC : $arCancelC")
+                        }
+                    }
+
+                    // Apabila semua data di listIdGym sudah dicek
+                    if (counter == listIdClass.size) {
+                        arCancelC.sortBy { it.timestamp }
+                        _rvOngoing.adapter?.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+    }
 
     //BLM
     //menampilkan data trainer

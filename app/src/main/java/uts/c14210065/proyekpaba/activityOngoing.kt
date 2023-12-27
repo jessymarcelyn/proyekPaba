@@ -164,7 +164,7 @@ class activityOngoing : AppCompatActivity() {
                                         "Sesi gym berhasil dibatalkan."
                                     )
 
-                                    // BLM UPDATE JUMLAH KUOTA SESI
+                                    // UPDATE JUMLAH KUOTA SESI
                                     val documentId = arOngoingG[pos].idGym
                                     val newKuotaSisa = arOngoingG[pos].kuotaSisa + 1
 
@@ -191,7 +191,6 @@ class activityOngoing : AppCompatActivity() {
                                         .addOnFailureListener { e ->
                                             Log.e("TAG", "Error adding document", e)
                                         }
-
 
 
                                     //tambahkan ke database cancel gym
@@ -227,12 +226,12 @@ class activityOngoing : AppCompatActivity() {
                                                     }
                                             } else {
                                                 //gabungkan tanggal dan sesi yang merupakan string ke timestamp.
-                                                val dateFormat =
-                                                    SimpleDateFormat("dd MMM yyyy HH:mm")
-                                                val dateTimeString =
-                                                    "${arOngoingG[pos].tanggal} ${arOngoingG[pos].sesi}"
-                                                val date = dateFormat.parse(dateTimeString)
-                                                val timestamp = Timestamp(date)
+//                                                val dateFormat =
+//                                                    SimpleDateFormat("dd MMM yyyy HH:mm")
+//                                                val dateTimeString =
+//                                                    "${arOngoingG[pos].tanggal} ${arOngoingG[pos].sesi}"
+//                                                val date = dateFormat.parse(dateTimeString)
+//                                                val timestamp = Timestamp(date)
 
                                                 val newData = hashMapOf(
                                                     "idGym" to arrayListOf(arOngoingG[pos].idGym)
@@ -248,14 +247,7 @@ class activityOngoing : AppCompatActivity() {
                                                     }
 
                                             }
-                                        }.addOnFailureListener { exception ->
-                                        // Handle failures
-                                        Log.w(
-                                            "pembayaran member",
-                                            "Error getting documents.",
-                                            exception
-                                        )
-                                    }
+                                        }
                                 }
                                 .addOnFailureListener {
                                     showAlert(
@@ -336,19 +328,55 @@ class activityOngoing : AppCompatActivity() {
                                                 "Cancelclass",
                                                 "gagal update"
                                             )
-                                        }
+                                        }//tambahkan ke database cancel gym
+                                    db.collection("CancelClass").get()
+                                        .addOnSuccessListener { cancelClassResult ->
+                                            var documentExists = false
 
+                                            for (cancelClassDocument in cancelClassResult) {
+                                                if (cancelClassDocument.id == idLogin) {
+                                                    // Document with the specified ID exists
+                                                    documentExists = true
+                                                    break
+                                                }
+                                            }
+                                            //sudah ada dokumen sebelumnya dengan idLogin
+                                            if (documentExists) {
+                                                //update gabungkan array idGym
+                                                val idGymValue = arOngoingC[pos].idClass
+                                                db.collection("CancelClass").document(idLogin)
+                                                    .update(
+                                                        "idClass",
+                                                        FieldValue.arrayUnion(idGymValue)
+                                                    )
+                                                    .addOnSuccessListener {
+                                                        // Update successful
+                                                    }
+                                            } else {
+                                                val newData = hashMapOf(
+                                                    "idClass" to arrayListOf(arOngoingC[pos].idClass)
+                                                )
+
+                                                db.collection("CancelClass").document(idLogin)
+                                                    .set(newData)
+                                                    .addOnSuccessListener {
+                                                        // Document successfully written
+                                                    }
+                                                    .addOnFailureListener { e ->
+                                                        Log.w("zxzx", "Error writing document", e)
+                                                    }
+
+                                            }
+                                        }
                                         .addOnFailureListener { e ->
                                             Log.e("TAG", "Error adding document", e)
                                         }
-
-
                                 }
                                 .addOnFailureListener {
                                     showAlert(
                                         this@activityOngoing,
                                         "Pembatalan Gagal",
-                                        "Sesi gym gagal dibatalkan."
+                                        "Sesi class gagal dibatalkan."
                                     )
                                 }
                         })
@@ -664,8 +692,12 @@ class activityOngoing : AppCompatActivity() {
                             val currentHour = currentTime.get(Calendar.HOUR_OF_DAY)
                             val currentMinute = currentTime.get(Calendar.MINUTE)
 
+                            //jam ditambah 2 jam
+                            calendar.add(Calendar.HOUR_OF_DAY, 2)
+                            val jamm = calendar.get(Calendar.HOUR_OF_DAY)
+
                             if (formattedDate == currentDate) {
-                                if (jam > currentHour) {
+                                if (jamm > currentHour) {
                                     Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
                                     arOngoingT.add(
                                         SesiT(
@@ -676,7 +708,7 @@ class activityOngoing : AppCompatActivity() {
                                             userTrainerIdd, userTrainerId
                                         )
                                     )
-                                } else if (jam == currentHour) {
+                                } else if (jamm == currentHour) {
                                     if (menit > currentMinute) {
                                         Log.d("rrr", "jadwalTrainerId : $jadwalTrainerId")
                                         arOngoingT.add(
@@ -867,10 +899,14 @@ class activityOngoing : AppCompatActivity() {
                         val formattedDate = dateFormat.format(timestampJes)
                         val currentDate = dateFormat.format(Date())
 
+                        //jam ditambah 2 jam
+                        calendar.add(Calendar.HOUR_OF_DAY, 2)
+                        val jamm = calendar.get(Calendar.HOUR_OF_DAY)
+
                         // kalau jam hari ini sudah lewat berarti tidak masuk ongoing
                         if (formattedDate == currentDate) {
                             Log.d("ppp", "masuk1")
-                            if (jam > currentHour) {
+                            if (jamm > currentHour) {
                                 Log.d("ppp", "masuk2")
                                 arOngoingC.add(
                                     GymClass(
@@ -885,7 +921,7 @@ class activityOngoing : AppCompatActivity() {
                                     )
                                 )
                             }
-                            if (jam == currentHour) {
+                            if (jamm == currentHour) {
                                 if (menit > currentMinute) {
                                     Log.d("ppp", "masuk3")
                                     arOngoingC.add(
