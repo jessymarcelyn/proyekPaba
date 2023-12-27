@@ -133,6 +133,9 @@ class sesiTrainer : AppCompatActivity() {
                                                         "Booking sesi dengan personal trainer anda pada tanggal ${data.tanggal} " +
                                                                 " jam ${data.sesi} telah berhasil, Salam sehat! "
                                                     )
+                                                    TampilkanData2()
+                                                    TampilkanData1()
+
                                                     //Delete in cancel database
                                                     val documentId = idLogin
                                                     val userIdToDelete = data.idJadwal
@@ -141,8 +144,6 @@ class sesiTrainer : AppCompatActivity() {
                                                         .document(documentId!!)
                                                         .update("idJadwal", FieldValue.arrayRemove(userIdToDelete))
                                                         .addOnSuccessListener {
-                                                            TampilkanData2()
-                                                            TampilkanData1()
                                                         }
                                                 }
                                                 .addOnFailureListener { e ->
@@ -257,7 +258,7 @@ class sesiTrainer : AppCompatActivity() {
                 calendar.time = currentDate
                 calendar.add(Calendar.DATE, i)
                 dayDate = calendar.time
-//                TampilkanData2(dayDate)
+
                 TampilkanData2()
             }
         }
@@ -366,6 +367,15 @@ class sesiTrainer : AppCompatActivity() {
                         ivNext.visibility = View.GONE
                     }else{
                         ivNext.visibility = View.VISIBLE
+                        if (currentVisiblePosition == 0) {
+                            ivPrevious.isEnabled = false
+                            ivPrevious.visibility = View.GONE
+                        }
+                        else if (currentVisiblePosition == arCard.size - 1) {
+                            ivNext.isEnabled = false
+                            ivNext.visibility = View.GONE
+                        }
+
                     }
                     if (sisaSesi > 0) {
                         for (i in buttons.indices) {

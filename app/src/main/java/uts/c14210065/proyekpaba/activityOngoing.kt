@@ -375,7 +375,6 @@ class activityOngoing : AppCompatActivity() {
                                                     .addOnFailureListener { e ->
                                                         Log.w("zxzx", "Error writing document", e)
                                                     }
-
                                             }
                                         }
                                         .addOnFailureListener { e ->
@@ -427,6 +426,7 @@ class activityOngoing : AppCompatActivity() {
                                         "Sesi personal trainer berhasil dibatalkan."
                                     )
 
+                                    Log.d("qwqw", "arOngoingT size1: ${arOngoingT.size}")
                                     val documentId = arOngoingT[pos].userTrainerId
 //                                    val newKuotaSisa = arOngoingT[pos].kuotaSisa + 1
 
@@ -451,7 +451,6 @@ class activityOngoing : AppCompatActivity() {
                                                                 "OngoingT",
                                                                 "berhasil update"
                                                             )
-                                                            TampilkanDataTrainer(dayDate)
                                                         }
                                                         .addOnFailureListener { e ->
                                                             Log.d(
@@ -474,6 +473,9 @@ class activityOngoing : AppCompatActivity() {
                                                             //sudah ada dokumen sebelumnya dengan idLogin
                                                             if (documentExists) {
                                                                 Log.d("dfdf", "masuk4")
+                                                                Log.d("qwqw", "arOngoingT size2: ${arOngoingT.size}")
+
+//                                                                Log.d("dfdf", " arOngoingT[pos].idJadwal ${ arOngoingT[pos].idJadwal}")
                                                                 //update gabungkan array idJadwal
                                                                 val idJadwalValue = arOngoingT[pos].idJadwal
 //                                                                val idUserTrainer = arOngoingT[pos].userTrainerIdSesi
@@ -484,11 +486,9 @@ class activityOngoing : AppCompatActivity() {
                                                                             "idJadwal",
                                                                             FieldValue.arrayUnion(
                                                                                 idJadwalValue
-                                                                            )
-//                                                                        ,"idUserTrainer", FieldValue.arrayUnion(idUserTrainer)
-                                                                        )
+                                                                            ))
                                                                         .addOnSuccessListener {
-                                                                            // Update successful
+                                                                            TampilkanDataTrainer(dayDate)
                                                                         }
                                                                 }
                                                             } else {
@@ -496,15 +496,13 @@ class activityOngoing : AppCompatActivity() {
                                                                 val newData = hashMapOf(
                                                                     "idJadwal" to arrayListOf(
                                                                         arOngoingT[pos].idJadwal
-                                                                    )
-//                                                                   , "idUserTrainer" to arrayListOf(arOngoingT[pos].userTrainerIdSesi)
-                                                                )
+                                                                    ))
 
                                                                 db.collection("CancelTrainer")
                                                                     .document(idLogin)
                                                                     .set(newData)
                                                                     .addOnSuccessListener {
-                                                                        // Document successfully written
+                                                                        TampilkanDataTrainer(dayDate)
                                                                     }
                                                                     .addOnFailureListener { e ->
                                                                         Log.w(
@@ -513,7 +511,6 @@ class activityOngoing : AppCompatActivity() {
                                                                             e
                                                                         )
                                                                     }
-
                                                             }
                                                         }
                                                         .addOnFailureListener { e ->
@@ -615,7 +612,6 @@ class activityOngoing : AppCompatActivity() {
                         calendar.time = tanggal
 
                         // ambil jam dan menit dari timestamp tanggal di database
-
                         val jam = calendar.get(Calendar.HOUR_OF_DAY)
                         val menit = calendar.get(Calendar.MINUTE)
 
@@ -816,6 +812,7 @@ class activityOngoing : AppCompatActivity() {
                         }
                     }
                 }
+                Log.d("awawaw", "arGoinT : $arOngoingT")
                 arOngoingT.sortBy { it.sesi }
                 _rvOngoing.adapter?.notifyDataSetChanged()
             }.addOnFailureListener { e ->

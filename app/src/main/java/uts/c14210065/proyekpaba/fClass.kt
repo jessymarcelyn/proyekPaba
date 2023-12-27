@@ -246,6 +246,7 @@ class fClass : Fragment() {
                                                 "berhasil update"
                                                 
                                             )
+                                            ReadData(dayDate)
 
                                             //Delete in cancel database
                                             val documentId = idLogin
@@ -255,7 +256,7 @@ class fClass : Fragment() {
                                                 .document(documentId!!)
                                                 .update("idClass", FieldValue.arrayRemove(userIdToDelete))
                                                 .addOnSuccessListener {
-                                                    ReadData(dayDate)
+
                                                 }
 
 //                                            onBookingSuccessListener.onBookingSuccess()

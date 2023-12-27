@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +11,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestore
+import java.util.Calendar
+import java.util.Date
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -75,11 +80,32 @@ class fProfile : Fragment() {
         }
 
         _btnTrainer.setOnClickListener{
+            db.collection("UserTrainer").get().addOnSuccessListener { result ->
+                var ketemu = false
+                for (document in result) {
+                    var idUser = document.getString("idUser") ?: ""
+                    var durasi = document.getLong("durasiPaket")?.toInt() ?: 0
+                    val currentDate = Calendar.getInstance().time
+                    val tanggalMulai = (document["tanggalMulai"] as? Timestamp)?.toDate()?.time ?: 0
+                    val tanggalBerakhir = addMonthsToTimestamp(tanggalMulai, durasi)
+                    if (idUser == idLogin && tanggalBerakhir >= currentDate) {
+                        val intent = Intent(activity, sesiTrainer::class.java)
+                        intent.putExtra(utama.login, true)
+                        intent.putExtra(utama.userId, idLogin)
+                        startActivity(intent)
+                        ketemu = true
+                        break
+                    }
+                }
+                if(!ketemu){
+                    showAlert(
+                        requireContext(),
+                        "Akses Gagal",
+                        "Anda belum memiliki paket dengan trainer kami."
+                    )
+                }
+            }
 
-            val intent = Intent(activity, sesiTrainer::class.java)
-            intent.putExtra(utama.login, true)
-            intent.putExtra(utama.userId, idLogin)
-            startActivity(intent)
         }
 
         _btnCancelH.setOnClickListener{
@@ -121,6 +147,14 @@ class fProfile : Fragment() {
         }
     }
 
+    // menghitung tanggal berakhir
+    fun addMonthsToTimestamp(originalTimestamp: Long, monthsToAdd: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = originalTimestamp
+        calendar.add(Calendar.MONTH, monthsToAdd)
+        return calendar.time
+    }
+
     fun ReadData(idLogin : String){
         db.collection("users")
             .document(idLogin)
@@ -132,6 +166,18 @@ class fProfile : Fragment() {
                 tvTinggi.text = result.get("tinggi").toString() + " cm"
             }
     }
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Handle the "OK" button click if needed
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
