@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnInput"
+        android:id="@+id/btnInputJadwalT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvSkilll" />
 
     <Button
-        android:id="@+id/btnLogout"
+        android:id="@+id/btnLogoutT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -51,7 +51,7 @@
         app:cornerRadius="10sp"
         app:layout_constraintEnd_toEndOf="@+id/iconEdit2"
         app:layout_constraintStart_toStartOf="@+id/tvNama2"
-        app:layout_constraintTop_toBottomOf="@+id/btnInput" />
+        app:layout_constraintTop_toBottomOf="@+id/btnInputJadwalT" />
 
     <TextView
         android:id="@+id/textView6"

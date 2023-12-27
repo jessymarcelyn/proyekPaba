@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -17,6 +18,7 @@ import org.mindrot.jbcrypt.BCrypt
 class detailTrainer : AppCompatActivity() {
 
     lateinit var arr: ArrayList<String>
+    lateinit var btnBack: ImageView
     var idLogin: String = ""
     val db = Firebase.firestore
 
@@ -34,6 +36,15 @@ class detailTrainer : AppCompatActivity() {
         val cbSpecial = findViewById<CheckBox>(R.id.cbSpecial)
         val cbStrong = findViewById<CheckBox>(R.id.cbStrong)
         val cbWellness = findViewById<CheckBox>(R.id.cbWellness)
+
+        btnBack = findViewById(R.id.btnDetTrainerBack)
+
+        btnBack.setOnClickListener {
+            val intent = Intent(this, activityTrainer::class.java)
+            intent.putExtra(activityTrainer.login, true)
+            intent.putExtra(activityTrainer.userId, idLogin)
+            startActivity(intent)
+        }
 
         idLogin = intent.getStringExtra(utama.userId).toString()
         arr = ArrayList()

@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,10 @@ class activityTrainer : AppCompatActivity() {
     lateinit var tvNomor : TextView
     lateinit var tvEmail : TextView
     lateinit var tvSkilll : TextView
+
+    lateinit var btnLogout: Button
+    lateinit var btnInput: Button
+
     var dataLogin : Boolean = false
     var idLogin: String = ""
     companion object{
@@ -23,14 +28,19 @@ class activityTrainer : AppCompatActivity() {
         const val userId = "GETID"
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trainer)
 
-        tvNama = findViewById<TextView>(R.id.tvNama2)
-        tvEmail = findViewById<TextView>(R.id.tvEmail3)
-        tvNomor = findViewById<TextView>(R.id.tvNomor)
-        tvSkilll = findViewById<TextView>(R.id.tvSkilll)
+        tvNama = findViewById(R.id.tvNama2)
+        tvEmail = findViewById(R.id.tvEmail3)
+        tvNomor = findViewById(R.id.tvNomor)
+        tvSkilll = findViewById(R.id.tvSkilll)
+
+        btnLogout = findViewById(R.id.btnLogoutT)
+        btnInput = findViewById(R.id.btnInputJadwalT)
+
 
         dataLogin = intent.getBooleanExtra(utama.login, false)
         idLogin = intent.getStringExtra(utama.userId).toString()
@@ -39,6 +49,20 @@ class activityTrainer : AppCompatActivity() {
         val btnIconEdit2 = findViewById<ImageView>(R.id.iconEdit2)
 
         ReadData(idLogin)
+
+        btnInput.setOnClickListener {
+            val intent = Intent(this, inputJadwalTrainer::class.java)
+            intent.putExtra(activityTrainer.login, true)
+            intent.putExtra(activityTrainer.userId, idLogin)
+            startActivity(intent)
+        }
+
+        btnLogout.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(utama.login, false)
+            intent.putExtra(utama.userId, "0")
+            startActivity(intent)
+        }
 
         btnIconEdit2.setOnClickListener{
             val intent = Intent(this, detailTrainer::class.java)

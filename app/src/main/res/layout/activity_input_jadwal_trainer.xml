@@ -7,32 +7,110 @@
     android:background="#212122"
     tools:context=".inputJadwalTrainer">
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="331dp"
-        android:layout_height="304dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/neon"
-        app:layout_constraintStart_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-    <TextView
-        android:id="@+id/textView9"
+    <ImageView
+        android:id="@+id/btnInputBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Pilih Tanggal"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_arrow_back_24" />
 
-    <RadioGroup
-        android:layout_width="332dp"
-        android:layout_height="108dp"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="392dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="Pilih Tanggal"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="331dp"
+                android:layout_height="304dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp"
+                android:background="@color/neon"
+                android:selectedWeekBackgroundColor="#212122" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="Pilih Jam"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupJam"
+                android:layout_width="341dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="40dp">
+
+                <RadioButton
+                    android:id="@+id/jam1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="08:00-10:00"
+                    android:textColor="#fff" />
+
+                <RadioButton
+                    android:id="@+id/jam2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="10:00-12:00"
+                    android:textColor="#fff" />
+
+                <RadioButton
+                    android:id="@+id/jam3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="14:00-16:00"
+                    android:textColor="#fff" />
+
+                <RadioButton
+                    android:id="@+id/jam4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="16:00-18:00"
+                    android:textColor="#fff" />
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btnSaveDateJadwal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="40dp"
+                android:backgroundTint="@color/neon"
+                android:text="Save"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
