@@ -29,7 +29,6 @@ class detailTrainer : AppCompatActivity() {
 
         idLogin = intent.getStringExtra(utama.userId).toString()
         arr = ArrayList()
-        arr.add("")
 
         cbAtheltic.setOnCheckedChangeListener { _, isChecked ->
             arr.add(cbAtheltic.text.toString())
@@ -48,6 +47,8 @@ class detailTrainer : AppCompatActivity() {
         cbWellness.setOnCheckedChangeListener { _, isChecked ->
             arr.add(cbWellness.text.toString())
         }
+
+        arr.add("")
 
         val saveButton: Button = findViewById(R.id.btnSave)
         saveButton.setOnClickListener {
