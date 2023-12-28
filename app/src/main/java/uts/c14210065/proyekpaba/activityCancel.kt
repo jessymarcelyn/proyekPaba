@@ -159,6 +159,7 @@ class activityCancel : AppCompatActivity() {
                                                 "BookingGym",
                                                 "berhasil update"
                                             )
+                                            Log.d("wkwk", "masuk1")
                                             TampilkanDataGym()
                                         }
                                         .addOnFailureListener { e ->
@@ -172,9 +173,9 @@ class activityCancel : AppCompatActivity() {
                                             Log.e("TAG", "Error adding document", e)
                                         }
 
-                                    arCancelG.sortByDescending { it.timestamp }
-                                    _rvOngoing.adapter?.notifyDataSetChanged()
-                                    TampilkanDataGym()
+//                                    arCancelG.sortByDescending { it.timestamp }
+//                                    _rvOngoing.adapter?.notifyDataSetChanged()
+//                                    TampilkanDataGym()
                                 }
                                 .addOnFailureListener {
                                     showAlert(
@@ -256,7 +257,7 @@ class activityCancel : AppCompatActivity() {
                                                 "BookingClass",
                                                 "berhasil update"
                                             )
-                                            TampilkanDataClass()
+//                                            TampilkanDataClass()
                                         }
                                         .addOnFailureListener { e ->
                                             Log.d(
@@ -394,7 +395,7 @@ class activityCancel : AppCompatActivity() {
                                                                         "Booking Pt",
                                                                         "berhasil update"
                                                                     )
-                                                                    TampilkanDataGym()
+                                                                    TampilkanDataTrainer()
                                                                 }
                                                                 .addOnFailureListener { e ->
                                                                     Log.d(
@@ -445,6 +446,7 @@ class activityCancel : AppCompatActivity() {
 
     //menampilkan data gym
     private fun TampilkanDataGym() {
+        Log.d("wkwk", "masuk2")
         arCancelG.clear()
         db.collection("CancelGym").get().addOnSuccessListener { result ->
             val listIdGym = mutableListOf<String>()
