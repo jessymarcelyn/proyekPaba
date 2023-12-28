@@ -50,26 +50,26 @@ class detailTrainer : AppCompatActivity() {
         arr = ArrayList()
 
         cbAtheltic.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) arr.add(cbAtheltic.text.toString())
-            else arr.remove(cbAtheltic.text.toString())
+            if (isChecked) arr.add(cbAtheltic.text.toString().lowercase())
+            else arr.remove(cbAtheltic.text.toString().lowercase())
         }
 
         cbShape.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) arr.add(cbShape.text.toString())
-            else arr.remove(cbShape.text.toString())
+            if (isChecked) arr.add(cbShape.text.toString().lowercase())
+            else arr.remove(cbShape.text.toString().lowercase())
         }
 
         cbSpecial.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) arr.add(cbSpecial.text.toString())
-            else arr.remove(cbSpecial.text.toString())
+            if (isChecked) arr.add(cbSpecial.text.toString().lowercase())
+            else arr.remove(cbSpecial.text.toString().lowercase())
         }
         cbStrong.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) arr.add(cbStrong.text.toString())
-            else arr.remove(cbStrong.text.toString())
+            if (isChecked) arr.add(cbStrong.text.toString().lowercase())
+            else arr.remove(cbStrong.text.toString().lowercase())
         }
         cbWellness.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) arr.add(cbWellness.text.toString())
-            else arr.remove(cbWellness.text.toString())
+            if (isChecked) arr.add(cbWellness.text.toString().lowercase())
+            else arr.remove(cbWellness.text.toString().lowercase())
         }
 
         val saveButton: Button = findViewById(R.id.btnSave)

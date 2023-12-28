@@ -126,6 +126,7 @@ class activityPaketTrainer : AppCompatActivity() {
                     var nama = document.getString("nama")
                     val clients = ((document["clientId"] as? List<*>)?.map { it.toString() } ?: emptyList()).size
                     val skills = (document["skills"] as? List<*>)?.map { it.toString() } ?: emptyList()
+                    val foto = document.getString("foto")
 
                     val skillFormat = skills.joinToString(", ") { it.capitalize() }.dropLast(2)
 
@@ -133,8 +134,9 @@ class activityPaketTrainer : AppCompatActivity() {
                     tvClient.text = "Active clients: " + clients.toString()
                     tvSkill.text = "Skills: " + skillFormat
 
-                    val fotoSource = "trainer_${nama?.toLowerCase()}"
-                    val imageResId = resources.getIdentifier(fotoSource, "drawable", packageName)
+
+//                    val fotoSource = "trainer_${nama?.toLowerCase()}"
+                    val imageResId = resources.getIdentifier(foto, "drawable", packageName)
 
                     ivDet.setImageResource(imageResId)
                 }

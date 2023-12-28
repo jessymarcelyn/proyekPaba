@@ -139,6 +139,14 @@ class Register : AppCompatActivity() {
     fun CreateDataTrainer(nama: String, nomor: String, password: String, gender: String, email: String){
         val userCollection = db.collection("Trainer")
 
+        var fotoGender = ""
+        if (gender == "Female") {
+            fotoGender = "trainer_female"
+        }
+        else if (gender == "Male") {
+            fotoGender = "trainer_male"
+        }
+
         // Membuat data yang akan disimpan di Firestore
         val userData = hashMapOf(
             "nama" to nama,
@@ -148,7 +156,7 @@ class Register : AppCompatActivity() {
             "email" to email,
             "skills" to emptyList<String>(),
             "clientId" to emptyList<String>(),
-            "foto" to "trainer_betty"
+            "foto" to fotoGender
         )
 
         // Menambahkan data ke Firestore
