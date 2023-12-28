@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -91,6 +92,8 @@ class activityCancel : AppCompatActivity() {
             TampilkanDataTrainer()
         }
 
+
+
     }
 
     private fun setupRecyclerView() {
@@ -100,19 +103,347 @@ class activityCancel : AppCompatActivity() {
             val adapterP = adapterCancelG(arCancelG, idLogin)
             _rvOngoing.adapter = adapterP
 
+            adapterP.setOnItemClickCallback(object : adapterCancelG.OnItemClickCallback {
+                override fun onItemClicked(data: Gym) {
+
+                }
+
+                override fun delData(pos: Int) {
+
+                }
+
+                override fun recancel(pos: Int) {
+                    AlertDialog.Builder(this@activityCancel)
+                        .setTitle("Booking Ulang Sesi")
+                        .setMessage("Apakah anda yakin booking ulang sesi gym pada " + arCancelG[pos].tanggal + " pukul ${arCancelG[pos].sesi} ?")
+                        .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
+                            val documentId = arCancelG[pos].idGym
+                            val userId = idLogin
+                            Log.d("www", "docuemntid $documentId")
+                            db.collection("GymSesi")
+                                .document(documentId)
+                                .update("userId", FieldValue.arrayUnion(userId))
+                                .addOnSuccessListener {
+
+                                    showAlert(
+                                        this@activityCancel,
+                                        "Booking berhasil",
+                                        "Sesi gym berhasil dibatalkan."
+                                    )
+
+                                    // UPDATE JUMLAH KUOTA SESI
+                                    val documentId = arCancelG[pos].idGym
+                                    val newKuotaSisa = arCancelG[pos].kuotaSisa - 1
+
+                                    val updateData = mapOf(
+                                        "kuotaSisa" to newKuotaSisa,
+                                    )
+
+                                    db.collection("GymSesi").document(documentId)
+                                        .update(updateData)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+                                    db.collection("CancelGym").document(idLogin)
+                                        .update("idGym", FieldValue.arrayRemove(documentId))
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+                                            TampilkanDataGym()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+                                    arCancelG.sortByDescending { it.timestamp }
+                                    _rvOngoing.adapter?.notifyDataSetChanged()
+                                    TampilkanDataGym()
+                                }
+                                .addOnFailureListener {
+                                    showAlert(
+                                        this@activityCancel,
+                                        "Booking Gagal",
+                                        "Sesi gym gagal dibatalkan."
+                                    )
+                                }
+                        })
+                        .setNegativeButton(
+                            "Tidak", DialogInterface.OnClickListener { dialog, which ->
+//                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
+//                                    .show()
+                            })
+                        .show()
+                }
+
+                override fun delGym(data: Gym) {
+                    TODO("Not yet implemented")
+                }
+            })
         } else if (state == 2) {
             Log.d("mmm", "masuk")
             _rvOngoing.layoutManager = LinearLayoutManager(this)
             val adapterP = adapterCancelC(arCancelC, idLogin)
             _rvOngoing.adapter = adapterP
+
+            adapterP.setOnItemClickCallback(object : adapterCancelC.OnItemClickCallback{
+                override fun onItemClicked(data: GymClass) {
+                    TODO("Not yet implemented")
+                }
+
+
+                override fun delData(pos: Int) {
+
+                }
+
+                override fun recancel(pos: Int) {
+                    val timestamp = arCancelC[pos].timestamp
+                    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+                    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+                    val formattedDate = timestamp?.toDate()?.let { dateFormat.format(it) } ?: ""
+                    val calendar = Calendar.getInstance()
+                    calendar.time = timestamp?.toDate()
+
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
+                    val formattedTime = String.format("%02d:%02d", hour, minute)
+                    AlertDialog.Builder(this@activityCancel)
+                        .setTitle("Pembatalan Sesi Class")
+                        .setMessage("Apakah anda yakin membatalkan sesi class pada $formattedDate pukul $formattedTime?")
+                        .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
+                            val documentId = arCancelC[pos].idClass
+                            val userId = idLogin
+                            Log.d("www", "docuemntid $documentId")
+                            db.collection("Class")
+                                .document(documentId)
+                                .update("userId", FieldValue.arrayUnion(userId))
+                                .addOnSuccessListener {
+
+                                    showAlert(
+                                        this@activityCancel,
+                                        "Booking berhasil",
+                                        "Sesi gym berhasil dibatalkan."
+                                    )
+
+                                    // UPDATE JUMLAH KUOTA SESI
+                                    val documentId = arCancelC[pos].idClass
+                                    val newKuotaSisa = arCancelC[pos].capacity - 1
+
+                                    val updateData = mapOf(
+                                        "kapasitas" to newKuotaSisa,
+                                    )
+
+                                    db.collection("Class").document(documentId)
+                                        .update(updateData)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+                                            TampilkanDataClass()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+                                    db.collection("CancelClass").document(idLogin)
+                                        .update("idClass", FieldValue.arrayRemove(documentId))
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+                                            TampilkanDataClass()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+
+//                                    arCancelC.sortByDescending { it.timestamp }
+//                                    _rvOngoing.adapter?.notifyDataSetChanged()
+
+                                }
+                                .addOnFailureListener {
+                                    showAlert(
+                                        this@activityCancel,
+                                        "Booking Gagal",
+                                        "Sesi gym gagal dibatalkan."
+                                    )
+                                }
+                        })
+                        .setNegativeButton(
+                            "Tidak", DialogInterface.OnClickListener { dialog, which ->
+//                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
+//                                    .show()
+                            })
+                        .show()
+                }
+
+                override fun bookClass(data: GymClass) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         } else if (state == 3) {
             Log.d("mmm", "masuk")
             _rvOngoing.layoutManager = LinearLayoutManager(this)
             val adapterP = adapterCancelT(arCancelT, idLogin)
             _rvOngoing.adapter = adapterP
+            adapterP.setOnItemClickCallback(object : adapterCancelT.OnItemClickCallback {
+                override fun onItemClicked(data: SesiT) {
+                    TODO("Not yet implemented")
+                }
 
+                override fun delData(pos: Int) {
+
+                }
+
+                override fun bookSesi(data: SesiT) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun recancel(pos: Int) {
+                    AlertDialog.Builder(this@activityCancel)
+                        .setTitle("Pembatalan Sesi")
+                        .setMessage("Apakah anda yakin membatalkan sesi personal trainer pada " + arCancelT[pos].tanggal + " pukul ${arCancelT[pos].sesi} ?")
+                        .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
+                            val documentId = arCancelT[pos].idJadwal
+                            val userId = idLogin
+                            Log.d("www", "docuemntid $documentId")
+                            db.collection("JadwalTrainer")
+                                .document(documentId)
+                                .update("userTrainerId", FieldValue.arrayUnion(userId))
+                                .addOnSuccessListener {
+
+                                    showAlert(
+                                        this@activityCancel,
+                                        "Booking berhasil",
+                                        "Sesi gym berhasil dibatalkan."
+                                    )
+
+                                    // UPDATE JUMLAH KUOTA SESI
+                                    val documentId = arCancelT[pos].userTrainerId
+//                                    val newKuotaSisa = arCancelT[pos].kuotaSisa + 1
+
+//                                    val updateData = mapOf(
+//                                        "kuotaSisa" to newKuotaSisa,
+//                                    )
+
+                                    db.collection("UserTrainer").get()
+                                        .addOnSuccessListener { result ->
+                                            for (document in result) {
+                                                if (document.id == arCancelT[pos].userTrainerId) {
+                                                    Log.d("dfdf", "masuk2")
+                                                    val sisaSesi =
+                                                        document.getLong("sisaSesi")?.toInt() ?: 0
+
+                                                    val newsisaSesi = sisaSesi - 1
+
+                                                    val updateData = mapOf(
+                                                        "sisaSesi" to newsisaSesi,
+                                                    )
+                                                    db.collection("UserTrainer")
+                                                        .document(documentId)
+                                                        .update(updateData)
+                                                        .addOnSuccessListener {
+                                                            Log.d(
+                                                                "OngoingT",
+                                                                "berhasil update"
+                                                            )
+                                                        }
+                                                        .addOnFailureListener { e ->
+                                                            Log.d(
+                                                                "OngoingT",
+                                                                "gagal update"
+                                                            )
+                                                        }
+                                                }
+                                            }
+                                        }
+
+
+                                    db.collection("CancelTrainer").document(idLogin)
+                                        .update("idJadwal", FieldValue.arrayRemove(documentId))
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "BookingGym",
+                                                "berhasil update"
+                                            )
+                                            TampilkanDataGym()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.d(
+                                                "BookingGym",
+                                                "gagal update"
+                                            )
+                                        }
+
+                                        .addOnFailureListener { e ->
+                                            Log.e("TAG", "Error adding document", e)
+                                        }
+
+//                                    arCancelT.sortByDescending { it.timestamp }
+//                                    _rvOngoing.adapter?.notifyDataSetChanged()
+//                                    TampilkanDataGym()
+                                }
+                                .addOnFailureListener {
+                                    showAlert(
+                                        this@activityCancel,
+                                        "Booking Gagal",
+                                        "Sesi gym gagal dibatalkan."
+                                    )
+                                }
+                        })
+                        .setNegativeButton(
+                            "Tidak", DialogInterface.OnClickListener { dialog, which ->
+//                                Toast.makeText(this@activityOngoing, "DATA BATAL DIHAPUS", Toast.LENGTH_SHORT)
+//                                    .show()
+                            })
+                        .show()
+                }
+
+            })
         }
     }
+
 
     private fun changeButtonColor(clickedButton: Button) {
         selectedCategoryButton?.setBackgroundColor(Color.WHITE)

@@ -1,5 +1,6 @@
 package uts.c14210065.proyekpaba
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
@@ -31,7 +33,7 @@ class adapterCancelC (
     interface OnItemClickCallback {
         fun  onItemClicked(data : GymClass)
         fun delData(pos:Int)
-
+        fun recancel(post : Int)
         fun bookClass(data : GymClass)
     }
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback){
@@ -99,7 +101,13 @@ class adapterCancelC (
         else{
             holder._btnBook.text = gymClass.capacity.toString() + " More Left"
             holder._btnBook.setOnClickListener{
-                onItemClickCallback.bookClass(listClass[position])
+//                onItemClickCallback.bookClass(listClass[position])
+                if (isMoreThan24HoursBefore(timestamp)) {
+                    onItemClickCallback.recancel(position)
+                } else {
+                    showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi gym tidak bisa dibatalkan karena kurang dari 24 jam.")
+                }
+
             }
             holder._btnBook.isActivated = true
             val backgroundColor = Color.parseColor("#C9F24D")
@@ -119,4 +127,52 @@ class adapterCancelC (
 
     }
 
+    fun convertDateTimeToTimestamp(dateString: String, timeString: String): Timestamp {
+        val dateTimeString = "$dateString $timeString"
+        val dateFormat = java.text.SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+        try {
+            val date = dateFormat.parse(dateTimeString)
+            if (date != null) {
+                return Timestamp(date)
+            } else {
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return Timestamp.now()
+    }
+    fun isMoreThan24HoursBefore(tanggal: Timestamp?): Boolean {
+        if (tanggal != null) {
+            Log.d("uuu", "tanggal : $tanggal")
+            val timeZone = java.util.TimeZone.getTimeZone("Asia/Jakarta")
+
+            val currentTimeInTimeZone = Calendar.getInstance(timeZone).timeInMillis
+            val twentyFourHoursInMillis = 24 * 60 * 60 * 1000
+
+            // set timezone
+            val targetTimeInTimeZone = Calendar.getInstance(timeZone).apply {
+                time = tanggal.toDate() // Convert timestamp ke date
+            }.timeInMillis
+
+            val twentyFourHoursBefore = targetTimeInTimeZone - twentyFourHoursInMillis
+
+            Log.d("uuu", "currentTime: $currentTimeInTimeZone")
+            Log.d("uuu", "twentyFourHoursBefore: $twentyFourHoursBefore")
+
+            return currentTimeInTimeZone < twentyFourHoursBefore
+        }
+        return false
+    }
+
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Handle the "OK" button click if needed
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
 }

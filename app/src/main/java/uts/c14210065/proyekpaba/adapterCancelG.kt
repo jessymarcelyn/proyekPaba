@@ -15,10 +15,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class adapterCancelG(
     private val listGym: ArrayList<Gym>,
@@ -31,7 +33,7 @@ class adapterCancelG(
         fun onItemClicked(data: Gym)
         fun delData(pos: Int)
 
-//        fun bookGym(data : Gym)
+        fun recancel(post : Int)
         fun delGym(data : Gym)
     }
 
@@ -87,7 +89,7 @@ class adapterCancelG(
             holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
             holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
-        } else if (gym.userId.contains(idLogin)) {
+//        } else if (gym.userId.contains(idLogin)) {
 //            onItemClickCallback.delGym(listGym[position])
 
 
@@ -96,17 +98,60 @@ class adapterCancelG(
 //            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
 //            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
         } else {
+
             holder._btnBookGym.text = "BOOK SEKARANG"
+            holder._btnBookGym.isActivated = true
+            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBookGym.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+            val timestamp = convertDateTimeToTimestamp(gym.tanggal, gym.sesi)
             holder._btnBookGym.setOnClickListener {
-//                onItemClickCallback.bookGym(listGym[position])
+                if (isMoreThan24HoursBefore(timestamp)) {
+                    onItemClickCallback.recancel(position)
+                } else {
+                    showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi gym tidak bisa dibatalkan karena kurang dari 24 jam.")
+                }
 
             }
 
-            holder._btnBookGym.isActivated = true
-            holder._btnBookGym.backgroundTintMode = PorterDuff.Mode.SRC_IN
-            holder._btnBookGym.backgroundTintList =
-                ColorStateList.valueOf(Color.parseColor("#C9F24D"))
+
         }
+    }
+
+    fun convertDateTimeToTimestamp(dateString: String, timeString: String): Timestamp {
+        val dateTimeString = "$dateString $timeString"
+        val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
+        try {
+            val date = dateFormat.parse(dateTimeString)
+            if (date != null) {
+                return Timestamp(date)
+            } else {
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return Timestamp.now()
+    }
+    fun isMoreThan24HoursBefore(tanggal: Timestamp?): Boolean {
+        if (tanggal != null) {
+            Log.d("uuu", "tanggal : $tanggal")
+            val timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+
+            val currentTimeInTimeZone = Calendar.getInstance(timeZone).timeInMillis
+            val twentyFourHoursInMillis = 24 * 60 * 60 * 1000
+
+            // set timezone
+            val targetTimeInTimeZone = Calendar.getInstance(timeZone).apply {
+                time = tanggal.toDate() // Convert timestamp ke date
+            }.timeInMillis
+
+            val twentyFourHoursBefore = targetTimeInTimeZone - twentyFourHoursInMillis
+
+            Log.d("uuu", "currentTime: $currentTimeInTimeZone")
+            Log.d("uuu", "twentyFourHoursBefore: $twentyFourHoursBefore")
+
+            return currentTimeInTimeZone < twentyFourHoursBefore
+        }
+        return false
     }
 
     fun showAlert(context: Context, title: String, message: String) {
@@ -119,6 +164,10 @@ class adapterCancelG(
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
+    }
+
+    fun setOnItemClickCallback(onItemClickCallback: adapterGym.OnItemClickCallback) {
+
     }
 
 }

@@ -33,6 +33,7 @@ class adapterCancelT(
         fun onItemClicked(data: SesiT)
         fun delData(pos: Int)
         fun bookSesi(data: SesiT)
+        fun recancel(pos: Int)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
