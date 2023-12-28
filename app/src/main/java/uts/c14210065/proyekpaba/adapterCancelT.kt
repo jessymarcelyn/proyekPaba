@@ -95,7 +95,7 @@ class adapterCancelT(
                 .addOnSuccessListener { userTrainerSnapshot ->
                     for (userTrainerDocument in userTrainerSnapshot) {
                         userTrainerIdd  = userTrainerDocument.id
-                        queryJadwalTrainer(sesiTrainer, holder, userTrainerIdd)
+                        queryJadwalTrainer(sesiTrainer, holder, userTrainerIdd, position)
                     }
 
                 }
@@ -103,7 +103,7 @@ class adapterCancelT(
     }
 
 
-    private fun queryJadwalTrainer(sesiTrainer: SesiT, holder: ListViewHolder, userTrainerIddd :String) {
+    private fun queryJadwalTrainer(sesiTrainer: SesiT, holder: ListViewHolder, userTrainerIddd :String, pos: Int) {
         val db = Firebase.firestore
         db.collection("JadwalTrainer").document(sesiTrainer.idJadwal).get()
             .addOnSuccessListener { documentSnapshot ->
@@ -123,8 +123,14 @@ class adapterCancelT(
                 } else if (userTrainerId == "") {
                     holder._btnBookSesi.text = "BOOK SEKARANG"
                     holder._btnBookSesi.setOnClickListener {
-                        onItemClickCallback.bookSesi(sesiTrainer)
+//                        onItemClickCallback.bookSesi(sesiTrainer)
+                        val timestamp = convertDateTimeToTimestamp(sesiTrainer.tanggal, sesiTrainer.sesi)
 
+                        if (isMoreThan24HoursBefore(timestamp)) {
+                            onItemClickCallback.recancel(pos)
+                        } else {
+                            showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking trainer pt tidak bisa karena kurang dari 24 jam.")
+                        }
                     }
                     holder._btnBookSesi.isActivated = true  // Set to true if you want it to be interactive
                     holder._btnBookSesi.backgroundTintMode = PorterDuff.Mode.SRC_IN

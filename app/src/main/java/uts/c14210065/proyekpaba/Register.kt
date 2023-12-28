@@ -61,7 +61,7 @@ class Register : AppCompatActivity() {
                 Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
             }else{
                 Log.d("masuk", "iya")
-                checkNumber(_etNomor.text.toString()){registered ->
+                checkNumber(_etNomor.text.toString(), "users"){registered ->
                     Log.d("registerd", registered.toString())
                     if(registered){
                         Toast.makeText(this@Register, "Nomor telah terdaftar", Toast.LENGTH_SHORT).show()
@@ -92,7 +92,7 @@ class Register : AppCompatActivity() {
                 Toast.makeText(this@Register, "Harap isi semua kolom", Toast.LENGTH_SHORT).show()
             }else{
                 Log.d("masuk", "iya")
-                checkNumber(_etNomor.text.toString()){registered ->
+                checkNumber(_etNomor.text.toString(), "Trainer"){registered ->
                     Log.d("registerd", registered.toString())
                     if(registered){
                         Toast.makeText(this@Register, "Nomor telah terdaftar", Toast.LENGTH_SHORT).show()
@@ -118,9 +118,9 @@ class Register : AppCompatActivity() {
 
     }
 
-    fun checkNumber(number:String, callback: (Boolean) -> Unit) {
+    fun checkNumber(number:String, kategori: String, callback: (Boolean) -> Unit) {
 
-        db.collection("users")
+        db.collection(kategori)
             .whereEqualTo("nomor", number)
             .get()
             .addOnSuccessListener {documents ->

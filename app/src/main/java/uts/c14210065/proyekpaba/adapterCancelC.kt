@@ -105,7 +105,7 @@ class adapterCancelC (
                 if (isMoreThan24HoursBefore(timestamp)) {
                     onItemClickCallback.recancel(position)
                 } else {
-                    showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking sesi gym tidak bisa dibatalkan karena kurang dari 24 jam.")
+                    showAlert(holder.itemView.context, "Pembatalan Gagal", "Booking ulang sesi gym tidak bisa dibatalkan karena kurang dari 24 jam.")
                 }
 
             }

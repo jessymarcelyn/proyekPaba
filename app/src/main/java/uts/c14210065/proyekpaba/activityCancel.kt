@@ -114,7 +114,7 @@ class activityCancel : AppCompatActivity() {
 
                 override fun recancel(pos: Int) {
                     AlertDialog.Builder(this@activityCancel)
-                        .setTitle("Booking Ulang Sesi")
+                        .setTitle("Recancel Sesi Gym")
                         .setMessage("Apakah anda yakin booking ulang sesi gym pada " + arCancelG[pos].tanggal + " pukul ${arCancelG[pos].sesi} ?")
                         .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
                             val documentId = arCancelG[pos].idGym
@@ -128,7 +128,7 @@ class activityCancel : AppCompatActivity() {
                                     showAlert(
                                         this@activityCancel,
                                         "Booking berhasil",
-                                        "Sesi gym berhasil dibatalkan."
+                                        "Sesi gym berhasil booking ulang."
                                     )
 
                                     // UPDATE JUMLAH KUOTA SESI
@@ -231,8 +231,8 @@ class activityCancel : AppCompatActivity() {
                     val minute = calendar.get(Calendar.MINUTE)
                     val formattedTime = String.format("%02d:%02d", hour, minute)
                     AlertDialog.Builder(this@activityCancel)
-                        .setTitle("Pembatalan Sesi Class")
-                        .setMessage("Apakah anda yakin membatalkan sesi class pada $formattedDate pukul $formattedTime?")
+                        .setTitle("Recancel Sesi Class")
+                        .setMessage("Apakah anda yakin booking ulang sesi class pada $formattedDate pukul $formattedTime?")
                         .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
                             val documentId = arCancelC[pos].idClass
                             val userId = idLogin
@@ -245,7 +245,7 @@ class activityCancel : AppCompatActivity() {
                                     showAlert(
                                         this@activityCancel,
                                         "Booking berhasil",
-                                        "Sesi gym berhasil dibatalkan."
+                                        "Sesi class berhasil booking ulang."
                                     )
 
                                     // UPDATE JUMLAH KUOTA SESI
@@ -260,14 +260,14 @@ class activityCancel : AppCompatActivity() {
                                         .update(updateData)
                                         .addOnSuccessListener {
                                             Log.d(
-                                                "BookingGym",
+                                                "BookingClass",
                                                 "berhasil update"
                                             )
                                             TampilkanDataClass()
                                         }
                                         .addOnFailureListener { e ->
                                             Log.d(
-                                                "BookingGym",
+                                                "BookingClass",
                                                 "gagal update"
                                             )
                                         }
@@ -280,14 +280,14 @@ class activityCancel : AppCompatActivity() {
                                         .update("idClass", FieldValue.arrayRemove(documentId))
                                         .addOnSuccessListener {
                                             Log.d(
-                                                "BookingGym",
+                                                "BookingClass",
                                                 "berhasil update"
                                             )
                                             TampilkanDataClass()
                                         }
                                         .addOnFailureListener { e ->
                                             Log.d(
-                                                "BookingGym",
+                                                "BookingClass",
                                                 "gagal update"
                                             )
                                         }
@@ -305,7 +305,7 @@ class activityCancel : AppCompatActivity() {
                                     showAlert(
                                         this@activityCancel,
                                         "Booking Gagal",
-                                        "Sesi gym gagal dibatalkan."
+                                        "Sesi class gagal booking ulang."
                                     )
                                 }
                         })
@@ -342,21 +342,21 @@ class activityCancel : AppCompatActivity() {
 
                 override fun recancel(pos: Int) {
                     AlertDialog.Builder(this@activityCancel)
-                        .setTitle("Pembatalan Sesi")
-                        .setMessage("Apakah anda yakin membatalkan sesi personal trainer pada " + arCancelT[pos].tanggal + " pukul ${arCancelT[pos].sesi} ?")
+                        .setTitle("Recancel Sesi Personal Trainer")
+                        .setMessage("Apakah anda yakin booking ulang sesi personal trainer pada " + arCancelT[pos].tanggal + " pukul ${arCancelT[pos].sesi} ?")
                         .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
                             val documentId = arCancelT[pos].idJadwal
                             val userId = idLogin
                             Log.d("www", "docuemntid $documentId")
                             db.collection("JadwalTrainer")
                                 .document(documentId)
-                                .update("userTrainerId", FieldValue.arrayUnion(userId))
+                                .update("userTrainerId", userId)
                                 .addOnSuccessListener {
 
                                     showAlert(
                                         this@activityCancel,
                                         "Booking berhasil",
-                                        "Sesi gym berhasil dibatalkan."
+                                        "Sesi personal trainer berhasil booking ulang."
                                     )
 
                                     // UPDATE JUMLAH KUOTA SESI
@@ -385,13 +385,13 @@ class activityCancel : AppCompatActivity() {
                                                         .update(updateData)
                                                         .addOnSuccessListener {
                                                             Log.d(
-                                                                "OngoingT",
+                                                                "Booking Pt",
                                                                 "berhasil update"
                                                             )
                                                         }
                                                         .addOnFailureListener { e ->
                                                             Log.d(
-                                                                "OngoingT",
+                                                                "Booking Pt",
                                                                 "gagal update"
                                                             )
                                                         }
@@ -404,14 +404,14 @@ class activityCancel : AppCompatActivity() {
                                         .update("idJadwal", FieldValue.arrayRemove(documentId))
                                         .addOnSuccessListener {
                                             Log.d(
-                                                "BookingGym",
+                                                "Booking Pt",
                                                 "berhasil update"
                                             )
                                             TampilkanDataGym()
                                         }
                                         .addOnFailureListener { e ->
                                             Log.d(
-                                                "BookingGym",
+                                                "Booking Pt",
                                                 "gagal update"
                                             )
                                         }
@@ -428,7 +428,8 @@ class activityCancel : AppCompatActivity() {
                                     showAlert(
                                         this@activityCancel,
                                         "Booking Gagal",
-                                        "Sesi gym gagal dibatalkan."
+                                        "Sesi personal trainer gagal booking ulang."
+
                                     )
                                 }
                         })
