@@ -5,20 +5,13 @@ import android.content.DialogInterface
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.AbsoluteSizeSpan
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import java.text.SimpleDateFormat
@@ -341,36 +334,35 @@ class activityCancel : AppCompatActivity() {
                 }
 
                 override fun recancel(pos: Int) {
+                    db.collection("UserTrainer")
                     AlertDialog.Builder(this@activityCancel)
                         .setTitle("Recancel Sesi Personal Trainer")
                         .setMessage("Apakah anda yakin booking ulang sesi personal trainer pada " + arCancelT[pos].tanggal + " pukul ${arCancelT[pos].sesi} ?")
                         .setPositiveButton("Ya", DialogInterface.OnClickListener { dialog, which ->
-                            val documentId = arCancelT[pos].idJadwal
-                            val userId = idLogin
-                            Log.d("www", "docuemntid $documentId")
-                            db.collection("JadwalTrainer")
-                                .document(documentId)
-                                .update("userTrainerId", userId)
-                                .addOnSuccessListener {
-
-                                    showAlert(
-                                        this@activityCancel,
-                                        "Booking berhasil",
-                                        "Sesi personal trainer berhasil booking ulang."
-                                    )
-
-                                    // UPDATE JUMLAH KUOTA SESI
-                                    val documentId = arCancelT[pos].userTrainerId
-//                                    val newKuotaSisa = arCancelT[pos].kuotaSisa + 1
-
-//                                    val updateData = mapOf(
-//                                        "kuotaSisa" to newKuotaSisa,
-//                                    )
 
                                     db.collection("UserTrainer").get()
                                         .addOnSuccessListener { result ->
                                             for (document in result) {
-                                                if (document.id == arCancelT[pos].userTrainerId) {
+                                                val usertrainerId = document.id
+                                                val idUser = document.getString("idUser").toString()
+                                                val idTrainer = document.getString("idTrainer").toString()
+
+                                                if (idUser == idLogin && idTrainer == arCancelT[pos].trainerId) {
+                                                    val documentId = arCancelT[pos].idJadwal
+//                                                    val usertrainerId = arCancelT[pos].userTrainerId
+                                                    Log.d("userTrainerid", usertrainerId)
+
+                                                    Log.d("www", "docuemntid $documentId")
+                                                    db.collection("JadwalTrainer")
+                                                        .document(documentId)
+                                                        .update("userTrainerId", usertrainerId)
+                                                        .addOnSuccessListener {
+
+                                                            showAlert(
+                                                                this@activityCancel,
+                                                                "Booking berhasil",
+                                                                "Sesi personal trainer berhasil booking ulang."
+                                                            )
                                                     Log.d("dfdf", "masuk2")
                                                     val sisaSesi =
                                                         document.getLong("sisaSesi")?.toInt() ?: 0
@@ -395,30 +387,27 @@ class activityCancel : AppCompatActivity() {
                                                                 "gagal update"
                                                             )
                                                         }
+                                                            db.collection("CancelTrainer").document(idLogin)
+                                                                .update("idJadwal", FieldValue.arrayRemove(documentId))
+                                                                .addOnSuccessListener {
+                                                                    Log.d(
+                                                                        "Booking Pt",
+                                                                        "berhasil update"
+                                                                    )
+                                                                    TampilkanDataGym()
+                                                                }
+                                                                .addOnFailureListener { e ->
+                                                                    Log.d(
+                                                                        "Booking Pt",
+                                                                        "gagal update"
+                                                                    )
+                                                                }
                                                 }
                                             }
                                         }
 
 
-                                    db.collection("CancelTrainer").document(idLogin)
-                                        .update("idJadwal", FieldValue.arrayRemove(documentId))
-                                        .addOnSuccessListener {
-                                            Log.d(
-                                                "Booking Pt",
-                                                "berhasil update"
-                                            )
-                                            TampilkanDataGym()
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Log.d(
-                                                "Booking Pt",
-                                                "gagal update"
-                                            )
-                                        }
 
-                                        .addOnFailureListener { e ->
-                                            Log.e("TAG", "Error adding document", e)
-                                        }
 
 //                                    arCancelT.sortByDescending { it.timestamp }
 //                                    _rvOngoing.adapter?.notifyDataSetChanged()
@@ -603,10 +592,11 @@ class activityCancel : AppCompatActivity() {
 
                         if(jadwalId == listid){
                             val tanggal = (userTrainerDocument["tanggal"] as? Timestamp)?.toDate()
-                            val userTrainerIdd = userTrainerDocument.getString("userTrainerId") ?: ""
+                            val userTrainerIdd = userTrainerDocument.getString("userTrainerId")
                             val trainerId = userTrainerDocument.getString("trainerId") ?: ""
                             val timestamp = userTrainerDocument.getTimestamp("tanggal")
 
+                            Log.d("TrainerIdd cancel", trainerId)
                             val calendar = Calendar.getInstance()
                             calendar.time = tanggal
 
