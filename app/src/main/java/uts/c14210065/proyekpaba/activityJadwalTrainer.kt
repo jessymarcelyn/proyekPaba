@@ -43,8 +43,6 @@ class activityJadwalTrainer : AppCompatActivity() {
                 var idJadwal = document.id
                 val idTrainer = document.getString("trainerId") ?: ""
 
-//                if(idTrainer == idLogin) {
-
                     val tanggal = (document["tanggal"] as? Timestamp)?.toDate()
                     val calendar = Calendar.getInstance()
                     calendar.time = tanggal
@@ -64,7 +62,7 @@ class activityJadwalTrainer : AppCompatActivity() {
                     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
                     val formattedDate = dateFormat.format(tanggal)
 
-                    val userTrainerId = document.get("userTrainerId").toString()
+                    val userTrainerId = document.getString("userTrainerId") ?: ""
                     arJadwalT.add(
                         SesiT(
                             idJadwal,
@@ -76,7 +74,6 @@ class activityJadwalTrainer : AppCompatActivity() {
                     )
 
                     Log.d("xxxx", "arHistory : " + arJadwalT.toString())
-//                }
 
             }
 

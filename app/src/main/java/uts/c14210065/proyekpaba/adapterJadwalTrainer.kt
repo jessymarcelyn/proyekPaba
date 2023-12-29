@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class adapterJadwalTrainer (
     private val listClass: ArrayList<SesiT>
@@ -43,8 +45,23 @@ class adapterJadwalTrainer (
         holder._jam.text = SesiT.sesi
 
         holder._tanggal.text = SesiT.tanggal
-        holder._member.text = ""
+
 //        Log.d("nama class", holder._nama.text.toString())
+        val db = Firebase.firestore
+
+        if(SesiT.userTrainerId == ""){
+            holder._member.text = "No bookings made yet"
+        }else {
+            db.collection("UserTrainer").document(SesiT.userTrainerId).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    var idUser = documentSnapshot.getString("idUser") ?: ""
+                    db.collection("users").document(idUser).get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            var namaUser = documentSnapshot.getString("nama") ?: ""
+                            holder._member.text = "Booked by $namaUser"
+                        }
+                }
+        }
 
     }
 }
