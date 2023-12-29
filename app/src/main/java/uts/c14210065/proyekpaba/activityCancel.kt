@@ -373,8 +373,10 @@ class activityCancel : AppCompatActivity() {
                                                     val updateData = mapOf(
                                                         "sisaSesi" to newsisaSesi,
                                                     )
+
+                                                    var userTrainerId = document.id
                                                     db.collection("UserTrainer")
-                                                        .document(documentId)
+                                                        .document(userTrainerId)
                                                         .update(updateData)
                                                         .addOnSuccessListener {
                                                             Log.d(
