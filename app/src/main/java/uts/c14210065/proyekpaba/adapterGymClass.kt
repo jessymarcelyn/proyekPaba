@@ -82,8 +82,11 @@ class adapterGymClass (
                 onItemClickCallback.bookClass(listClass[position])
             }
             holder._btnBook.isActivated = true
-            val backgroundColor = Color.parseColor("#C9F24D")
-            holder._btnBook.setBackgroundColor(backgroundColor)
+//            val backgroundColor = Color.parseColor("#C9F24D")
+//            holder._btnBook.setBackgroundColor(backgroundColor)
+            holder._btnBook.backgroundTintMode = PorterDuff.Mode.SRC_IN
+            holder._btnBook.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#C9F24D"))
         }
 
         holder._level.text = gymClass.level

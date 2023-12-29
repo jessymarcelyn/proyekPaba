@@ -460,7 +460,12 @@ class activityCancel : AppCompatActivity() {
                 }
             }
 
-            Log.d("cvcv", listIdGym.toString())
+            Log.d("wkwk","listIdGym : ${listIdGym.toString()}")
+
+            if(listIdGym.size == 0){
+                arCancelG.sortByDescending { it.timestamp }
+                _rvOngoing.adapter?.notifyDataSetChanged()
+            }
 
             for (listid in listIdGym) {
                 db.collection("GymSesi").document(listid).get().addOnSuccessListener { document ->
@@ -510,7 +515,7 @@ class activityCancel : AppCompatActivity() {
                             )
                         )
                     }
-
+                    Log.d("wkwk", "arCancelG : $arCancelG")
                     arCancelG.sortByDescending { it.timestamp }
                     _rvOngoing.adapter?.notifyDataSetChanged()
                 }
@@ -534,6 +539,11 @@ class activityCancel : AppCompatActivity() {
             }
 
             Log.d("cvcv", listIdClass.toString())
+
+            if(listIdClass.size == 0){
+                arCancelC.sortByDescending { it.timestamp }
+                _rvOngoing.adapter?.notifyDataSetChanged()
+            }
 
             for (listid in listIdClass) {
                 db.collection("Class").document(listid).get().addOnSuccessListener { document ->
@@ -586,6 +596,11 @@ class activityCancel : AppCompatActivity() {
 
                     listIdJadwal.addAll(idTrainerList)
                 }
+            }
+
+            if(listIdJadwal.size == 0) {
+                arCancelT.sortByDescending { it.timestamp }
+                _rvOngoing.adapter?.notifyDataSetChanged()
             }
             for (listid in listIdJadwal) {
                 db.collection("JadwalTrainer").get().addOnSuccessListener { userTrainerResult ->

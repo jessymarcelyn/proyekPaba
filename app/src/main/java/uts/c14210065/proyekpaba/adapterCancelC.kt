@@ -66,7 +66,6 @@ class adapterCancelC (
 
         val timestamp: Timestamp? = gymClass.timestamp// Your Timestamp object
 
-
         val date: Date = timestamp!!.toDate()
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
         dateFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")

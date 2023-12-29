@@ -64,7 +64,6 @@ class adapterOngoingC(
 
         val db = Firebase.firestore
 
-
         val selectedDate = classo.timestamp?.toDate()?.time ?: 0
         val timeFormat = android.icu.text.SimpleDateFormat("HH:mm ", Locale("id", "ID"))
         timeFormat.timeZone = android.icu.util.TimeZone.getTimeZone("Asia/Jakarta")
@@ -91,21 +90,6 @@ class adapterOngoingC(
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
-    }
-
-    fun convertDateTimeToTimestamp(dateString: String, timeString: String): Timestamp {
-        val dateTimeString = "$dateString $timeString"
-        val dateFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-        try {
-            val date = dateFormat.parse(dateTimeString)
-            if (date != null) {
-                return Timestamp(date)
-            } else {
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return Timestamp.now()
     }
 
     fun isMoreThan24HoursBefore(tanggal: Timestamp?): Boolean {
