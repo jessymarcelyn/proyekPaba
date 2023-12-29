@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ProyekPaba"
         tools:targetApi="31">
         <activity
+            android:name=".activityJadwalTrainer"
+            android:exported="false" />
+        <activity
             android:name=".activityCancel"
             android:exported="false" />
         <activity

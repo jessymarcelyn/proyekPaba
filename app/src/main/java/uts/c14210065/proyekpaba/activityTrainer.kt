@@ -20,6 +20,7 @@ class activityTrainer : AppCompatActivity() {
 
     lateinit var btnLogout: Button
     lateinit var btnInput: Button
+    lateinit var btnJadwal: Button
 
     var dataLogin : Boolean = false
     var idLogin: String = ""
@@ -40,6 +41,7 @@ class activityTrainer : AppCompatActivity() {
 
         btnLogout = findViewById(R.id.btnLogoutT)
         btnInput = findViewById(R.id.btnInputJadwalT)
+        btnJadwal = findViewById(R.id.btnJadwalTrainer)
 
 
         dataLogin = intent.getBooleanExtra(utama.login, false)
@@ -61,6 +63,13 @@ class activityTrainer : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra(utama.login, false)
             intent.putExtra(utama.userId, "0")
+            startActivity(intent)
+        }
+
+        btnJadwal.setOnClickListener{
+            val intent = Intent(this, activityJadwalTrainer::class.java)
+            intent.putExtra(activityTrainer.login, true)
+            intent.putExtra(activityTrainer.userId, idLogin)
             startActivity(intent)
         }
 

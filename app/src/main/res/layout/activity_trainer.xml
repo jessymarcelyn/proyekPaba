@@ -38,10 +38,25 @@
         app:layout_constraintTop_toBottomOf="@+id/tvSkilll" />
 
     <Button
+        android:id="@+id/btnJadwalTrainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#C9F24D"
+        android:drawableLeft="@drawable/outline_schedule_24"
+        android:padding="10sp"
+        android:text="Jadwal Trainer"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        app:cornerRadius="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/iconEdit2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvNama2"
+        app:layout_constraintTop_toBottomOf="@+id/btnInputJadwalT" />
+
+    <Button
         android:id="@+id/btnLogoutT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:backgroundTint="#C9F24D"
         android:drawableLeft="@drawable/baseline_logout_24"
         android:padding="10sp"
@@ -50,8 +65,9 @@
         android:textColor="@color/black"
         app:cornerRadius="10sp"
         app:layout_constraintEnd_toEndOf="@+id/iconEdit2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvNama2"
-        app:layout_constraintTop_toBottomOf="@+id/btnInputJadwalT" />
+        app:layout_constraintTop_toBottomOf="@+id/btnJadwalTrainer" />
 
     <TextView
         android:id="@+id/textView6"
