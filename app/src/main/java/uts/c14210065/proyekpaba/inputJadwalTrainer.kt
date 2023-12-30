@@ -1,6 +1,7 @@
 package uts.c14210065.proyekpaba
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.firestore
@@ -81,7 +83,16 @@ class inputJadwalTrainer : AppCompatActivity() {
             }
         }
     }
-
+    fun showAlert(context: Context, title: String, message: String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, which ->
+            dialog.dismiss()
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
     private fun SimpanTanggalJam(tgl: String, jam: String) {
 
         val selectedCalendar = Calendar.getInstance()
@@ -90,7 +101,12 @@ class inputJadwalTrainer : AppCompatActivity() {
 
             val currDate = Calendar.getInstance().time
             if (selectedCalendar.time < currDate) {
-                Toast.makeText(this, "Tanggal dan jam harus lebih dari sekarang.", Toast.LENGTH_SHORT).show()
+                showAlert(
+                    this@inputJadwalTrainer,
+                    "Input Jadwal",
+                    "Tanggal dan jam harus lebih dari sekarang."
+                )
+//                Toast.makeText(this, "Tanggal dan jam harus lebih dari sekarang.", Toast.LENGTH_SHORT).show()
                 Log.e("inputJadwal", "Tanggal harus lebih dari hari ini. tgl: $tgl jam: $jam")
                 return
             }
@@ -98,7 +114,12 @@ class inputJadwalTrainer : AppCompatActivity() {
             monthDate.add(Calendar.MONTH, 6)
 
             if (selectedCalendar.after(monthDate)) {
-                Toast.makeText(this, "Tanggal tidak boleh lebih dari 6 bulan dari sekarang.", Toast.LENGTH_SHORT).show()
+                showAlert(
+                    this@inputJadwalTrainer,
+                    "Input Jadwal",
+                    "Tanggal tidak boleh lebih dari 6 bulan dari sekarang."
+                )
+//                Toast.makeText(this, "Tanggal tidak boleh lebih dari 6 bulan dari sekarang.", Toast.LENGTH_SHORT).show()
                 Log.e("inputJadwal", "Tanggal tidak boleh lebih dari 6 bulan dari sekarang. tgl: $tgl jam: $jam")
                 return
             }
@@ -139,12 +160,22 @@ class inputJadwalTrainer : AppCompatActivity() {
             )
             if (docId == null) {
                 db.collection("JadwalTrainer").add(addData).addOnSuccessListener {
-                    Toast.makeText(this, "Jadwal berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                    showAlert(
+                        this@inputJadwalTrainer,
+                        "Input Jadwal",
+                        "Jadwal berhasil ditambahkan."
+                    )
+//                    Toast.makeText(this, "Jadwal berhasil ditambahkan", Toast.LENGTH_SHORT).show()
                     Log.d("inputJadwal", "berhasil add data.")
                 }
             }
             else {
-                Toast.makeText(this, "Jadwal sudah ada", Toast.LENGTH_SHORT).show()
+                showAlert(
+                    this@inputJadwalTrainer,
+                    "Input Jadwal",
+                    "Jadwal sudah ada."
+                )
+//                Toast.makeText(this, "Jadwal sudah ada", Toast.LENGTH_SHORT).show()
                 Log.d("inputJadwal", "jadwal sdh ada. docid: $docId")
             }
         }
