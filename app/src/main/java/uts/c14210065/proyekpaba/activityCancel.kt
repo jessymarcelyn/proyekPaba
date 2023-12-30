@@ -173,7 +173,7 @@ class activityCancel : AppCompatActivity() {
                                             Log.e("TAG", "Error adding document", e)
                                         }
 
-//                                    arCancelG.sortByDescending { it.timestamp }
+//                                    arCancelG.sortBy { it.timestamp }
 //                                    _rvOngoing.adapter?.notifyDataSetChanged()
 //                                    TampilkanDataGym()
                                 }
@@ -291,7 +291,7 @@ class activityCancel : AppCompatActivity() {
                                         }
 
 
-//                                    arCancelC.sortByDescending { it.timestamp }
+//                                    arCancelC.sortBy { it.timestamp }
 //                                    _rvOngoing.adapter?.notifyDataSetChanged()
 
                                 }
@@ -412,7 +412,7 @@ class activityCancel : AppCompatActivity() {
 
 
 
-//                                    arCancelT.sortByDescending { it.timestamp }
+//                                    arCancelT.sortBy { it.timestamp }
 //                                    _rvOngoing.adapter?.notifyDataSetChanged()
 //                                    TampilkanDataGym()
                                 }
@@ -465,7 +465,7 @@ class activityCancel : AppCompatActivity() {
             Log.d("wkwk","listIdGym : ${listIdGym.toString()}")
 
             if(listIdGym.size == 0){
-                arCancelG.sortByDescending { it.timestamp }
+                arCancelG.sortBy { it.timestamp }
                 _rvOngoing.adapter?.notifyDataSetChanged()
             }
 
@@ -518,7 +518,7 @@ class activityCancel : AppCompatActivity() {
                         )
                     }
                     Log.d("wkwk", "arCancelG : $arCancelG")
-                    arCancelG.sortByDescending { it.timestamp }
+                    arCancelG.sortBy { it.timestamp }
                     _rvOngoing.adapter?.notifyDataSetChanged()
                 }
             }
@@ -543,7 +543,7 @@ class activityCancel : AppCompatActivity() {
             Log.d("cvcv", listIdClass.toString())
 
             if(listIdClass.size == 0){
-                arCancelC.sortByDescending { it.timestamp }
+                arCancelC.sortBy { it.timestamp }
                 _rvOngoing.adapter?.notifyDataSetChanged()
             }
 
@@ -576,7 +576,7 @@ class activityCancel : AppCompatActivity() {
 
                         Log.d("nmnm", "arCancelC : $arCancelC")
                     }
-                    arCancelC.sortByDescending { it.timestamp }
+                    arCancelC.sortBy { it.timestamp }
                     _rvOngoing.adapter?.notifyDataSetChanged()
                 }
             }
@@ -601,7 +601,7 @@ class activityCancel : AppCompatActivity() {
             }
 
             if(listIdJadwal.size == 0) {
-                arCancelT.sortByDescending { it.timestamp }
+                arCancelT.sortBy { it.timestamp }
                 _rvOngoing.adapter?.notifyDataSetChanged()
             }
             for (listid in listIdJadwal) {
@@ -643,7 +643,7 @@ class activityCancel : AppCompatActivity() {
                                 ))
                         }
                     }
-                    arCancelT.sortByDescending { it.timestamp }
+                    arCancelT.sortBy { it.timestamp }
                     _rvOngoing.adapter?.notifyDataSetChanged()
                 }
             }
