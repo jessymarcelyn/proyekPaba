@@ -75,6 +75,7 @@ class inputJadwalTrainer : AppCompatActivity() {
         Log.d("inputJam", "jamselect: $jamSelect")
 
         btnSave.setOnClickListener {
+            radioGroup.clearCheck()
             dateSelect?.let { date ->
                 SimpanTanggalJam(date, jamSelect)
             }
@@ -108,8 +109,11 @@ class inputJadwalTrainer : AppCompatActivity() {
             else if (jam.isEmpty()) {
                 warningJam.visibility = View.VISIBLE
             }
+            else {
+                warningTgl.visibility = View.GONE
+                warningJam.visibility = View.GONE
+            }
             Log.e("inputJadwal", "tgl or jam is empty. tgl: $tgl jam: $jam")
-            return
         }
 
         val timestamp = Timestamp(selectedCalendar.time)
