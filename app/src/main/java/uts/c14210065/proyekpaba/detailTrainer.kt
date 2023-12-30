@@ -99,7 +99,7 @@ class detailTrainer : AppCompatActivity() {
                 )
 
                 Log.d("detTrainer", "new data: ${newData}")
-                db.collection("Trainer") .document(idLogin).update(newData)
+                db.collection("Trainer").document(idLogin).update(newData)
                     .addOnSuccessListener {
                         val intent = Intent(this, activityTrainer::class.java)
                         intent.putExtra(activityTrainer.login, true)

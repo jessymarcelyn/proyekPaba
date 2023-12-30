@@ -91,7 +91,7 @@ class activityTrainer : AppCompatActivity() {
                 tvEmail.text = result.get("email").toString()
                 val skills = (result["skills"] as? List<*>)?.map { it.toString() } ?: emptyList()
                 val skillFormat = skills.joinToString(", ") { it.capitalize() }.dropLast(2)
-                tvSkilll.text = skillFormat
+                tvSkilll.text = "Skills: " + skillFormat
             }
     }
 }

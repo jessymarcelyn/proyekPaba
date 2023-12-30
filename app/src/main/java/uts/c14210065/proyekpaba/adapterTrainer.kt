@@ -53,7 +53,12 @@ class adapterTrainer (private val listTrainer: ArrayList<TrainerModel>) : Recycl
 
         holder._namaTrainer.setText(trainers.nama)
         val skillsString = trainers.skills?.joinToString(", ") { it.capitalize() }?.dropLast(2) ?: ""
-        holder._skills.text = "Skills: $skillsString"
+        if (skillsString == ""){
+            holder._skills.text = ""
+        }
+        else {
+            holder._skills.text = "Skills: $skillsString"
+        }
         holder._client.text = "Active clients: " + trainers.client?.toString()
 
         holder._btnBook.setOnClickListener {

@@ -132,7 +132,13 @@ class activityPaketTrainer : AppCompatActivity() {
 
                     tvNama.text = nama
                     tvClient.text = "Active clients: " + clients.toString()
-                    tvSkill.text = "Skills: " + skillFormat
+                    if (skillFormat == "") {
+                        tvSkill.text = ""
+                    }
+                    else {
+                        tvSkill.text = "Skills: $skillFormat"
+                    }
+
 
 
 //                    val fotoSource = "trainer_${nama?.toLowerCase()}"

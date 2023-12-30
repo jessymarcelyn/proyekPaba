@@ -87,10 +87,18 @@ class inputJadwalTrainer : AppCompatActivity() {
         if (tgl.isNotEmpty() && jam.isNotEmpty()) {
             selectedCalendar.time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse("$tgl $jam")!!
 
-            val currentDate = Calendar.getInstance().time
-            if (selectedCalendar.time < currentDate) {
+            val currDate = Calendar.getInstance().time
+            if (selectedCalendar.time < currDate) {
                 Toast.makeText(this, "Tanggal dan jam harus lebih dari sekarang.", Toast.LENGTH_SHORT).show()
                 Log.e("inputJadwal", "Tanggal harus lebih dari hari ini. tgl: $tgl jam: $jam")
+                return
+            }
+            val monthDate = Calendar.getInstance()
+            monthDate.add(Calendar.MONTH, 6)
+
+            if (selectedCalendar.after(monthDate)) {
+                Toast.makeText(this, "Tanggal tidak boleh lebih dari 6 bulan dari sekarang.", Toast.LENGTH_SHORT).show()
+                Log.e("inputJadwal", "Tanggal tidak boleh lebih dari 6 bulan dari sekarang. tgl: $tgl jam: $jam")
                 return
             }
         } else {

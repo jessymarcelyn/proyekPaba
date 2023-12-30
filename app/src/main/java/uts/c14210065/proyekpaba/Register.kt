@@ -147,6 +147,10 @@ class Register : AppCompatActivity() {
             fotoGender = "trainer_male"
         }
 
+        var skill: ArrayList<String>
+        skill = ArrayList()
+        skill.add("")
+
         // Membuat data yang akan disimpan di Firestore
         val userData = hashMapOf(
             "nama" to nama,
@@ -154,7 +158,7 @@ class Register : AppCompatActivity() {
             "password" to password,
             "gender" to gender,
             "email" to email,
-            "skills" to emptyList<String>(),
+            "skills" to skill,
             "clientId" to emptyList<String>(),
             "foto" to fotoGender
         )
